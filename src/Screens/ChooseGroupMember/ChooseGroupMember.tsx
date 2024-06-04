@@ -23,13 +23,13 @@ import { useGetMembers, member } from '../../hooks/useGetMembers';
 import Routes from '../../Navigation/routes';
 import MenuTab from '../../Components/MenuTab';
 
-type ChooseGroupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChooseGroup'>;
+type ChooseGroupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChooseGroupMember'>;
 
 type Props = {
   navigation: ChooseGroupScreenNavigationProp;
 };
 
-export default function ChooseGroup({ navigation }: Props) {
+export default function ChooseGroupMember({ navigation }: Props) {
   const { authenticationWG } = useGetWallsGroup();
   const { authenticationAddG } = useGetGroupUserId();
   const { authenticationGetM } = useGetMembers();
@@ -86,35 +86,29 @@ export default function ChooseGroup({ navigation }: Props) {
       {user && listGroup.length !== 0 ? (
         <>
           {user.isAdmin ? (
-            <Title name={listGroup[0].name} category={"Grupo"} img={listGroup[0].imgGroup} navigation={navigation}/>
+            <Title name={listGroup[0].name} category={"Grupo"} img={listGroup[0].imgGroup} />
           ) : (
             <Title name={user?.username!} category={user?.username!} img={user.profile_image}  navigation={navigation}/>
           )}
         </>
       ) : null}
       <View style={styles.viewMuraisChooseGroup}>
-        <Text style={styles.textMuraisChooseGroup}>GRUPOS</Text>
+        <Text style={styles.textMuraisChooseGroup}>MEMBRO GRUPOS</Text>
         <ScrollView style={styles.viewShowMuraisChooseGroup} pagingEnabled contentContainerStyle={{ paddingBottom: 150 }} decelerationRate={'normal'}>
           {listGroup && listGroup.length !== 0 ? (
             listGroup.map((valueListGroup) => (
               <TouchableOpacity key={valueListGroup.id} onPress={() => {
-                navigation.navigate('ChooseMural', { groupChoose: { id: valueListGroup!.id, name: valueListGroup!.name, created_at: valueListGroup!.created_at, imgGroup: valueListGroup!.imgGroup, groupCode: valueListGroup!.groupCode, userId: valueListGroup!.userId } });
+                navigation.navigate('ChooseMuralMember', { groupChoose: { id: valueListGroup!.id, name: valueListGroup!.name, created_at: valueListGroup!.created_at, imgGroup: valueListGroup!.imgGroup, groupCode: valueListGroup!.groupCode, userId: valueListGroup!.userId } });
               }}>
                 <ShowMural authentication={() => { }} name={valueListGroup.name} img={valueListGroup.imgGroup} idMural={valueListGroup.id} canceled={false} />
               </TouchableOpacity>
             ))
           ) : null}
-          {user?.isAdmin == false ? (
-            <TouchableOpacity onPress={() => {
-              navigation.navigate('CodGroup');
-            }}>
-              <ShowMural authentication={() => { }} name={"Adicionar Grupo"} img={"https://res.cloudinary.com/dfmdiobwa/image/upload/v1716926877/fyypxugvsc6g3m3pkget.png"} idMural={1} canceled={false} />
-            </TouchableOpacity>
-          ) : null}
+          
         </ScrollView>
       </View>
       <View style={{ position: "absolute", width: "100%", bottom: 0, paddingBottom: 20, alignItems: "center" }}>
-        <MenuTab navigation={navigation} two />
+        <MenuTab navigation={navigation} five />
       </View>
     </View>
   );

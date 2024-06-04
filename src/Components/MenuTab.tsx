@@ -33,9 +33,11 @@ export default function MenuTab({navigation, one, two, three, four, five}: AuthS
             shadowOpacity: 0.25,
             shadowRadius: 3.84,
             elevation: 5,
+            paddingRight: 25,
+            paddingLeft: 25,
 
         }}>
-            <TouchableOpacity onPress={()=>{
+            {/* <TouchableOpacity onPress={()=>{
                 navigation.navigate('Profile')
             }}>
                 {one?(
@@ -43,12 +45,12 @@ export default function MenuTab({navigation, one, two, three, four, five}: AuthS
             ):(
                     <Image style={{width: 35, height: 35}} source={require("../../assets/perfil.png")}/>
                 )}
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity onPress={()=>{
                 navigation.navigate('ChooseGroup')
             }}>
                 {two?(
-                    <Image style={{width: 65, height: 41}} source={require("../../assets/grupon.png")}/>
+                    <Image style={{width: 55, height: 35}} source={require("../../assets/gruponblack.png")}/>
                 ):(
                     <Image style={{width: 55, height: 35}} source={require("../../assets/grupon.png")}/>
                 )}
@@ -57,7 +59,7 @@ export default function MenuTab({navigation, one, two, three, four, five}: AuthS
                 navigation.navigate('Home')
             }}>
                 {three?(
-                    <Image style={{width: 48, height: 48}} source={require("../../assets/Home.png")}/>
+                    <Image style={{width: 40, height: 40}} source={require("../../assets/homeBlack.png")}/>
                 ):(
                     <Image style={{width: 40, height: 40}} source={require("../../assets/Home.png")}/>
                 )}
@@ -66,7 +68,7 @@ export default function MenuTab({navigation, one, two, three, four, five}: AuthS
                 navigation.navigate('UserPost')
             }}>
                {four?(
-                     <Image style={{width: 43, height: 43}} source={require("../../assets/postagens.png")}/>
+                     <Image style={{width: 35, height: 35}} source={require("../../assets/postagensblack.png")}/>
                ):(
                 <Image style={{width: 35, height: 35}} source={require("../../assets/postagens.png")}/>
                )}
@@ -75,7 +77,7 @@ export default function MenuTab({navigation, one, two, three, four, five}: AuthS
                 navigation.navigate('Configuration')
             }}>
                 {five?(
-                    <Image style={{width: 43, height: 43}} source={require("../../assets/configuracoes.png")}/>
+                    <Image style={{width: 35, height: 35}} source={require("../../assets/configuracoesblack.png")}/>
                 ):(
                     <Image style={{width: 35, height: 35}} source={require("../../assets/configuracoes.png")}/>
                 )}

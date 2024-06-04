@@ -7,6 +7,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "white",
    },
+   imgArrow:{
+      width: 40,
+      height: 30,
+      transform: [{ scaleX: -1 }],
+      marginTop:30,
+  },
+  imgArrowN:{
+   width: 40,
+   height: 30,
+   transform: [{ scaleX: -1 }],
+   marginTop:60,
+   marginBottom: -20,
+},
    viewAllTextInfor:{
       marginBottom: 10,
    },

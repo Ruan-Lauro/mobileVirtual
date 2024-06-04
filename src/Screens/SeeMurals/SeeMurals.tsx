@@ -139,7 +139,7 @@ export default function SeeMural({navigation}:Props) {
                 <Text style={styles.TextGroupMuralCod}>Cod: {codGroup}</Text>
             </View>
             <View style={styles.SeeMuralInfor}>
-                {Murals && Murals.length !== 0?(
+                {Murals?.map!==undefined?(
                     Murals.map((value)=>(
                         <ShowMural authentication={()=>{
                             setModalVisible(true)

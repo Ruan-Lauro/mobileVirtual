@@ -212,6 +212,9 @@ export default function UserPost({navigation}:Props) {
           setPosts(sortedPosts.reverse())
           setRefreshing(false);
           setLoading(false);
+        }else{
+          setRefreshing(false);
+          setLoading(false);
         }
       },[postsTeste])
 

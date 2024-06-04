@@ -10,9 +10,10 @@ type AuthShowMuralProps = {
     name: string;
     idMural: number | string;
     canceled: boolean;
+    category?: string,
 }
 
-export default function ShowMural({img, authentication, name, idMural, canceled}: AuthShowMuralProps){
+export default function ShowMural({img, authentication, name, idMural, canceled, category}: AuthShowMuralProps){
    
     return(
         <View style={styles.ShowMural}>
@@ -21,7 +22,13 @@ export default function ShowMural({img, authentication, name, idMural, canceled}
                 <View style={styles.ShowMuralViewText}>
                     <Text style={styles.ShowMuralText}>{name}</Text>
                     {name!== undefined?(
-                        <Text style={styles.ShowMuralTextSecond} >@{name.toLowerCase()}</Text>
+                        <>
+                            {category!== undefined?(
+                                <Text style={styles.ShowMuralTextSecond} >@{category.toLowerCase()}</Text>
+                            ):(
+                                <Text style={styles.ShowMuralTextSecond} >@{name.toLowerCase()}</Text>
+                            )}
+                        </>
                     ):null}
                 </View>
             </View>

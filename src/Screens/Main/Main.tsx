@@ -20,6 +20,9 @@ import Configuration from '../Configuration/Configuration';
 import Profile from '../Profile/Profile';
 import Home from '../Home/Home';
 import Mural from '../Mural/Mural';
+import ChooseGroupMember from '../ChooseGroupMember/ChooseGroupMember';
+import ChooseMuralMember from '../ChooseMuralMember/ChooseMuralMember';
+import ChooseMember from '../ChooseMember/ChooseMember';
 
 export default function Main() {
 
@@ -46,6 +49,9 @@ export default function Main() {
         <Stack.Screen name="UserPost" component={UserPost} />
         <Stack.Screen name="Configuration" component={Configuration} />
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="ChooseGroupMember" component={ChooseGroupMember} />
+        <Stack.Screen name="ChooseMuralMember" component={ChooseMuralMember} />
+        <Stack.Screen name="ChooseMember" component={ChooseMember} />
       </Stack.Navigator>
     </NavigationContainer>
   );

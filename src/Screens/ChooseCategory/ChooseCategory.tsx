@@ -16,6 +16,7 @@ import { RootStackParamList } from '../type';
 import { RouteProp } from '@react-navigation/native';
 import { user } from '../../hooks/useRegister';
 import React from 'react';
+import { useGetMembers } from '../../hooks/useGetMembers';
 
 type ChooseCategoryScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChooseCategory'>;
 type ChooseCategoryScreenRouteProp = RouteProp<RootStackParamList, 'ChooseCategory'>;
@@ -44,9 +45,11 @@ export default function ChooseCategory({navigation, route}:Props) {
     const [group, setGroup] = useState<group>()
     const [selectCategory, setSelectCategory] = useState("")
     const [erroMember, setErroMember] = useState(false)
+    const [erroText, setErroText] = useState("")
 
     const {authenticationWG} = useGetWallsGroup()
     const {authenticationAddM} = useAddMember()
+    const {authenticationGetM} = useGetMembers()
 
     const [walls, setWalls] = useState<wall[]>([])
 
@@ -56,9 +59,19 @@ export default function ChooseCategory({navigation, route}:Props) {
             .then((value) => {
               if (value) {
                 const wallsGet = authenticationWG(groupChoose.id)
-                wallsGet.then((data:wall[])=>{
-                    setWalls(data)
-                    console.log(data)
+                wallsGet.then((data:wall[]| string)=>{
+                  
+                    if(data === "Aconteceu um erro"){
+                      setErroMember(true)
+                      setErroText("Não tem nenhum mural aqui!")
+                    }else{
+                      if(Array.isArray(data)){
+                        setWalls(data)  
+                      }
+                    }
+                    
+                }).catch(()=>{
+                  console.log("Aqui!")
                 })
                 const userInformation = JSON.parse(value);
                 setUser(userInformation.data)
@@ -75,16 +88,28 @@ export default function ChooseCategory({navigation, route}:Props) {
 
     const authenCategory = () =>{
         if(selectCategory){
-            const numSelect = parseInt(selectCategory)
-            let cod = `${group?.id}!${numSelect}`
-            const res = authenticationAddM(user?.id!, cod)
-            res.then((data)=>{
-              if(data = 'Member created successfully.'){
-                navigation.navigate('InforGroupMember', {groupChoose: {id: group!.id, name: group!.name, created_at: group!.created_at, imgGroup: group!.imgGroup, groupCode: group!.groupCode, userId: group!.userId}})
-              }else{
-                console.log("Não criado")
+            const listMember = authenticationGetM()
+            listMember.then(valueListMember=>{
+              if(valueListMember.map!== undefined){
+                const memberUser = valueListMember.find(valueMember=> valueMember.userId == user?.id && valueMember.groupId == group?.id)
+                if(!memberUser){
+                  const numSelect = parseInt(selectCategory)
+                    let cod = `${group?.id}!${numSelect}`
+                    const res = authenticationAddM(user?.id!, cod)
+                    res.then((data)=>{
+                      if(data = 'Member created successfully.'){
+                        navigation.navigate('InforGroupMember', {groupChoose: {id: group!.id, name: group!.name, created_at: group!.created_at, imgGroup: group!.imgGroup, groupCode: group!.groupCode, userId: group!.userId}})
+                      }else{
+                        console.log("Não criado")
+                      }
+                    })
+                }else{
+                  setErroMember(true)
+                  setErroText("Usuário já cadastrado nesse grupo")
+                }
               }
             })
+            
         }
     }
     
@@ -141,7 +166,7 @@ export default function ChooseCategory({navigation, route}:Props) {
         </View>
       ): null}
       {(erroMember)?(
-        <Text style={styles.TextErroMember}>Usuário já está cadastrado a esse mural ou grupo</Text>
+        <Text style={walls.length == 0?(styles.TextErroMemberN):(styles.TextErroMember)}>{erroText}</Text>
       ):null}
        <View style={{alignSelf:"center", marginBottom:30,}}>
         <Buttons textButton='Entrar' Condition={true} authentication={authenCategory}/>

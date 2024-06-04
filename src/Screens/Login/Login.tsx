@@ -33,7 +33,6 @@ export default function Login({navigation}:Props) {
   const authenLogin = () =>{
 
     const res = authenticationE(email, password)
-    setLoad(true)
     res.then(async (data) =>{
       if(data === "Não passou"){
         setLoad(false)
@@ -50,7 +49,7 @@ export default function Login({navigation}:Props) {
         })
         .catch((error) => {
           console.error('Erro ao armazenar informações do usuário:', error);
-        });
+        })
       }
     })
     

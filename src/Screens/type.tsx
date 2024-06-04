@@ -50,4 +50,21 @@ export type RootStackParamList = {
   Configuration: undefined;
   Profile: undefined;
   UserPost: undefined;
+  ChooseGroupMember: undefined;
+  ChooseMuralMember:{ groupChoose?: { 
+    id: string;
+    name: string;
+    created_at: Date;
+    imgGroup: string;
+    groupCode: number;
+    userId: string;
+  }};
+  ChooseMember:  { muralChoose?: { 
+    id: number;
+    name: string;
+    created_at: Date;
+    imgMural: string;
+    category: string;
+    groupId: string;
+  }};
 };

@@ -44,6 +44,7 @@ export default function Home({navigation}:Props) {
     const [searchText, setSearchText] = useState("")
     const [listUsers, setListUsers] = useState<user[]>()
     const [listMembers, setListMember] = useState<member[]>()
+    const [listGroup, setListGroup] = useState<group[]>()
     const [tabMenu, setTabMenu] = useState(true)
     const [loading, setLoading] = useState(true)
     const [DoPost, setDoPost] = useState(false)
@@ -85,6 +86,10 @@ export default function Home({navigation}:Props) {
                 const userInfor = JSON.parse(value!)
                 const userInformation: user = userInfor.data
                 setUser(userInformation)
+                const listUserAll = authenticationGetU()
+                listUserAll.then(value=>{
+                  setListUsers(value)
+                })
                 if(userInformation.isAdmin){
                   const groupUser = authenticationAddG(userInformation.id!)
                   groupUser.then(valueGroupUser=>{
@@ -96,9 +101,10 @@ export default function Home({navigation}:Props) {
                     const groupAll = authenticationG()
                     MemberAll.then(valueUserMember=>{
                       const memberValue = valueUserMember.find(userMemberNow => userMemberNow.userId == userInformation.id)
-                      setUserMember(memberValue)
+                     
                       
                       if(memberValue){
+                        setUserMember(memberValue)
                         groupAll.then(valueGroupAll=>{
                           const groupUserNow = valueGroupAll.find((valueGroup)=> valueGroup.id == memberValue.groupId)
                           if(groupUserNow){
@@ -106,6 +112,8 @@ export default function Home({navigation}:Props) {
                             setMuralGroup(groupUserNow)
                           }
                         }) 
+                      }else{
+                        navigation.navigate("CodGroup")
                       }
                     })
                 }
@@ -146,6 +154,10 @@ export default function Home({navigation}:Props) {
           listUserAll.then(value=>{
             setListUsers(value)
           })
+        const listGroupAll = authenticationG()
+        listGroupAll.then(valueGroup=>{
+          setListGroup(valueGroup)
+        })
         const listMemberAll = authenticationGetM()
         listMemberAll.then(valueMember=>{
           setListMember(valueMember)
@@ -162,10 +174,16 @@ export default function Home({navigation}:Props) {
                     if(PostMuralNew.map !== undefined){
                       PostMuralNew.map(value=>{
                         
-                        let letterUp: string = FirstLetter(searchText)
-                        let letterDown: string = capitalizeFirstLetter(searchText)
-                        if(value.content.includes(searchText) || value.content.includes(letterUp) || value.content.includes(letterDown) ){
-                          setPostsTeste(prevList => [...prevList, value])
+                        if(listUsers?.map!==undefined){
+                          listUsers.map(valueUser=>{
+                            let letterUp: string = FirstLetter(searchText)
+                            let letterDown: string = capitalizeFirstLetter(searchText)
+                            if(value.content.includes(searchText) || value.content.includes(letterUp) || value.content.includes(letterDown) ){
+                              setPostsTeste(prevList => [...prevList, value])
+                            }else if(value.memberId == valueUser.id && ((valueUser.name.includes(searchText) || valueUser.name.includes(letterUp) || valueUser.name.includes(letterDown)) ||(valueUser.username.includes(searchText) || valueUser.username.includes(letterUp) || valueUser.username.includes(letterDown)))){
+                              setPostsTeste(prevList => [...prevList, value])
+                            }
+                          })
                         }
                       })
                     }
@@ -210,8 +228,11 @@ export default function Home({navigation}:Props) {
         if(postsTeste.length!==0){
           const sortedPosts: posts[] = postsTeste.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
           setPosts(sortedPosts.reverse())
-          setRefreshing(false);
-          setLoading(false);
+          setRefreshing(false)
+          setLoading(false)
+        }else{
+          setRefreshing(false)
+          setLoading(false)
         }
       },[postsTeste])
 
@@ -285,7 +306,7 @@ export default function Home({navigation}:Props) {
                 {userSeePost.isAdmin === true?(
                     <SeePost  authentication={()=>{
                         setTruePost(false)
-                    }} name={muralGroup!?.name} category={"@grupo"} data={seePost.created_at} idPost={seePost.id} isAdmin={user?.isAdmin!} text={seePost.content} media={seePost.media} img={muralGroup!.imgGroup} deleteN={()=>{
+                    }} name={ userGroup!?.name} category={"@grupo"} data={seePost.created_at} idPost={seePost.id} isAdmin={user?.isAdmin!} text={seePost.content} media={seePost.media} img={userGroup!!.imgGroup} deleteN={()=>{
         
                     }} userNow={user?.id} userPost={userSeePost.id} editPost={()=>{
                         setEditPostTrue(true)
@@ -313,13 +334,13 @@ export default function Home({navigation}:Props) {
       {user && userGroup?(
           <>
             {user!.isAdmin?(
-              <Title name={userGroup?.name!} category={"Grupo"} img={userGroup?.imgGroup}/>
+              <Title name={userGroup?.name!} category={"Grupo"} img={userGroup?.imgGroup} navigation={navigation}/>
             ):(
-              <Title name={user?.username!} category={userMember?.category! || ""} img={user!.profile_image!}/>
+              <Title name={user?.username!} category={userMember?.category! || ""} img={user!.profile_image!} navigation={navigation}/>
             )}
           </>
         ):null}
-        <View style={styles.viewPostFilter}>
+        <View style={user?.isAdmin?(styles.viewPostFilterN):(styles.viewPostFilter)}>
             <View style={styles.viewPesqShowPost}>
                 <Image style={styles.imgPesqShowPost} source={require('../../../assets/lupa1.png')}/>
                 <TextInput
@@ -335,23 +356,26 @@ export default function Home({navigation}:Props) {
                 <Image style={styles.imgfilterShowPost} source={require('../../../assets/entrar.png')}/>
             </TouchableOpacity>
         </View>
-        <View style={{flexDirection:"row", marginBottom: 20, marginLeft: 25, marginRight: 25}}>
-            {listGroupUser.map!== undefined?(
-              listGroupUser.map((listgroup=>(
-                <ChooseGroup
-                  key={listgroup.id}
-                  placeholder={listgroup.name}
-                  selected={selectedGroupId === listgroup.id}
-                  onchange={() => {
-                    setSelectedGroupId(listgroup.id)
-                    setUserGroup(listgroup)
-                    setLoading(true)
-                  }}
-                />
-              )))
-            ):null}
-        </View>
-        <ScrollView   style={styles.viewShowPost} contentContainerStyle={{ paddingBottom: 500 }} decelerationRate={'normal'} key={1} refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
+        {user?.isAdmin == false?(
+          <View style={{flexDirection:"row", marginBottom: 20, marginLeft: 25, marginRight: 25}}>
+          {listGroupUser.map!== undefined?(
+            listGroupUser.map((listgroup=>(
+              <ChooseGroup
+                key={listgroup.id}
+                placeholder={listgroup.name}
+                selected={selectedGroupId === listgroup.id}
+                onchange={() => {
+                  setSelectedGroupId(listgroup.id)
+                  setUserGroup(listgroup)
+
+                  setLoading(true)
+                }}
+              />
+            )))
+          ):null}
+      </View>
+        ):null}
+        <ScrollView   style={styles.viewShowPost} contentContainerStyle={{ paddingBottom: 110 }} decelerationRate={'normal'} key={1} refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
 
                 {posts.map !== undefined && listUsers !== undefined?(
                     posts.map(VPost =>(
@@ -368,7 +392,7 @@ export default function Home({navigation}:Props) {
                                                    
                                                    setTruePost(true)
                                                 }}>
-                                                    <ShowPosts authentication={()=>{}} name={muralGroup?.name} category={"grupo"} data={VPost.created_at} img={muralGroup.imgGroup || "https://res.cloudinary.com/dfmdiobwa/image/upload/v1715644955/wtnyvouucw0rlu1o9f1f.png"} idPost={VPost.id} text={VPost.content} canceled={false} media={VPost.media} userNow={user?.id!} userPost={VUser.id} isAdmin={user?.isAdmin!} deleteN={()=>{
+                                                    <ShowPosts authentication={()=>{}} name={userGroup!?.name} category={"grupo"} data={VPost.created_at} img={userGroup!.imgGroup || "https://res.cloudinary.com/dfmdiobwa/image/upload/v1715644955/wtnyvouucw0rlu1o9f1f.png"} idPost={VPost.id} text={VPost.content} canceled={false} media={VPost.media} userNow={user?.id!} userPost={VUser.id} isAdmin={user?.isAdmin!} deleteN={()=>{
                                                         setIdPostDeleted(VPost.id)
                                                         setDeleteP(true)
                                                     }} editPostN={()=>{

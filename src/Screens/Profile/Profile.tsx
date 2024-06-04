@@ -296,10 +296,15 @@ const keyboardDidHideListener = Keyboard.addListener(
       {loading?(
         <LoadingMax/>
       ):null}
-      <View style={{width:"70%"}}>  
+      <View style={{width:"70%"}}>
+      <TouchableOpacity onPress={()=>{
+                   navigation.goBack()
+                }}>
+                    <Image style={user?.isAdmin?(styles.imgArrowN):(styles.imgArrow)} source={require('../../../assets/seta-direita.png')}/>
+                </TouchableOpacity>  
       
       {user !== undefined && user!== null?(
-        <ScrollView contentContainerStyle={{ marginTop: 80, paddingBottom: 200, position:"relative" }} decelerationRate={'normal'} showsVerticalScrollIndicator={false}>
+        <ScrollView contentContainerStyle={{ marginTop: 50, paddingBottom: 200, position:"relative" }} decelerationRate={'normal'} showsVerticalScrollIndicator={false}>
         {user?.isAdmin === true?(
             <>
             {imageUri !== ""?(
@@ -333,7 +338,7 @@ const keyboardDidHideListener = Keyboard.addListener(
                     (user?.profile_image ? (
                       <Image source={{ uri: user?.profile_image }} style={{ width: 180, height: 180, borderRadius: 100, alignSelf: "center", }} />
                   ) : (
-                      <Image source={require('../../../assets/trabalho.png')} style={{ width: 180, height: 180, borderRadius: 100,borderWidth: 1, borderColor: "black", alignSelf: "center",}} />
+                      <Image source={require('../../../assets/pensar.png')} style={{ width: 180, height: 180, borderRadius: 100,borderWidth: 1, borderColor: "black", alignSelf: "center",}} />
                   ))
                  )}
                  <View style={styles.viewImageCamera}>

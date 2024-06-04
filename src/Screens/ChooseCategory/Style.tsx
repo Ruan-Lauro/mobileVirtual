@@ -53,7 +53,14 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: "#C91E2D",
         marginLeft: 12,
-        marginTop: 10,
+        marginTop: -20,
+        marginBottom:25,
+    },
+    TextErroMemberN:{
+        fontSize: 16,
+        color: "#C91E2D",
+        marginLeft: 12,
+        marginBottom:25,
     }
    
 })

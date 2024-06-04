@@ -24,7 +24,7 @@ import {useGetMembers, member} from '../../hooks/useGetMembers'
 import { RouteProp } from '@react-navigation/native';
 import MenuTab from '../../Components/MenuTab';
 
-type ChooseMuralScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChooseGroup'>;
+type ChooseMuralScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChooseMuralMember'>;
 
 type  InforGroupMemberScreenRouteProp = RouteProp<RootStackParamList, 'InforGroupMember'>;
 
@@ -43,7 +43,7 @@ type Props = {
 };
 
 
-export default function ChooseMural({navigation, route}:Props) {
+export default function ChooseMuralMember({navigation, route}:Props) {
 
   const {authenticationWG} = useGetWallsGroup()
   const {authenticationGetM} = useGetMembers()
@@ -72,7 +72,7 @@ export default function ChooseMural({navigation, route}:Props) {
                     const ListMember = authenticationGetM()
                     if(userInformation){
                       console.log("Aqui")
-                    if(userInformation.isAdmin){
+                      if(userInformation.isAdmin){
                         setLoading(false)
                     }else{
                        if(value.map !== undefined){
@@ -108,23 +108,23 @@ export default function ChooseMural({navigation, route}:Props) {
        {loading?(
          <LoadingMax/>
        ): null}
-        {user && userGroup ?(
+        {user && userGroup?(
           <>
             {user.isAdmin?(
-              <Title name={userGroup?.name!} category={"Grupo"} img={userGroup?.imgGroup} navigation={navigation}/>
+              <Title name={userGroup?.name!} category={"Grupo"} img={userGroup?.imgGroup}  navigation={navigation}/>
             ):(
               <Title name={user?.username!} category={userMember?.category! || ""} img={user.profile_image}  navigation={navigation}/>
             )}
           </>
         ):null}
         <View style={styles.viewMuraisChooseMural}>
-          <Text style={styles.textMuraisChooseMural}>MURAIS</Text>
+          <Text style={styles.textMuraisChooseMural}>MEMBRO MURAIS</Text>
           <ScrollView style={styles.viewShowMuraisChooseMural} pagingEnabled contentContainerStyle={{ paddingBottom: 150 }}>
             
               {listMurais.map !== undefined && listMurais !== undefined?(
                 listMurais.map((valueListGroup)=>(
                   <TouchableOpacity onPress={()=>{
-                    navigation.navigate('Posts', {muralChoose:{
+                    navigation.navigate('ChooseMember', {muralChoose:{
                       id:valueListGroup.id, category: valueListGroup.category, created_at: valueListGroup.created_at, groupId: valueListGroup.groupId, imgMural: valueListGroup.name, name: valueListGroup.name
                     }})
                   }} key={valueListGroup.id}>
@@ -134,19 +134,12 @@ export default function ChooseMural({navigation, route}:Props) {
                 )
                 )
               ):null}
-              {user?.isAdmin== true?(
-                <TouchableOpacity onPress={()=>{
-                  navigation.navigate('Mural')
-                }}>
-                    <ShowMural authentication={()=>{
-                      }} name={"Adicionar Mural"} img={"https://res.cloudinary.com/dfmdiobwa/image/upload/v1716926877/fyypxugvsc6g3m3pkget.png"} idMural={1} canceled={false}/>
-              </TouchableOpacity>
-              ):null}
+              
             
           </ScrollView>
         </View>
         <View style={{position:"absolute", width:"100%", bottom: 0, paddingBottom: 20, alignItems:"center", }}>
-          <MenuTab navigation={navigation} two/>
+          <MenuTab navigation={navigation} five/>
         </View>
     </View>
   );

@@ -72,10 +72,15 @@ export default function Posts({navigation, route}:Props) {
     useEffect(() => {
         AsyncStorage.getItem('@userInfor')
             .then(async (value) => {
-                setLoading(true);
-                const userInfor = JSON.parse(value!);
-                const userInformation: user = userInfor.data;
-                setUser(userInformation);
+                setLoading(true)
+                const userInfor = JSON.parse(value!)
+                const userInformation: user = userInfor.data
+                setUser(userInformation)
+                setUser(userInformation)
+                const listUserAll = authenticationGetU()
+                listUserAll.then(value=>{
+                  setListUsers(value)
+                })
                 if (muralChoose) {
                     const userlist = authenticationGetU();
                     userlist.then((userValue) => {
@@ -147,11 +152,17 @@ export default function Posts({navigation, route}:Props) {
                 postSelection.then(value=>{
                 const list:posts[] = []
                 value.map(searchValue=>{
-                    let letterUp: string = FirstLetter(searchText)
-                    let letterDown: string = capitalizeFirstLetter(searchText)
-                    if(searchValue.content.includes(searchText) || searchValue.content.includes(letterUp) || searchValue.content.includes(letterDown) ){
-                        list.push(searchValue)
-                    }
+                   if(listUsers?.map!==undefined){
+                        listUsers.map(valueUser=>{
+                            let letterUp: string = FirstLetter(searchText)
+                            let letterDown: string = capitalizeFirstLetter(searchText)
+                            if(searchValue.content.includes(searchText) || searchValue.content.includes(letterUp) || searchValue.content.includes(letterDown) ){
+                                list.push(searchValue)
+                            }else if(searchValue.memberId == valueUser.id && ((valueUser.name.includes(searchText) || valueUser.name.includes(letterUp) || valueUser.name.includes(letterDown)) ||(valueUser.username.includes(searchText) || valueUser.username.includes(letterUp) || valueUser.username.includes(letterDown)))){
+                                list.push(searchValue)
+                            }
+                        })
+                   }
                 })
                 setPosts(list)
                 setRefreshing(false);
@@ -257,9 +268,9 @@ export default function Posts({navigation, route}:Props) {
       {user || userGroup?(
           <>
             {user!.isAdmin?(
-              <Title name={userGroup?.name!} category={"Grupo"} img={userGroup?.imgGroup}/>
+              <Title name={userGroup?.name!} category={"Grupo"} img={userGroup?.imgGroup}  navigation={navigation}/>
             ):(
-              <Title name={user?.username!} category={userMember?.category! || ""} img={user!.profile_image!}/>
+              <Title name={user?.username!} category={userMember?.category! || ""} img={user!.profile_image!} navigation={navigation}/>
             )}
           </>
         ):null}
@@ -280,7 +291,7 @@ export default function Posts({navigation, route}:Props) {
             </TouchableOpacity>
         </View>
         
-        <ScrollView   style={styles.viewShowPost} contentContainerStyle={{ paddingBottom: 500 }} decelerationRate={'normal'} key={1} refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
+        <ScrollView   style={styles.viewShowPost} contentContainerStyle={{ paddingBottom: 110 }} decelerationRate={'normal'} key={1} refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
 
                 {posts.map !== undefined && posts != undefined && listUsers?(
                     posts.map(VPost =>(

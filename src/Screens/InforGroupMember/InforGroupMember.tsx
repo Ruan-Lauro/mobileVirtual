@@ -49,7 +49,7 @@ export default function InforGroupMember({navigation, route}:Props) {
     },[groupChoose])
 
     const EnterHome = () =>{
-
+      navigation.navigate('Home')
     }
 
   return (
