@@ -11,6 +11,7 @@ export type wall = {
   category: string,
   groupId: string,
   created_at: Date;
+  isPrivate?: boolean;
 }
 
 

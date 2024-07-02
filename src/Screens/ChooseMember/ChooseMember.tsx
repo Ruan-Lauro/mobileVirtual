@@ -23,6 +23,8 @@ import SeePost from '../../Components/SeePosts/SeePosts';
 import ChooseCategory from '../ChooseCategory/ChooseCategory';
 import EditPost from '../../Components/EditPost/EditPost';
 import ShowMural from '../../Components/ShowMural/ShowMural';
+import { useDeleteMember } from '../../hooks/useDeleteMember';
+import DeleteMember from '../../Components/DeleteMember/DeleteMember';
 
 type PostsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChooseMember'>;
 
@@ -48,10 +50,13 @@ export default function Posts({navigation, route}:Props) {
     const [pesqTrue, setPesqTrue] = useState(false)
     const [isModalVisible, setModalVisible] = useState(false)
     const [userChoose, setUserChoose] = useState<user>()
+    const [trueDeleteMember, setTrueDeleteMember] = useState(false)
+   
 
     const {authenticationGetM} = useGetMembers()
     const {authenticationG} = useGetGroup()
     const {authenticationGetU} = useGetUsers()
+   
     
     
     const onRefresh = () => {
@@ -193,6 +198,8 @@ export default function Posts({navigation, route}:Props) {
         }
       );
 
+     
+
 
 
   return (
@@ -201,6 +208,13 @@ export default function Posts({navigation, route}:Props) {
         {loading?(
          <LoadingMax/>
        ): null}
+
+       {trueDeleteMember?(
+            <DeleteMember authentication={()=>{
+                setTrueDeleteMember(false)
+                setAtualiz(!atualiz)
+            }} idGroup={muralChoose?.groupId!} idUser={userChoose?.id!}/>
+       ):null}
 
             {isModalVisible?(
               <Modal
@@ -211,11 +225,11 @@ export default function Posts({navigation, route}:Props) {
               >
               <View style={styles.modalContentShowPost}>
               <TouchableOpacity style={{flexDirection:"row",alignItems:"center", }} onPress={()=>{
-                
+                setTrueDeleteMember(true)
                 setModalVisible(false)
               }}>
                   <Image style={{ width: 25,height: 25, marginLeft: 25,}} source={require('../../../assets/botao-apagar.png')}/>
-                  <Text style={styles.modalItemShowPost}>Deletar Mural</Text>
+                  <Text style={styles.modalItemShowPost}>Deletar Membro</Text>
                 </TouchableOpacity>
                 
                      
@@ -261,6 +275,7 @@ export default function Posts({navigation, route}:Props) {
                     <ShowMural authentication={()=>{
                         setModalVisible(true)
                         setUserChoose(VUser)
+                        
                     }} canceled={user?.isAdmin!} idMural={VUser.id!} img={VUser.profile_image || "https://res.cloudinary.com/dfmdiobwa/image/upload/v1715644955/wtnyvouucw0rlu1o9f1f.png"} name={VUser.username} category={VUser.name}/>
                 ))
             ):null}

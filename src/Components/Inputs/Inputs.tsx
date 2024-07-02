@@ -55,7 +55,8 @@ type AuthInputProps = {
   onchange: (text: string) => void;
   Secure: booleanType;
   reject?: booleanType;
-  Variant: "register" | "login"
+  Variant: "register" | "login";
+  onPress?: ()=>void;
 };
 
 export default function Input({
@@ -65,11 +66,12 @@ export default function Input({
     onchange,
     Secure,
     reject,
-    Variant
+    Variant,
+    onPress
 }: AuthInputProps
 ) {
 
   return (
-    <TextInput textContentType={type} placeholder={placeholder} value={value} onChangeText={onchange} secureTextEntry={Secure} style={reject?(Variant === 'login'?styles.inputRejected: styles.inputRejectedRegister): (Variant === "login"? styles.inputStyle: styles.inputRegister)}></TextInput>
+    <TextInput textContentType={type} onPress={onPress} placeholder={placeholder} value={value} onChangeText={onchange} secureTextEntry={Secure} style={reject?(Variant === 'login'?styles.inputRejected: styles.inputRejectedRegister): (Variant === "login"? styles.inputStyle: styles.inputRegister)} ></TextInput>
   );
 }

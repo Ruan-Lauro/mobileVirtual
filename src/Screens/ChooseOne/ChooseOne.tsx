@@ -10,6 +10,8 @@ import { useAuthLogin } from '../../hooks/useAuthLogin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loading from '../../Components/Loading/Loading';
 import React from 'react';
+import { usePostEmailCode } from '../../hooks/usePostEmailCode';
+import EmailVerification from '../../Components/EmailVerification/EmailVerification';
 
 type ChooseOneScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChooseOne'>;
 
@@ -29,13 +31,30 @@ const ChooseOne = ({route, navigation}:Props) =>{
 
   const [chooseUser, setChosseUser] = useState(false)
   const [chooseGroup, setChosseGroup] = useState(false)
+  const [codEmail, setCodEmail] = useState("")
   const { NewUser } = route.params;
+  const [trueCodEmail, setTrueCodEmial] = useState(false)
 
   const {authenticationR} = useRegister()
   const {authenticationE} = useAuthLogin()
+  const {authenticationPEV} = usePostEmailCode()
   const [rejectRegister, setRejectRegister] = useState(false)
 
   const [loading, setLoading] = useState(false)
+
+  const selectVerification = () =>{
+    const code = authenticationPEV(NewUser?.email!)
+    code.then((valueCod)=>{
+      if(valueCod == "Não passou"){
+        console.log("Aconteceu um erro")
+      }else{
+        setCodEmail(valueCod)
+        setTrueCodEmial(true)
+       } 
+      
+    })
+  }
+
 
   const selectOption = () =>{
     setLoading(true)
@@ -132,6 +151,15 @@ const ChooseOne = ({route, navigation}:Props) =>{
       {loading?(
         <Loading/> 
       ):null}
+
+      {trueCodEmail && codEmail?(
+        <EmailVerification authentication={()=>{
+          selectOption()
+          setTrueCodEmial(false)
+        }} emailCod={codEmail} navigation={()=>{
+            setTrueCodEmial(false)
+        }}/>
+      ):null}
       
       <View style={styles.inforLogo}>
         <TouchableOpacity onPress={()=>{
@@ -176,7 +204,7 @@ const ChooseOne = ({route, navigation}:Props) =>{
         </View>
         {chooseGroup || chooseUser?(
           <View style={styles.ButtomChoose}>
-          <Buttons textButton='Selecionar' Condition={true} authentication={selectOption}/>
+          <Buttons textButton='Selecionar' Condition={true} authentication={selectVerification}/>
          </View>
          
         ):null}

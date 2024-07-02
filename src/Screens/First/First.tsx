@@ -26,7 +26,7 @@ export default function First({navigation}:Props) {
       <Image  source={require('../../../assets/LogoMural.png')} style={styles.imgLogo}/>    
     
       <View style={styles.firstInfor}>
-        <Text style={styles.textFirstInfor}>A informaçõa é a chave do sucesso, para que tudo cresça.</Text>
+        <Text style={styles.textFirstInfor}>A informação é a chave do sucesso para que tudo cresça.</Text>
         <Image  source={require("../../../assets/PapeisPersonagem.png")} style={{width: 190, height: 130}}/>    
        
       </View>
@@ -43,7 +43,7 @@ export default function First({navigation}:Props) {
            navigation.navigate('Login')
         }}/>
       </View>
-      <Text style={styles.textFirstBottom}>Ao fazer o <Text style={styles.textStrong}>cadastro</Text>, você está concordando com <Text style={styles.textStrong}>nossos termos</Text></Text>
+      <Text style={styles.textFirstBottom}>Ao fazer o <Text style={styles.textStrong}>cadastro</Text>, você estar concordando com <Text style={styles.textStrong}>nossos termos</Text></Text>
       
     </View>
   );

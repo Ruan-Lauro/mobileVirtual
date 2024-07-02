@@ -68,7 +68,8 @@ export default function Home({navigation}:Props) {
     const [pesqTrue, setPesqTrue] = useState(false)
 
     const [listGroupUser, setListGroupUser] = useState<group[]>([])
-    const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
+    const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null)
+    const [lengthPost, setLengthPost] = useState<number>(0)
 
     const onRefresh = () => {
         setRefreshing(true);
@@ -126,7 +127,7 @@ export default function Home({navigation}:Props) {
           } catch (error) {
             console.error('Erro ao recuperar informações do usuário:', error)
           } finally {
-            setLoading(false)
+           
           }
         };
   
@@ -175,15 +176,19 @@ export default function Home({navigation}:Props) {
                       PostMuralNew.map(value=>{
                         
                         if(listUsers?.map!==undefined){
-                          listUsers.map(valueUser=>{
-                            let letterUp: string = FirstLetter(searchText)
+                          let letterUp: string = FirstLetter(searchText)
                             let letterDown: string = capitalizeFirstLetter(searchText)
                             if(value.content.includes(searchText) || value.content.includes(letterUp) || value.content.includes(letterDown) ){
+                              
                               setPostsTeste(prevList => [...prevList, value])
-                            }else if(value.memberId == valueUser.id && ((valueUser.name.includes(searchText) || valueUser.name.includes(letterUp) || valueUser.name.includes(letterDown)) ||(valueUser.username.includes(searchText) || valueUser.username.includes(letterUp) || valueUser.username.includes(letterDown)))){
-                              setPostsTeste(prevList => [...prevList, value])
+                            }else{
+                              listUsers.map(valueUser=>{
+                                if(value.memberId == valueUser.id && ((valueUser.name.includes(searchText) || valueUser.name.includes(letterUp) || valueUser.name.includes(letterDown)) ||(valueUser.username.includes(searchText) || valueUser.username.includes(letterUp) || valueUser.username.includes(letterDown)))){
+                                  setPostsTeste(prevList => [...prevList, value])
+                                }
+                              })
                             }
-                          })
+                           
                         }
                       })
                     }
@@ -202,18 +207,29 @@ export default function Home({navigation}:Props) {
             const muralAll = authenticationWG(userGroup.id)
             
             muralAll.then((valueMural)=>{
+             
               if(valueMural.map !== undefined){
                 valueMural.map(muralsNew=>{
                   const postMural = authenticationGetPM(muralsNew.id)
                   postMural.then((PostMuralNew)=>{
+                   
                     if(PostMuralNew.map !== undefined){
+                   
                       PostMuralNew.map(value=>{
                         setPostsTeste(prevList => [...prevList, value])
+
                       })
+                    }else{
+                      setPosts([])
+                      setRefreshing(false)
+                      setLoading(false)
                     }
                   })
                   
                 })
+              }else{
+                setRefreshing(false)
+                setLoading(false)
               }
               
               
@@ -225,12 +241,10 @@ export default function Home({navigation}:Props) {
       },[ userGroup, atualiz, deleteP, postDo, trueSeePost, pesqTrue, editPostTrue])
 
       useEffect(()=>{
+        
         if(postsTeste.length!==0){
           const sortedPosts: posts[] = postsTeste.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
-          setPosts(sortedPosts.reverse())
-          setRefreshing(false)
-          setLoading(false)
-        }else{
+          setPosts(sortedPosts.reverse().filter(value=>value.id))
           setRefreshing(false)
           setLoading(false)
         }
@@ -270,6 +284,10 @@ export default function Home({navigation}:Props) {
           })
         }
       },[userGroup])
+
+      useEffect(()=>{
+        console.log(lengthPost)
+      },[lengthPost])
       
 
       const keyboardDidShowListener = Keyboard.addListener(
@@ -288,6 +306,7 @@ export default function Home({navigation}:Props) {
 
   return (
     <View style={styles.allPosts}>
+        
         {editPostTrue?(
             <>
                 {userSeePost?.isAdmin == true?(
@@ -399,7 +418,7 @@ export default function Home({navigation}:Props) {
                                                         setSeePost(VPost)
                                                         setUserSeePost(VUser)
                                                         setEditPostTrue(true)
-                                                    }}/>
+                                                    }} key={VPost.id}/>
                                                 </TouchableOpacity>
                                             ):(
                                                 <>
@@ -422,7 +441,7 @@ export default function Home({navigation}:Props) {
                                                                 setSeePost(VPost)
                                                                 setUserSeePost(VUser)
                                                                 setEditPostTrue(true)
-                                                            }}/>
+                                                            }} key={VPost.id}/>
                                                         </TouchableOpacity>
                                                         ):null}
                                                       </>

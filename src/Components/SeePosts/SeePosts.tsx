@@ -44,6 +44,7 @@ export default function SeePost({img, authentication, name, category, idPost, ca
     const [deleteP, setDeleteP] = useState(false)
     const [idPostDeleted, setIdPostDeleted] = useState("")
     const [editPostTrue, setEditPostTrue] = useState(false)
+    const [status, setStatus] = React.useState({});
 
     const calculateTimeDifference = (postDate: string | Date): string => {
         const currentDate = new Date();
@@ -245,25 +246,27 @@ export default function SeePost({img, authentication, name, category, idPost, ca
                     <Text style={styles.textDoPosts}>{text}</Text>
                     {(video.length!== 0 || image.length!== 0 || pdfN.length !== 0)?(
                         <ScrollView style={styles.viewMedia} horizontal  
-                        showsHorizontalScrollIndicator={false}  contentContainerStyle={{  maxHeight:300,}}  ref={scrollViewRef}  >
+                        showsHorizontalScrollIndicator={false}  contentContainerStyle={{  maxHeight:300,}}  ref={scrollViewRef}  scrollEnabled={false}>
 
                                 {image.length!== 0?(
                                     image.map((listImage)=>(
-                                        <Image source={{ uri: listImage}} style={{width:319, height:300, }} resizeMode="contain"/>
+                                        <Image source={{ uri: listImage}} style={{width:319, height:300,  }} resizeMode="cover"/>
                                     ))
                                 ):null}
                                 
                                 {video.length!==0?(
                                     video.map(listVideo=>(
-                                        <Video
-                                        ref={videoN}
-                                        style={{width: 319, height: 300, }}
-                                        source={{
+                                      <Video
+                                      ref={videoN}
+                                      style={{width: 319, height: 261, backgroundColor:"#353535"}}
+                                      source={{
                                         uri: listVideo,
-                                        }}
-                                        useNativeControls
-                                        resizeMode={ResizeMode.CONTAIN}
-                                        />
+                                      }}
+                                      useNativeControls
+                                      resizeMode={ResizeMode.CONTAIN}
+                                      isLooping
+                                      onPlaybackStatusUpdate={status => setStatus(() => status)}
+                                    />
                                     ))
                                 ):null}
 

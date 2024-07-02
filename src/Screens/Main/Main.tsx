@@ -23,6 +23,7 @@ import Mural from '../Mural/Mural';
 import ChooseGroupMember from '../ChooseGroupMember/ChooseGroupMember';
 import ChooseMuralMember from '../ChooseMuralMember/ChooseMuralMember';
 import ChooseMember from '../ChooseMember/ChooseMember';
+import AccessKey from '../AccessKey/AccessKey';
 
 export default function Main() {
 
@@ -52,6 +53,7 @@ export default function Main() {
         <Stack.Screen name="ChooseGroupMember" component={ChooseGroupMember} />
         <Stack.Screen name="ChooseMuralMember" component={ChooseMuralMember} />
         <Stack.Screen name="ChooseMember" component={ChooseMember} />
+        <Stack.Screen name="AccessKey" component={AccessKey} />
       </Stack.Navigator>
     </NavigationContainer>
   );

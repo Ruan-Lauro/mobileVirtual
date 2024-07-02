@@ -12,10 +12,13 @@ type AuthButtonProps = {
     idPost: string,
 }
 
+
 export default function DeletePost({authentication, idPost}:AuthButtonProps){
 
     const {authenticationDP} = useDeletePost()
     const [loading, setLoading] = useState(false)
+
+    const e:number = 1
 
     const authenDelete = () =>{
         setLoading(true)
@@ -30,13 +33,13 @@ export default function DeletePost({authentication, idPost}:AuthButtonProps){
     }
 
     return(
-        <View style={{width:"100%", alignItems:"center", height:"100%", backgroundColor: "#rgba(255, 255, 255, 0.96)", paddingTop:"55%", position:"absolute", zIndex:999,}}>
+        <View style={{width:"100%", alignItems:"center", height:"100%", backgroundColor: "#rgba(255, 255, 255, 0.96)", paddingTop:"55%", position:"absolute", zIndex:1000,}}>
             {loading?(
                 <LoadingMax/>
             ):null}
             <View style={{width:"85%", backgroundColor:"white", padding:45, alignItems:"center", borderWidth:1, borderColor:"black", position:"relative"}}>
                 <Image style={{width: 170, height: 170,  }} source={require('../../../assets/escolha.png')}/>
-                <Text style={{fontSize: 18, textAlign:"justify", width:"90%"}}>Você tem certeza que irar <Text style={{fontWeight:500}}>deletar</Text> esta postagem?</Text>
+                <Text style={{fontSize: 18, textAlign:"justify", width:"90%"}}>Você tem certeza que irar <Text style={{fontWeight:500}}>deletar</Text> essa postagem?</Text>
                 <View style={{flexDirection:"row", justifyContent:"space-between", width:"90%", marginTop: 10,}}>
                     <TouchableOpacity style={styles.buttonDelete} onPress={authentication}>
                         <Text style={styles.textButtonDelete}>Cancelar</Text>

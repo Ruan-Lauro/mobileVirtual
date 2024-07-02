@@ -9,6 +9,7 @@ export type createMural = {
     groupId: string;
     category: string;
     imgMural: string;
+    isPrivate: boolean;
 }
 
 export const useAddMural = (): useAddMuralResult => {
@@ -20,6 +21,7 @@ export const useAddMural = (): useAddMuralResult => {
         groupId: MuralAdd.groupId,
         imgMural: MuralAdd.imgMural,
         category: MuralAdd.name,
+        isPrivate: MuralAdd.isPrivate
       });
 
 

@@ -67,4 +67,5 @@ export type RootStackParamList = {
     category: string;
     groupId: string;
   }};
+  AccessKey: undefined;
 };

@@ -283,9 +283,9 @@ export default function UserPost({navigation}:Props) {
       {user && userGroup?(
           <>
             {user!.isAdmin?(
-              <Title name={userGroup?.name!} category={"Grupo"} img={userGroup?.imgGroup}/>
+              <Title name={userGroup?.name!} category={"Grupo"} img={userGroup?.imgGroup} navigation={navigation}/>
             ):(
-              <Title name={user?.username!} category={userMember?.category! || ""} img={user!.profile_image!}/>
+              <Title name={user?.username!} category={userMember?.category! || ""} img={user!.profile_image!} navigation={navigation}/>
             )}
           </>
         ):null}
@@ -306,7 +306,7 @@ export default function UserPost({navigation}:Props) {
             </TouchableOpacity>
         </View>
        
-        <ScrollView   style={styles.viewShowPost} contentContainerStyle={{ paddingBottom: 500 }} decelerationRate={'normal'} key={1} refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
+        <ScrollView   style={styles.viewShowPost} contentContainerStyle={{ paddingBottom: 110 }} decelerationRate={'normal'} key={1} refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
 
                 {posts.map !== undefined && listUsers !== undefined?(
                     posts.map(VPost =>(

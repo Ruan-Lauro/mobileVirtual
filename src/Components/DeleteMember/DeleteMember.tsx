@@ -1,30 +1,45 @@
 import { FormEvent, useState } from 'react';
-import styles from './Style';
 import {Text, View, TouchableOpacity, Image } from 'react-native';
 import React from 'react';
-import Buttons from '../Buttons/Buttons';
+import styles from './Style';
 import { useDeletePost } from '../../hooks/useDeletePost';
 import LoadingMax from '../LoadingMax/Loading';
-import { useDeleteMural } from '../../hooks/useDeleteMural';
+import { useDeleteMember } from '../../hooks/useDeleteMember';
+import { useGetMembers } from '../../hooks/useGetMembers';
 
 type AuthButtonProps = {
 
     authentication: () => void ;
-    idMural: number,
+    idUser: string,
+    idGroup: string,
 }
 
-export default function DeleteMural({authentication, idMural}:AuthButtonProps){
+export default function DeleteMember({authentication, idUser, idGroup}:AuthButtonProps){
 
-    const {authenticationRM} = useDeleteMural()
+    const {authenticationDME} = useDeleteMember()
+    const {authenticationGetM} = useGetMembers()
     const [loading, setLoading] = useState(false)
 
     const authenDelete = () =>{
         setLoading(true)
-        const deleteP = authenticationRM(idMural)
-        deleteP.then((valueDelete)=>{
-            authentication()
-            setLoading(false)
-        })
+        if(idUser && idGroup){
+            const listMember = authenticationGetM()
+            listMember.then(value=>{
+                value.map(memberValue=>{
+                    if(memberValue.userId == idUser && idGroup == memberValue.groupId){
+                        const deleteP = authenticationDME(memberValue.id)
+                        deleteP.then((valueDelete)=>{
+                            if(valueDelete == "Member deleted successfully."){
+                                authentication()
+                                setLoading(false)
+                                
+                            }
+                        })
+                    }
+                })
+            })
+            }
+        
     }
 
     return(
@@ -34,7 +49,7 @@ export default function DeleteMural({authentication, idMural}:AuthButtonProps){
             ):null}
             <View style={{width:"85%", backgroundColor:"white", padding:45, alignItems:"center", borderWidth:1, borderColor:"black", position:"relative"}}>
                 <Image style={{width: 170, height: 170,  }} source={require('../../../assets/escolha.png')}/>
-                <Text style={{fontSize: 18, textAlign:"justify", width:"90%"}}>Você tem certeza que irar <Text style={{fontWeight:500}}>deletar</Text> esse Mural?</Text>
+                <Text style={{fontSize: 18, textAlign:"justify", width:"90%"}}>Você tem certeza que irar <Text style={{fontWeight:500}}>deletar</Text> esse membro?</Text>
                 <View style={{flexDirection:"row", justifyContent:"space-between", width:"90%", marginTop: 10,}}>
                     <TouchableOpacity style={styles.buttonDelete} onPress={authentication}>
                         <Text style={styles.textButtonDelete}>Cancelar</Text>

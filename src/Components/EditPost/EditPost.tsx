@@ -290,6 +290,7 @@ export default function EditPost({idPost, exit, img, media, context}:AuthButtonP
             {errorN?(
                 <TextPost authentication={()=>{
                     setErrorN(false)
+                    setLoading(false)
                 }}/>
             ):null}
             

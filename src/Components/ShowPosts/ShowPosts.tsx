@@ -178,7 +178,7 @@ export default function ShowMural({img, authentication, name, category, idPost, 
                         {vide?(
                              <Video
                              ref={video}
-                             style={{width: 260, height: 200,  marginTop:20,}}
+                             style={{width: 260, height: 260,  marginTop:20, backgroundColor:"#353535"}}
                              source={{
                                uri: vide,
                              }}

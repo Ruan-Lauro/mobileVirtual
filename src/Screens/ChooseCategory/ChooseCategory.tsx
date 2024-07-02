@@ -17,6 +17,8 @@ import { RouteProp } from '@react-navigation/native';
 import { user } from '../../hooks/useRegister';
 import React from 'react';
 import { useGetMembers } from '../../hooks/useGetMembers';
+import { useGetMurals } from '../../hooks/useGetMurals';
+import MuralVerification from '../../Components/MuralVerification/MuralVerification';
 
 type ChooseCategoryScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChooseCategory'>;
 type ChooseCategoryScreenRouteProp = RouteProp<RootStackParamList, 'ChooseCategory'>;
@@ -46,10 +48,15 @@ export default function ChooseCategory({navigation, route}:Props) {
     const [selectCategory, setSelectCategory] = useState("")
     const [erroMember, setErroMember] = useState(false)
     const [erroText, setErroText] = useState("")
+    const [trueMemberMural, setTrueMemberMural] = useState(false)
+    const [idMural, setIdMural] = useState<number>()
 
     const {authenticationWG} = useGetWallsGroup()
     const {authenticationAddM} = useAddMember()
     const {authenticationGetM} = useGetMembers()
+    const {authenticationGetMU} = useGetMurals()
+
+
 
     const [walls, setWalls] = useState<wall[]>([])
 
@@ -93,16 +100,29 @@ export default function ChooseCategory({navigation, route}:Props) {
               if(valueListMember.map!== undefined){
                 const memberUser = valueListMember.find(valueMember=> valueMember.userId == user?.id && valueMember.groupId == group?.id)
                 if(!memberUser){
+                  const MuralList = authenticationGetMU()
                   const numSelect = parseInt(selectCategory)
-                    let cod = `${group?.id}!${numSelect}`
-                    const res = authenticationAddM(user?.id!, cod)
-                    res.then((data)=>{
-                      if(data = 'Member created successfully.'){
-                        navigation.navigate('InforGroupMember', {groupChoose: {id: group!.id, name: group!.name, created_at: group!.created_at, imgGroup: group!.imgGroup, groupCode: group!.groupCode, userId: group!.userId}})
-                      }else{
-                        console.log("Não criado")
+                  MuralList.then(valueMuralList=>{
+                    valueMuralList.map(valueList=>{
+                      if(valueList.id == numSelect){
+                        if(valueList.isPrivate){
+                          setTrueMemberMural(true)
+                          setIdMural(valueList.id!)
+                        }else{
+                         let cod = `${group?.id}!${numSelect}`
+                         const res = authenticationAddM(user?.id!, cod)
+                         res.then((data)=>{
+                           if(data = 'Member created successfully.'){
+                             navigation.navigate('InforGroupMember', {groupChoose: {id: group!.id, name: group!.name, created_at: group!.created_at, imgGroup: group!.imgGroup, groupCode: group!.groupCode, userId: group!.userId}})
+                           }else{
+                             console.log("Não criado")
+                           }
+                         })
+                        }
                       }
                     })
+                  })
+                 
                 }else{
                   setErroMember(true)
                   setErroText("Usuário já cadastrado nesse grupo")
@@ -112,10 +132,46 @@ export default function ChooseCategory({navigation, route}:Props) {
             
         }
     }
+
+    const AuthenMuralPrivate = () =>{
+      if(selectCategory){
+        const listMember = authenticationGetM()
+        listMember.then(valueListMember=>{
+          if(valueListMember.map!== undefined){
+            const memberUser = valueListMember.find(valueMember=> valueMember.userId == user?.id && valueMember.groupId == group?.id)
+            if(!memberUser){
+              const numSelect = parseInt(selectCategory)
+              let cod = `${group?.id}!${numSelect}`
+                         const res = authenticationAddM(user?.id!, cod)
+                         res.then((data)=>{
+                           if(data = 'Member created successfully.'){
+                             navigation.navigate('InforGroupMember', {groupChoose: {id: group!.id, name: group!.name, created_at: group!.created_at, imgGroup: group!.imgGroup, groupCode: group!.groupCode, userId: group!.userId}})
+                           }else{
+                             console.log("Não criado")
+                           }
+                         })
+             
+            }else{
+              setErroMember(true)
+              setErroText("Usuário já cadastrado nesse grupo")
+            }
+          }
+        })
+        
+    }
+    }
     
 
   return (
     <View style={styles.allChooseCategory}>
+      {trueMemberMural && idMural?(
+        <MuralVerification authentication={()=>{
+          AuthenMuralPrivate()
+          setTrueMemberMural(false)
+        }} idMural={idMural} navigation={()=>{
+          setTrueMemberMural(false)
+        }}/>
+      ):null}
         <View style={styles.inforLogo}>
           <TouchableOpacity onPress={()=>{
             navigation.goBack()

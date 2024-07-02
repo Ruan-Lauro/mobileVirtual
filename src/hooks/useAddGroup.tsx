@@ -21,10 +21,10 @@ export const useAddGroup = (): useAddGroupResult => {
       });
 
 
-      return response.data;
+      return response.data
     } catch (error) {
       console.log(error)
-      return 'Não passou';
+      return 'Não passou'
     }
 
   };

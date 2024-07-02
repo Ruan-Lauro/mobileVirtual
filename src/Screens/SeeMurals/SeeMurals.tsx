@@ -144,7 +144,9 @@ export default function SeeMural({navigation}:Props) {
                         <ShowMural authentication={()=>{
                             setModalVisible(true)
                             setMuralIdDelete(value)
-                        }} img={value.imgMural} name={value.name} idMural={value.id} key={value.id} canceled={true} />
+                        }} img={value.imgMural} name={value.name} idMural={value.id} key={value.id} canceled={true} category={""+value.id
+                            
+                        } textSecond={true}/>
                     ))
                 ): null}
             </View>

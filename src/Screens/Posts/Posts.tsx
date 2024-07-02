@@ -153,15 +153,18 @@ export default function Posts({navigation, route}:Props) {
                 const list:posts[] = []
                 value.map(searchValue=>{
                    if(listUsers?.map!==undefined){
-                        listUsers.map(valueUser=>{
-                            let letterUp: string = FirstLetter(searchText)
-                            let letterDown: string = capitalizeFirstLetter(searchText)
-                            if(searchValue.content.includes(searchText) || searchValue.content.includes(letterUp) || searchValue.content.includes(letterDown) ){
-                                list.push(searchValue)
-                            }else if(searchValue.memberId == valueUser.id && ((valueUser.name.includes(searchText) || valueUser.name.includes(letterUp) || valueUser.name.includes(letterDown)) ||(valueUser.username.includes(searchText) || valueUser.username.includes(letterUp) || valueUser.username.includes(letterDown)))){
-                                list.push(searchValue)
-                            }
-                        })
+                    let letterUp: string = FirstLetter(searchText)
+                    let letterDown: string = capitalizeFirstLetter(searchText)
+                    if(searchValue.content.includes(searchText) || searchValue.content.includes(letterUp) || searchValue.content.includes(letterDown) ){
+                      
+                      list.push(searchValue)
+                    }else{
+                      listUsers.map(valueUser=>{
+                        if(searchValue.memberId == valueUser.id && ((valueUser.name.includes(searchText) || valueUser.name.includes(letterUp) || valueUser.name.includes(letterDown)) ||(valueUser.username.includes(searchText) || valueUser.username.includes(letterUp) || valueUser.username.includes(letterDown)))){
+                            list.push(searchValue)
+                        }
+                      })
+                    }
                    }
                 })
                 setPosts(list)

@@ -257,6 +257,7 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
             {errorN?(
                 <TextPost authentication={()=>{
                     setErrorN(false)
+                    setLoading(false)
                 }}/>
             ):null}
             

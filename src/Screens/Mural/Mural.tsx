@@ -39,7 +39,7 @@ export default function Mural({navigation}:Props) {
   const [imageUri, setImageUri] = useState("");
   const [muralAdd, setMuralAdd] = useState(false)
   const [groupMural, setGroupMural] = useState<group>()
-
+  const [isPrivate, setIsPrivate] = useState(false)
 
   useEffect(()=>{
     AsyncStorage.getItem('@userInfor')
@@ -69,6 +69,7 @@ export default function Mural({navigation}:Props) {
           groupId: groupMural?.id!,
           imgMural: response.url,
           category: nameMural,
+          isPrivate: isPrivate,
         }
         const mural = authenticationAddM(muralAdd)
         mural.then((value)=>{
@@ -76,6 +77,7 @@ export default function Mural({navigation}:Props) {
             setMuralAdd(true)
             setImageUri("")
             setNameMural(" ")
+            setIsPrivate(false)
             setLoading(false)
           }
         })
@@ -136,7 +138,12 @@ export default function Mural({navigation}:Props) {
                    )}
                 </TouchableOpacity>
                 <InputEdit placeholder='Mural' value={nameMural} onchange={setNameMural} type='name' Secure={false} reject={reject} Variant='login'/>
-                
+            </View>
+            <View style={{flexDirection:"row", marginLeft: 15, marginTop: 10}}>
+                <TouchableOpacity style={isPrivate?{borderWidth:1, borderRadius: 100, width: 20, marginRight: 10, backgroundColor:"#1a1a1a"}:{borderWidth:1, borderRadius: 100, width: 20, marginRight: 10}} onPress={()=>{
+                  setIsPrivate(!isPrivate)
+                }}></TouchableOpacity>
+                <Text>Mural Privado</Text>
             </View>
             {muralAdd?(
                   <Text style={{fontSize: 16, opacity: 0.8, marginTop: 10,}}>Mural adicionado com sucesso!</Text>

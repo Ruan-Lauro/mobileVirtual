@@ -51,7 +51,7 @@ export default function Configuration({navigation}:Props) {
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.viewImgConfiguration} onPress={()=>{
-            
+            navigation.navigate('AccessKey')
           }}>
             <Image style={styles.imgConfiguration} source={require('../../../assets/privacidade.png')}/>
             <View>

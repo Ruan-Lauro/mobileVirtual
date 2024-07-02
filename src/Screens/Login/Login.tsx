@@ -11,6 +11,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../type';
 import React from 'react';
 import { user } from '../../hooks/useRegister';
+import EmailVerification from '../../Components/EmailVerification/EmailVerification';
+import { usePostEmailCode } from '../../hooks/usePostEmailCode';
+import SendEmail from '../../Components/SendEmail/SendEmail';
 
 type RegisterScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
@@ -29,6 +32,7 @@ export default function Login({navigation}:Props) {
   const [inforUser, setInforUser] = useState()
   const [reject, setReject] = useState(false)
   const [load, setLoad] = useState(false)
+  const [trueCodEmail, setTrueCodEmial] = useState(false)
 
   const authenLogin = () =>{
 
@@ -74,12 +78,22 @@ export default function Login({navigation}:Props) {
 
   return (
     <View style={styles.allLogin}>
+       {trueCodEmail?(
+        <SendEmail navigation={()=>{
+          setTrueCodEmial(false)
+         
+        }} functionEmail={()=>{
+          setTrueCodEmial(false)
+        }}/>
+       ):null}
       <Image style={styles.imgLogin} source={require('../../../assets/Imagens.png')}/>
       
       <View style={styles.inputView}>
         <Input placeholder='Email' value={email} onchange={setEmail} type='emailAddress' Secure={false} reject={reject} Variant='login'/>
         <Input placeholder='Senha' value={password} onchange={setPassword} type='password' Secure={true} reject={reject} Variant='login'/>
-        <Text style={styles.inputViewText}>Esqueceu a senha?</Text>
+        <Text style={styles.inputViewText} onPress={()=>{
+          setTrueCodEmial(true)
+        }}>Esqueceu a senha?</Text>
         {reject?(
         <Text style={styles.textReject}>E-mail ou senha incorreta</Text>
       ):null}

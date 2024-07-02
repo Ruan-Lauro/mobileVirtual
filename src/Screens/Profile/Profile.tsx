@@ -397,17 +397,7 @@ const keyboardDidHideListener = Keyboard.addListener(
             <View style={styles.viewAllTextInfor}>
               <View  style={styles.viewTextInfor}>
                 <Text style={styles.textTop}>E-mail</Text>
-                {editEmail?(
-                  <Text onPress={()=>{
-                    setEditEmail(false)
-                  }} style={styles.exit}>X</Text>
-                ):(
-                  <TouchableOpacity onPress={()=>{
-                    setEditEmail(!editEmail)
-                  }}>
-                    <Image source={require('../../../assets/editar.png')} style={{ width: 20, height: 20,}} />
-                  </TouchableOpacity>
-                )}
+                
               </View>
               {editEmail?(
                 <TextInput style={styles.inforText} placeholder={"E-mail"} value={email} onChangeText={setEmail}>
@@ -417,37 +407,7 @@ const keyboardDidHideListener = Keyboard.addListener(
               <Text style={styles.inforText}>{user?.email}</Text>
              )}
             </View>
-             {/* Password edit */}
-            {/* <View style={styles.viewAllTextInfor}>
-              <View  style={styles.viewTextInfor}>
-                <Text style={styles.textTop}>Senha</Text>
-                {editPassword?(
-                  <Text onPress={()=>{
-                    setEditPassword(false)
-                  }} style={styles.exit}>X</Text>
-                ):(
-                  <TouchableOpacity onPress={()=>{
-                    setEditPassword(!editPassword)
-                  }}>
-                    <Image source={require('../../../assets/editar.png')} style={{ width: 20, height: 20,}} />
-                  </TouchableOpacity>
-                )}
-              </View>
-              {editPassword?(
-                <>
-                  <TextInput style={styles.inforText} placeholder={"Senha"} onChangeText={setPassword} secureTextEntry={true}>
-                </TextInput >
-                <View style={{marginTop:10}}>
-                  <Text style={styles.textTop}>Confirmar senhar</Text>
-                  <TextInput  style={styles.inforText} placeholder={"Corfime sua senha"} onChangeText={setConfirmPassword} secureTextEntry={true}>
-  
-                  </TextInput>
-                </View>
-                </>
-             ):(
-              <Text style={styles.inforText}>********</Text>
-             )}
-            </View> */}
+            
 
             {user.isAdmin?(
               <>
