@@ -60,7 +60,7 @@ export default function Configuration({navigation}:Props) {
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.viewImgConfiguration} onPress={()=>{
-            
+            navigation.navigate('Help')
           }}>
             <Image style={styles.imgConfigurationN} source={require('../../../assets/atencao.png')}/>
             <View>

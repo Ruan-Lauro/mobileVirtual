@@ -1,7 +1,8 @@
+import axios from "axios";
 import api from "../Services/Api";
 
 interface useGetPostsMuralResult {
-  authenticationGetPM: (muralId: number) => Promise<posts[]>;
+  authenticationGetPM: (muralId: number) => Promise<posts[] | string>;
 }
 
 export type posts = {
@@ -24,8 +25,17 @@ export const useGetPostsMural = (): useGetPostsMuralResult => {
 
       return response.data;
     } catch (error) {
-      console.log(error)
-      return 'Não passou PostMural';
+      if (axios.isAxiosError(error)) {
+        
+        if (error.response && error.response.status === 400) {
+          return "user erro"
+        } else {
+          return "servidor erro"
+        }
+      } else {
+       
+        console.error('Erro desconhecido:', error)
+      }
     }
 
   };

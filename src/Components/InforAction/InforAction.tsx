@@ -18,7 +18,7 @@ export default function InforAction({authentication, textOne, textPrinc, textTwo
                     authentication()
                 }}>x</Text>
                 <Image style={{width: 180, height: 180,  }} source={require('../../../assets/investigacao.png')}/>
-                <Text style={{fontSize: 18, textAlign:"center"}}>{textOne}<Text style={{fontWeight:500}}>{textPrinc}</Text>{textTwo}</Text>
+                <Text style={{fontSize: 18, textAlign:"center", }}>{textOne}<Text style={{fontWeight:500}}>{textPrinc}</Text>{textTwo}</Text>
             </View>
 
         </View>

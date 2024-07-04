@@ -14,6 +14,7 @@ import { user } from '../../hooks/useRegister';
 import EmailVerification from '../../Components/EmailVerification/EmailVerification';
 import { usePostEmailCode } from '../../hooks/usePostEmailCode';
 import SendEmail from '../../Components/SendEmail/SendEmail';
+import ErroInternet from '../../Components/erroInternet/ErroInternet';
 
 type RegisterScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
@@ -33,15 +34,20 @@ export default function Login({navigation}:Props) {
   const [reject, setReject] = useState(false)
   const [load, setLoad] = useState(false)
   const [trueCodEmail, setTrueCodEmial] = useState(false)
+  const [erroComponent, setErroComponent] = useState(false)
 
   const authenLogin = () =>{
-
+    setLoad(true)
     const res = authenticationE(email, password)
     res.then(async (data) =>{
-      if(data === "Não passou"){
+      if(data == "user erro"){
         setLoad(false)
         Vibration.vibrate()
         setReject(true)
+      }else if(data == "servidor erro"){
+        console.log("Aqui")
+        setLoad(false)
+        setErroComponent(true)
       }else{
         setLoad(false)
         setReject(false)
@@ -84,6 +90,11 @@ export default function Login({navigation}:Props) {
          
         }} functionEmail={()=>{
           setTrueCodEmial(false)
+        }}/>
+       ):null}
+       {erroComponent?(
+        <ErroInternet authentication={()=>{
+          setErroComponent(false)
         }}/>
        ):null}
       <Image style={styles.imgLogin} source={require('../../../assets/Imagens.png')}/>

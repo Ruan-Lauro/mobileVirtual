@@ -8,6 +8,7 @@ import Loading from '../../Components/Loading/Loading';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../type';
 import React from 'react';
+import ErroInternet from '../../Components/erroInternet/ErroInternet';
 
 type CodGroupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'CodGroup'>;
 
@@ -19,22 +20,30 @@ type Props = {
 
 export default function CodGroup({navigation}:Props) {
 
- const [codGroup, setGroup] = useState("")
- const [reject, setReject] = useState(false)
-
+  const [codGroup, setGroup] = useState("")
+  const [reject, setReject] = useState(false)
+  const [erroComponent, setErroComponent] = useState(false)
   const {authenticationG} = useGetGroup()
 
   const authenCod = () => {
     if (codGroup !== "") {
-      const groups = authenticationG(); 
-      const chooseGroup = groups.then((data:group[])=>{
-        const group = data.filter((value)=> value.groupCode === parseInt(codGroup))
-        if(group.length !== 0){
-          group.map((date)=>{
-            navigation.navigate('ChooseCategory', {groupChoose: {id: date.id, name: date.name, created_at: date.created_at, imgGroup: date.imgGroup, groupCode: date.groupCode, userId: date.userId}})
-          })
+      const groups = authenticationG()
+      const chooseGroup = groups.then((data)=>{
+        if(typeof data !== "string"){
+          const group = data.filter((value)=> value.groupCode === parseInt(codGroup))
+          if(group.length !== 0){
+            group.map((date)=>{
+              navigation.navigate('ChooseCategory', {groupChoose: {id: date.id, name: date.name, created_at: date.created_at, imgGroup: date.imgGroup, groupCode: date.groupCode, userId: date.userId}})
+            })
+          }else{
+            console.log(setReject(true))
+          }
         }else{
-          console.log(setReject(true))
+          if(data == "user erro"){
+            return
+          }else if(data == "servidor erro"){
+            setErroComponent(true)
+          } 
         }
         
       })
@@ -45,6 +54,11 @@ export default function CodGroup({navigation}:Props) {
   return (
     <View style={styles.allCodGroup}>
      <View style={styles.inforLogo}>
+     {erroComponent?(
+        <ErroInternet authentication={()=>{
+          setErroComponent(false)
+        }}/>
+       ):null}
         <TouchableOpacity onPress={()=>{
           navigation.goBack()
         }}>

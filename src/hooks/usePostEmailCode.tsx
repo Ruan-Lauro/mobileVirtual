@@ -1,4 +1,4 @@
-
+import axios, { AxiosError } from 'axios';
 import api from "../Services/Api";
 
 interface usePostEmailResult {
@@ -14,8 +14,17 @@ export const usePostEmailCode = (): usePostEmailResult => {
 
       return response.data;
     } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 400) {
+          return "user erro"
+        } else {
+          return "servidor erro"
+        }
+      } else {
+       
+        console.error('Erro desconhecido:', error)
+      }
       
-      return 'Não passou';
     }
 
   };

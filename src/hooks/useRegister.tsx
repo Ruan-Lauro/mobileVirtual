@@ -1,4 +1,4 @@
-
+import axios, { AxiosError } from 'axios';
 import api from "../Services/Api";
 
 export type user = {
@@ -35,8 +35,15 @@ export const useRegister = (): UseRegisterResult => {
       
       return response.data;
     } catch (error) {
-      console.log(error)
-      return 'Aconteceu um erro';
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 400) {
+          return "user erro"
+        }else{
+          return "servidor erro"
+        }
+      } else {
+        console.error('Erro desconhecido:', error)
+      }
     }
 
   };

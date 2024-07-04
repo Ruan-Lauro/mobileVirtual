@@ -24,6 +24,7 @@ import ChooseGroupMember from '../ChooseGroupMember/ChooseGroupMember';
 import ChooseMuralMember from '../ChooseMuralMember/ChooseMuralMember';
 import ChooseMember from '../ChooseMember/ChooseMember';
 import AccessKey from '../AccessKey/AccessKey';
+import Help from '../Help/Help';
 
 export default function Main() {
 
@@ -54,6 +55,7 @@ export default function Main() {
         <Stack.Screen name="ChooseMuralMember" component={ChooseMuralMember} />
         <Stack.Screen name="ChooseMember" component={ChooseMember} />
         <Stack.Screen name="AccessKey" component={AccessKey} />
+        <Stack.Screen name="Help" component={Help} />
       </Stack.Navigator>
     </NavigationContainer>
   );

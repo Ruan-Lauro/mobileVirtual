@@ -1,7 +1,8 @@
+import axios from "axios";
 import api from "../Services/Api";
 
 interface useGetGroupResult {
-  authenticationG: () => Promise<group[]>;
+  authenticationG: () => Promise<group[] | string>;
 }
 
 export type group = {
@@ -26,7 +27,17 @@ export const useGetGroup = (): useGetGroupResult => {
       return response.data;
     } catch (error) {
       console.log(error)
-      return 'Aconteceu um erro';
+      if (axios.isAxiosError(error)) {
+        
+        if (error.response && error.response.status === 400) {
+          return "user erro"
+        } else {
+          return "servidor erro"
+        }
+      } else {
+       
+        console.error('Erro desconhecido:', error)
+      }
     }
 
   };

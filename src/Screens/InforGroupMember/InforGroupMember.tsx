@@ -16,8 +16,8 @@ import { RouteProp } from '@react-navigation/native';
 import { user } from '../../hooks/useRegister';
 import React from 'react';
 
-type InforGroupMemberScreenNavigationProp = RouteProp<RootStackParamList, 'InforGroupMember'>;
-type  InforGroupMemberScreenRouteProp = RouteProp<RootStackParamList, 'InforGroupMember'>;
+type InforGroupMemberScreenNavigationProp = StackNavigationProp<RootStackParamList, 'InforGroupMember'>;
+type InforGroupMemberScreenRouteProp = RouteProp<RootStackParamList, 'InforGroupMember'>;
 
 type route = {
     params: { id: string;

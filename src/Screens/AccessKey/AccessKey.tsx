@@ -16,6 +16,7 @@ import { usePutUser } from '../../hooks/usePutUser';
 import { useGetUsers } from '../../hooks/useGetUsers';
 import LoadingMax from '../../Components/LoadingMax/Loading';
 import { useAuthLogin } from '../../hooks/useAuthLogin';
+import ErroInternet from '../../Components/erroInternet/ErroInternet';
 
 type CodGroupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'AccessKey'>;
 
@@ -41,6 +42,7 @@ export default function AccessKey({navigation}:Props) {
  const [textReject, setTextReject] = useState("")
  const [loading,setLoading] = useState(false)
  const [text, setText] = useState("º A senha deve conter oito caracteres")
+ const [erroComponent, setErroComponent] = useState(false)
 
  const {authenticationPEV} = usePostEmailCode()
  const {authenticationPutU} = usePutUser()
@@ -90,9 +92,11 @@ export default function AccessKey({navigation}:Props) {
                 if(newPassword === confirmNewPassword){
                     const res = authenticationE(user!.email, password)
                     res.then(async (data) =>{
-                        if(data == "Não passou"){
+                        if(data == "user erro"){
                             setReject(true)
                             setTextReject("Senha não condiz")
+                        }else if(data == "servidor erro"){
+                            setErroComponent(true)
                         }else{
                             if(newPassword !== password){
                                 const userNew = {
@@ -144,9 +148,11 @@ export default function AccessKey({navigation}:Props) {
                 if(newPassword === confirmNewPassword){
                     const res = authenticationE(user!.email, password)
                     res.then(async (data) =>{
-                        if(data == "Não passou"){
+                        if(data == "user erro"){
                             setReject(true)
                             setTextReject("Senha não condiz")
+                        }else if(data == "servidor erro"){
+                            setErroComponent(true)
                         }else{
                             if(newPassword !== password){
                                 const userNew = {
@@ -267,7 +273,11 @@ export default function AccessKey({navigation}:Props) {
             setTrueCodEmial(false)
         }}/>
       ):null}
-
+       {erroComponent?(
+        <ErroInternet authentication={()=>{
+          setErroComponent(false)
+        }}/>
+       ):null}
       {loading?(
         <LoadingMax/>
       ):null}

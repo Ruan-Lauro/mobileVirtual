@@ -1,7 +1,8 @@
+import axios from "axios";
 import api from "../Services/Api";
 
 interface useGetWallsGroupResult  {
-    authenticationWG: (idGroup: string) => Promise<wall[]>;
+    authenticationWG: (idGroup: string) => Promise<wall[] | string>;
 }
 
 export type wall = {
@@ -25,8 +26,17 @@ export const useGetWallsGroup = (): useGetWallsGroupResult  => {
       
       return response.data;
     } catch (error) {
-      console.log(error)
-      return 'Aconteceu um erro';
+      if (axios.isAxiosError(error)) {
+        
+        if (error.response && error.response.status === 400) {
+          return "user erro"
+        } else {
+          return "servidor erro"
+        }
+      } else {
+       
+        console.error('Erro desconhecido:', error)
+      }
     }
 
   };

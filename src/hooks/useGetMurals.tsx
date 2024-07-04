@@ -1,8 +1,9 @@
 
+import axios from "axios";
 import api from "../Services/Api";
 
 interface useGetMuralsResult {
-  authenticationGetMU: () => Promise<wall[]>;
+  authenticationGetMU: () => Promise<wall[] | string>;
 }
 
 export type wall = {
@@ -25,8 +26,17 @@ export const useGetMurals = (): useGetMuralsResult => {
 
       return response.data;
     } catch (error) {
-      console.log(error)
-      return 'Não passou';
+      if (axios.isAxiosError(error)) {
+        
+        if (error.response && error.response.status === 400) {
+          return "user erro"
+        } else {
+          return "servidor erro"
+        }
+      } else {
+       
+        console.error('Erro desconhecido:', error)
+      }
     }
 
   };

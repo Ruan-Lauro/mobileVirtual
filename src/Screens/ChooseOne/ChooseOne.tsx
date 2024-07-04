@@ -12,6 +12,7 @@ import Loading from '../../Components/Loading/Loading';
 import React from 'react';
 import { usePostEmailCode } from '../../hooks/usePostEmailCode';
 import EmailVerification from '../../Components/EmailVerification/EmailVerification';
+import ErroInternet from '../../Components/erroInternet/ErroInternet';
 
 type ChooseOneScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChooseOne'>;
 
@@ -39,18 +40,24 @@ const ChooseOne = ({route, navigation}:Props) =>{
   const {authenticationE} = useAuthLogin()
   const {authenticationPEV} = usePostEmailCode()
   const [rejectRegister, setRejectRegister] = useState(false)
-
+  const [erroComponent, setErroComponent] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const selectVerification = () =>{
+    setLoading(true)
     const code = authenticationPEV(NewUser?.email!)
     code.then((valueCod)=>{
-      if(valueCod == "Não passou"){
-        console.log("Aconteceu um erro")
-      }else{
+      if(valueCod == "servidor erro"){
+        setLoading(false)
+        setErroComponent(true)
+      }else if(valueCod == "user erro"){
+        return
+      }
+      else{
+        setLoading(false)
         setCodEmail(valueCod)
-        setTrueCodEmial(true)
-       } 
+        setTrueCodEmial(true) 
+      } 
       
     })
   }
@@ -75,10 +82,11 @@ const ChooseOne = ({route, navigation}:Props) =>{
           setRejectRegister(false)
           const res = authenticationE(NewUser!.email!, NewUser!.password!)
           res.then((data) =>{
-            if(data === "Não passou"){
+            if(data === "user erro"){
               setLoading(false)
-              console.log("Não passou")
-              
+            }else if(data == "servidor erro"){
+              setLoading(false)
+              setErroComponent(true)
             }else{
               AsyncStorage.setItem('@userInfor', JSON.stringify(data))
               .then(() => {
@@ -94,8 +102,13 @@ const ChooseOne = ({route, navigation}:Props) =>{
             }
           })
         }else{
-          setLoading(false)
-          setRejectRegister(true)
+          if(data == "user erro"){
+            setLoading(false)
+            setRejectRegister(true)
+          }else if(data == "servidor erro"){
+            setErroComponent(true)
+            setLoading(false)
+          }
 
         }
       })
@@ -117,12 +130,12 @@ const ChooseOne = ({route, navigation}:Props) =>{
           setRejectRegister(false)
           const res = authenticationE(NewUser!.email!, NewUser!.password!)
           res.then((data) =>{
-            if(data === "Não passou"){
+            if(data === "user erro"){
               setLoading(false)
-              console.log("Não passou")
-              
+            }else if(data == "servidor erro"){
+              setLoading(false)
+              setErroComponent(true)
             }else{
-              
               AsyncStorage.setItem('@userInfor', JSON.stringify(data))
               .then(() => {
                 console.log('Informações do usuário armazenadas com sucesso.');
@@ -137,8 +150,14 @@ const ChooseOne = ({route, navigation}:Props) =>{
             }
           })
         }else{
-          setLoading(false)
-          setRejectRegister(true)
+          if(data == "user erro"){
+            setLoading(false)
+            setRejectRegister(true)
+          }if(data == "servidor erro"){
+            setErroComponent(true)
+            setLoading(false)
+            
+          }
 
         }
         
@@ -151,7 +170,11 @@ const ChooseOne = ({route, navigation}:Props) =>{
       {loading?(
         <Loading/> 
       ):null}
-
+      {erroComponent?(
+        <ErroInternet authentication={()=>{
+          setErroComponent(false)
+        }}/>
+       ):null}
       {trueCodEmail && codEmail?(
         <EmailVerification authentication={()=>{
           selectOption()
