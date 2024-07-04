@@ -10,6 +10,7 @@ import cloudinary from '../../Services/cloudinary';
 import TextPost from '../TextPost/TextPost';
 import LoadingMax from '../LoadingMax/Loading';
 import { usePutPost } from '../../hooks/usePutPost';
+import ErroInternet from '../erroInternet/ErroInternet';
 
 type AuthButtonProps = {
     img?: string,
@@ -40,7 +41,7 @@ export default function EditPost({idPost, exit, img, media, context}:AuthButtonP
     const [mediaPostN, setMediaPostN] = useState<string[]>([])
     const [errorN, setErrorN] = useState(false)
     const [loading,setLoading] = useState(false)
-    
+    const [erroComponent, setErroComponent] = useState(false)
 
     const pickPdf =  async () =>{
         let result = await DocumentPicker.getDocumentAsync({
@@ -225,10 +226,17 @@ export default function EditPost({idPost, exit, img, media, context}:AuthButtonP
 
            const resp = authenticationPutP(newPost)
            resp.then((valueResp)=>{
-                console.log(valueResp)
-                setText("")
-                setLoading(false)
-                exit()
+                if(valueResp == "user erro"){
+                    setLoading(false)
+                    return
+                }else if(valueResp == "servidor erro"){
+                    setErroComponent(true)
+                    setLoading(false)
+                }else{
+                    setText("")
+                    setLoading(false)
+                    exit()
+                }
            })
             
         } else if(video.length!== 0 || pdfN.length!==0 || image.length!==0){
@@ -249,7 +257,16 @@ export default function EditPost({idPost, exit, img, media, context}:AuthButtonP
                    console.log(newPost)
                    const resp = authenticationPutP(newPost)
                    resp.then((valueResp)=>{
-                        exit()
+                        if(valueResp == "user erro"){
+                            setLoading(false)
+                            return
+                        }else if(valueResp == "servidor erro"){
+                            setLoading(false)
+                            setErroComponent(true)
+                        }else{
+                            setLoading(false)
+                            exit()
+                        }
                    })
             }
         }
@@ -286,6 +303,11 @@ export default function EditPost({idPost, exit, img, media, context}:AuthButtonP
         <ScrollView style={styles.allDoPosts} >
             {loading?(
                 <LoadingMax type={true}></LoadingMax>
+            ):null}
+            {erroComponent?(
+            <ErroInternet authentication={()=>{
+                setErroComponent(false)
+                }}/>
             ):null}
             {errorN?(
                 <TextPost authentication={()=>{

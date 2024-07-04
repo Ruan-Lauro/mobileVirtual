@@ -10,6 +10,7 @@ import React from 'react';
 import { usePutUser } from '../../hooks/usePutUser';
 import LoadingMax from '../LoadingMax/Loading';
 import InforAction from '../InforAction/InforAction';
+import ErroInternet from '../erroInternet/ErroInternet';
 
 type emailVerification = {
     email: string,
@@ -30,54 +31,74 @@ export default function PutPassword({email, navigation, authentication}:emailVer
  const {authenticationGetU} = useGetUsers()
  const [loading, setLoading] = useState(false)
  const {authenticationPutU} = usePutUser()
-
+ const [erroComponent, setErroComponent] = useState(false)
+ 
   const authenCod = () => {
     const userList = authenticationGetU()
     userList.then(value=>{
-        value.map(valueUser=>{
-            if(valueUser.email===email){
-                if(password){
-                    if(confirmPassword){
-                        if(password === confirmPassword){
-                            const userNew = {
-                                id: valueUser?.id!,
-                                password: password!
-                            }
-                    
-                            const profileNew = authenticationPutU(userNew)
-                            profileNew.then((valueP)=>{
-                                if(valueP == "User updated successfully."){
-                                    setLoading(false)
-                                    setPassword("")
-                                    setConfirmPassword("")
-                                    setTextShow("Senha modificada")
-                                    setInforShow(true)
+        if(typeof value !== "string"){
+            value.map(valueUser=>{
+                if(valueUser.email===email){
+                    if(password){
+                        if(confirmPassword){
+                            if(password === confirmPassword){
+                                const userNew = {
+                                    id: valueUser?.id!,
+                                    password: password!
                                 }
-                            })
-                           
+                        
+                                const profileNew = authenticationPutU(userNew)
+                                profileNew.then((valueP)=>{
+                                    if(valueP == "User updated successfully."){
+                                        setLoading(false)
+                                        setPassword("")
+                                        setConfirmPassword("")
+                                        setTextShow("Senha modificada")
+                                        setInforShow(true)
+                                    }else if(valueP == "user erro"){
+                                        setLoading(false)
+                                        return
+                                    }else if(valueP == "servidor erro"){
+                                        setLoading(false)
+                                        setErroComponent(true)
+                                    }
+                                })
+                               
+                            }else{
+                                setReject(true)
+                                setText("O confirmar a nova senha estar diferente")
+                                setLoading(false)
+                            }
                         }else{
                             setReject(true)
-                            setText("O confirmar a nova senha estar diferente")
+                            setText("Confirme a nova senha")
                             setLoading(false)
                         }
                     }else{
                         setReject(true)
-                        setText("Confirme a nova senha")
+                        setText("Escreva a nova senha")
                         setLoading(false)
                     }
-                }else{
-                    setReject(true)
-                    setText("Escreva a nova senha")
-                    setLoading(false)
                 }
+            })
+        }else{
+            if(value == "user erro"){
+                return
+            }else if(value == "servidor erro"){
+                setErroComponent(true)
             }
-        })
+        }
     })
   }
 
   return (
     <View style={styles.allCodGroup}>
         {loading ? <LoadingMax /> : null}
+        {erroComponent?(
+            <ErroInternet authentication={()=>{
+                setErroComponent(false)
+                }}/>
+            ):null}
         {inforShow?(
             <InforAction authentication={()=>{
                 authentication()

@@ -17,6 +17,7 @@ import { group } from '../../hooks/useGetGroup';
 import { useGetGroupUserId } from '../../hooks/useGetGroupUserId';
 import { useFeedback } from '../../hooks/useFeedback';
 import InforAction from '../../Components/InforAction/InforAction';
+import ErroInternet from '../../Components/erroInternet/ErroInternet';
 
 type CodGroupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Help'>;
 
@@ -31,17 +32,12 @@ export default function Help({navigation}:Props){
     const [imgLogo, setImgLogo] = useState(true)
     const [text, setText] = useState<string>("")
     const [img, setImg] = useState<string>("")
-    const [pass, setPass] = useState<number>(0)
-    const [contPass, setContPass] = useState<number>(0)
-    const {authenticationAddP} = useAddPost()
-    const [mediaPostN, setMediaPostN] = useState<string[]>([])
-    const [errorN, setErrorN] = useState(false)
     const [loading,setLoading] = useState(false)
     const [user, setUser] = useState<user>()
-    const [userGroup, setUserGroup] = useState<group>()
     const {authenticationAddG} = useGetGroupUserId()
     const {authenticationFe} = useFeedback()
     const [warning, setWarning] = useState(false)
+    const [erroComponent, setErroComponent] = useState(false)
 
     useEffect(() => {
         setLoading(true)
@@ -55,9 +51,19 @@ export default function Help({navigation}:Props){
                   if(userInformation.isAdmin === true){
                     const groupUser = authenticationAddG(userInformation.id!)
                     groupUser.then((valueGroup)=>{
-                     setUserGroup(valueGroup)
-                     setImg(valueGroup.imgGroup)
-                     setLoading(false)
+                     if( typeof valueGroup !== "string"){
+                        setImg(valueGroup.imgGroup)
+                        setLoading(false)
+                      
+                     }else{
+                        if(valueGroup == "user erro"){
+                            setLoading(false)
+                            return
+                        }else if(valueGroup == "servidor erro"){
+                            setLoading(false)
+                            setErroComponent(true)
+                        }
+                     }
                     })
                  }
                 }else{
@@ -111,6 +117,11 @@ export default function Help({navigation}:Props){
 
     return(
         <View style={styles.allDoPosts} >
+             {erroComponent?(
+        <ErroInternet authentication={()=>{
+          setErroComponent(false)
+        }}/>
+       ):null}
             {warning?(
                  <InforAction authentication={()=>{
                     setWarning(false)

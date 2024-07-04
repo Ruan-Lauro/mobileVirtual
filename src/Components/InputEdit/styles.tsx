@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
         marginTop: 35,
         color: "#C91E2D",
         borderBottomColor: "#C91E2D",
+        width:"80%"
    },
    inputRegister:{
         borderBottomWidth: 1,

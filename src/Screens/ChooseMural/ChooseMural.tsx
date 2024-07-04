@@ -23,6 +23,7 @@ import { useGetGroupUserId } from '../../hooks/useGetGroupUserId';
 import {useGetMembers, member} from '../../hooks/useGetMembers'
 import { RouteProp } from '@react-navigation/native';
 import MenuTab from '../../Components/MenuTab';
+import ErroInternet from '../../Components/erroInternet/ErroInternet';
 
 type ChooseMuralScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChooseGroup'>;
 
@@ -53,7 +54,7 @@ export default function ChooseMural({navigation, route}:Props) {
   const [user , setUser] = useState<user>()
   const [userMember, setUserMember] = useState<member>()
   const [userGroup, setUserGroup] = useState<group>()
-
+  const [erroComponent, setErroComponent] = useState(false)
   const { groupChoose } = route.params;
 
   useEffect(()=>{
@@ -68,6 +69,7 @@ export default function ChooseMural({navigation, route}:Props) {
                 setUserGroup(groupChoose)
                 const listMural = authenticationWG(groupChoose.id)
                 listMural.then(value=>{
+                  if(typeof value !== "string"){
                     setListMurais(value)
                     const ListMember = authenticationGetM()
                     if(userInformation){
@@ -78,6 +80,7 @@ export default function ChooseMural({navigation, route}:Props) {
                        if(value.map !== undefined){
                         value.map(valueMural =>{
                           ListMember.then(valueMember => {
+                            if(typeof valueMember !== "string"){
                               if(valueMember.map !== undefined){
                                 valueMember.map(valueMemberList =>{
                                   if(groupChoose.id == valueMemberList.groupId && valueMural.category == valueMemberList.category && valueMemberList.userId == userInformation.id){
@@ -87,11 +90,27 @@ export default function ChooseMural({navigation, route}:Props) {
                                   }   
                               })
                               }
+                            }else{
+                              if(valueMember == "user erro"){
+                                setLoading(false)
+                                return
+                              }else if(valueMember == "servidor erro"){
+                                setLoading(false)
+                                setErroComponent(true)
+                              }
+                            }
                           })
                       })
                        }
                     }
                     }
+                  }else{
+                    if(value == "user erro"){
+                      return
+                    }else if(value == "servidor erro"){
+                      
+                    }
+                  }
                 })
             }
             
@@ -108,6 +127,11 @@ export default function ChooseMural({navigation, route}:Props) {
        {loading?(
          <LoadingMax/>
        ): null}
+       {erroComponent?(
+        <ErroInternet authentication={()=>{
+          setErroComponent(false)
+        }}/>
+       ):null}
         {user && userGroup ?(
           <>
             {user.isAdmin?(

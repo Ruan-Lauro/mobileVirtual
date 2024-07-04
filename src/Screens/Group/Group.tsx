@@ -15,6 +15,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useAddGroup, createGroup } from '../../hooks/useAddGroup';
 import React from 'react';
 import cloudinary from '../../Services/cloudinary';
+import ErroInternet from '../../Components/erroInternet/ErroInternet';
 
 type GroupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Group'>;
 
@@ -37,6 +38,7 @@ export default function Group({navigation}:Props) {
   const [loadingGroup, setLoadingGroup] = useState(false)
   const [rejectImage, setRejectImage] = useState(false)
   const {authenticationAddG} = useAddGroup()
+  const [erroComponent, setErroComponent] = useState(false)
 
   const autheGroup = () =>{
     setLoadingGroup(true)
@@ -61,6 +63,10 @@ export default function Group({navigation}:Props) {
                   if(element === "Group created successfully."){
                     setLoadingGroup(false)
                     navigation.navigate('Mural')
+                  }else if(element == "user erro"){
+                    return
+                  }else if(element == "servidor erro"){
+                    setErroComponent(true)
                   }
                 })
               }else{
@@ -113,6 +119,11 @@ export default function Group({navigation}:Props) {
         {loadingGroup?(
           <Loading/>
         ): null}
+        {erroComponent?(
+        <ErroInternet authentication={()=>{
+          setErroComponent(false)
+        }}/>
+       ):null}
         <View style={styles.inforLogoMember}>
             <Image style={styles.imgMural} source={require('../../../assets/LogoMural.png')} />
         </View>

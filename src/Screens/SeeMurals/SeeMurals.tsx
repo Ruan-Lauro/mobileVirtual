@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Image, Vibration, TouchableOpacity, Modal } from 'react-native';
 
-import InputEdit from '../../Components/InputEdit/Inputs';
+
 import styles from './Style';
 import { useEffect, useState } from 'react';
 import Buttons from '../../Components/Buttons/Buttons';
@@ -19,6 +19,7 @@ import React from 'react';
 import DeleteMural from '../../Components/DeleteMural/DeleteMural';
 import EditMural from '../../Components/EditMural/EditMural';
 import { Position } from '@cloudinary/url-gen/qualifiers';
+import ErroInternet from '../../Components/erroInternet/ErroInternet';
 
 type MuralScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Mural'>;
 
@@ -30,7 +31,7 @@ type Props = {
 
 export default function SeeMural({navigation}:Props) {
  
-    const [imgGroup, setImgGroup] = useState()
+    const [imgGroup, setImgGroup] = useState("")
     const [codGroup, setCodGroup] = useState("01234567")
     const [nameGroup, setNameGroup] = useState("Grupo")
     const {authenticationAddG} = useGetGroupUserId()
@@ -42,6 +43,7 @@ export default function SeeMural({navigation}:Props) {
     const [muralIdDelete, setMuralIdDelete] = useState<wall>()
     const [editMural, setEditMural] = useState(false)
     const [update, setUpdate] = useState(false)
+    const [erroComponent, setErroComponent] = useState(false)
 
     useEffect(()=>{
         AsyncStorage.getItem('@userInfor')
@@ -52,15 +54,31 @@ export default function SeeMural({navigation}:Props) {
                 const group = authenticationAddG(userInformation.id!)
                 group.then((element) =>{
              
-                  setImgGroup(element.imgGroup)
-                  setNameGroup(element.name)
-                  setCodGroup(element.groupCode)
-                 
-                  const muralGet = authenticationWG(element.id)
-                  muralGet.then((data:wall[])=>{
-                    setMurals(data)
-                  
-                })
+                    if(typeof element !== "string"){
+                    setImgGroup(element.imgGroup)
+                    setNameGroup(element.name)
+                    setCodGroup(element.groupCode+"")
+                    
+                    const muralGet = authenticationWG(element.id)
+                    muralGet.then((data)=>{
+                        if(typeof data !== "string"){
+                            setMurals(data)
+                        }else{
+                            if(data == "user erro"){
+                                return
+                            }else if(data == "servidor erro"){
+                                setErroComponent(true)
+                            }
+                        }
+                    
+                    })
+                    }else{
+                        if(element == "user erro"){
+                            return
+                        }else if(element == "servidor erro"){
+                            setErroComponent(true)
+                        }
+                    }
                 })
             })
             .catch((error) => {
@@ -80,6 +98,11 @@ export default function SeeMural({navigation}:Props) {
             }} idMural={muralIdDelete?.id!} imageMural={muralIdDelete?.imgMural!} name={muralIdDelete?.name!}  category={muralIdDelete?.category!}/>
             </View>
         ):null}
+        {erroComponent?(
+        <ErroInternet authentication={()=>{
+          setErroComponent(false)
+        }}/>
+       ):null}
         {deleteMuralN?(
             <DeleteMural authentication={()=>{
                 setUpdate(!update)

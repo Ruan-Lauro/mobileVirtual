@@ -9,6 +9,7 @@ import { createPost, useAddPost} from "../../hooks/useAddPost"
 import cloudinary from '../../Services/cloudinary';
 import TextPost from '../TextPost/TextPost';
 import LoadingMax from '../LoadingMax/Loading';
+import ErroInternet from '../erroInternet/ErroInternet';
 
 type AuthButtonProps = {
     memberId: string,
@@ -39,7 +40,7 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
     const [mediaPostN, setMediaPostN] = useState<string[]>([])
     const [errorN, setErrorN] = useState(false)
     const [loading,setLoading] = useState(false)
-    
+    const [erroComponent, setErroComponent] = useState(false)
 
     const pickPdf =  async () =>{
         let result = await DocumentPicker.getDocumentAsync({
@@ -210,9 +211,17 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
 
            const resp = authenticationAddP(newPost)
            resp.then((valueResp)=>{
-                console.log(valueResp)
-                setText("")
-                setLoading(false)
+                if(valueResp == "user erro"){
+                    setLoading(false)
+                    return
+                }else if(valueResp == "servidor erro"){
+                    setErroComponent(true)
+                    setLoading(false)
+                }else{
+                    setText("")
+                    setLoading(false)
+                }
+               
            })
             
         } else if(video.length!== 0 || pdfN.length!==0 || image.length!==0){
@@ -235,13 +244,21 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
                    console.log(newPost)
                    const resp = authenticationAddP(newPost)
                    resp.then((valueResp)=>{
-                        console.log(valueResp)
-                        setText("")
-                        setImage([])
-                        setPdfN([])
-                        setVideo([])
-                        setMediaPostN([])
-                        setLoading(false)
+                        if(valueResp == "user erro"){
+                            setLoading(false)
+                            return
+                        }else if(valueResp == "servidor erro"){
+                            setErroComponent(true)
+                            setLoading(false)
+                        }else{
+                            setText("")
+                            setImage([])
+                            setPdfN([])
+                            setVideo([])
+                            setMediaPostN([])
+                            setLoading(false)
+                        }
+                        
                    })
             }
         }
@@ -253,6 +270,11 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
         <ScrollView style={styles.allDoPosts} >
             {loading?(
                 <LoadingMax></LoadingMax>
+            ):null}
+            {erroComponent?(
+                <ErroInternet authentication={()=>{
+                setErroComponent(false)
+                }}/>
             ):null}
             {errorN?(
                 <TextPost authentication={()=>{

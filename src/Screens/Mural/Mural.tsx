@@ -15,6 +15,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useGetGroupUserId } from '../../hooks/useGetGroupUserId';
 import {useAddMural} from '../../hooks/useAddMural'
 import React from 'react';
+import ErroInternet from '../../Components/erroInternet/ErroInternet';
 
 
 type MuralScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Mural'>;
@@ -34,12 +35,13 @@ export default function Mural({navigation}:Props) {
   const [reject, setReject] = useState(false)
   const {authenticationAddG} = useGetGroupUserId()
   const {authenticationAddM} = useAddMural()
-  const [imageGroup, setImageGroup] = useState()
+  const [imageGroup, setImageGroup] = useState("")
   const [nameGroup, setNameGroup] = useState("NOME")
   const [imageUri, setImageUri] = useState("");
   const [muralAdd, setMuralAdd] = useState(false)
   const [groupMural, setGroupMural] = useState<group>()
   const [isPrivate, setIsPrivate] = useState(false)
+  const [erroComponent, setErroComponent] = useState(false)
 
   useEffect(()=>{
     AsyncStorage.getItem('@userInfor')
@@ -49,10 +51,17 @@ export default function Mural({navigation}:Props) {
             console.log(userInformation.id)
             const group = authenticationAddG(userInformation.id!)
             group.then((element) =>{
-              console.log(element)
-              setImageGroup(element.imgGroup)
-              setNameGroup(element.name)
-              setGroupMural(element)
+              if(typeof element !== "string"){
+                setImageGroup(element.imgGroup)
+                setNameGroup(element.name)
+                setGroupMural(element)
+              }else{
+                if(element == "user erro"){
+                  return
+                }else if(element == "servidor erro"){
+                  setErroComponent(true)
+                }
+              }
             })
         })
         .catch((error) => {
@@ -79,12 +88,17 @@ export default function Mural({navigation}:Props) {
             setNameMural(" ")
             setIsPrivate(false)
             setLoading(false)
+          }else if(value == "user erro"){
+            return
+          }else if(value == "servidor erro"){
+            setErroComponent(true)
           }
         })
     }else{
+      setLoading(false)
       setReject(true)
       Vibration.vibrate()
-      
+     
     }
   }
 
@@ -112,7 +126,11 @@ export default function Mural({navigation}:Props) {
       {loadingMural?(
         <Loading/>
       ): null}
-     
+      {erroComponent?(
+        <ErroInternet authentication={()=>{
+          setErroComponent(false)
+        }}/>
+       ):null}
        <View style={styles.inforLogoMember}>
             <Image style={styles.imgMural} source={require('../../../assets/LogoMural.png')} />
        </View>

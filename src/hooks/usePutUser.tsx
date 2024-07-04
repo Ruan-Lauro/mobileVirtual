@@ -1,3 +1,4 @@
+import axios from "axios";
 import api from "../Services/Api";
 
 interface usePutUserResult {
@@ -29,8 +30,18 @@ export const usePutUser = (): usePutUserResult => {
 
       return response.data;
     } catch (error) {
-      console.log(error)
-      return 'Não passou';
+      if (axios.isAxiosError(error)) {
+        
+        if (error.response && error.response.status === 400) {
+          
+          return "user erro"
+        } else {
+          return "servidor erro"
+        }
+      } else {
+       
+        console.error('Erro desconhecido:', error)
+      }
     }
 
   };

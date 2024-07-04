@@ -6,6 +6,7 @@ import Buttons from '../Buttons/Buttons';
 import { useDeletePost } from '../../hooks/useDeletePost';
 import LoadingMax from '../LoadingMax/Loading';
 import { useDeleteMural } from '../../hooks/useDeleteMural';
+import ErroInternet from '../erroInternet/ErroInternet';
 
 type AuthButtonProps = {
 
@@ -17,18 +18,30 @@ export default function DeleteMural({authentication, idMural}:AuthButtonProps){
 
     const {authenticationRM} = useDeleteMural()
     const [loading, setLoading] = useState(false)
-
+    const [erroComponent, setErroComponent] = useState(false)
     const authenDelete = () =>{
         setLoading(true)
         const deleteP = authenticationRM(idMural)
         deleteP.then((valueDelete)=>{
-            authentication()
-            setLoading(false)
+            if(valueDelete == "user erro"){
+                return
+            }else if(valueDelete == "servidor erro"){
+                setErroComponent(true)
+                setLoading(false)
+            }else{
+                authentication()
+                setLoading(false)
+            }
         })
     }
 
     return(
         <View style={{width:"100%", alignItems:"center", height:"100%", backgroundColor: "#rgba(255, 255, 255, 0.96)", paddingTop:"55%", position:"absolute", zIndex:999,}}>
+            {erroComponent?(
+        <ErroInternet authentication={()=>{
+          setErroComponent(false)
+        }}/>
+       ):null}
             {loading?(
                 <LoadingMax/>
             ):null}

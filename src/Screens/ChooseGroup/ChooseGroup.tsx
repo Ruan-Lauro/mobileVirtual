@@ -22,6 +22,7 @@ import { useGetGroupUserId } from '../../hooks/useGetGroupUserId';
 import { useGetMembers, member } from '../../hooks/useGetMembers';
 import Routes from '../../Navigation/routes';
 import MenuTab from '../../Components/MenuTab';
+import ErroInternet from '../../Components/erroInternet/ErroInternet';
 
 type ChooseGroupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChooseGroup'>;
 
@@ -30,7 +31,7 @@ type Props = {
 };
 
 export default function ChooseGroup({ navigation }: Props) {
-  const { authenticationWG } = useGetWallsGroup();
+  
   const { authenticationAddG } = useGetGroupUserId();
   const { authenticationGetM } = useGetMembers();
   const { authenticationG } = useGetGroup();
@@ -38,6 +39,7 @@ export default function ChooseGroup({ navigation }: Props) {
   const [loading, setLoading] = useState(true);
   const [listGroup, setListGroup] = useState<group[]>([]);
   const [user, setUser] = useState<user>();
+  const [erroComponent, setErroComponent] = useState(false)
 
   useFocusEffect(
     React.useCallback(() => {
@@ -51,19 +53,42 @@ export default function ChooseGroup({ navigation }: Props) {
             setListGroup([])
             setUser(userInformation)
             if (userInformation.isAdmin) {
-              const group = await authenticationAddG(userInformation.id!);
-              console.log(group)
-              setListGroup(prevList => [...prevList, group]);
+              const group = await authenticationAddG(userInformation.id!)
+              if(typeof group !== "string"){
+                setListGroup(prevList => [...prevList, group])
+              }else{
+                if(group == "user erro"){
+                  return
+                }else if(group == "servidor erro"){
+                  setErroComponent(true)
+                }
+              }
+
             } else {
-              const listMurais = await authenticationGetM();
+              const listMurais = await authenticationGetM()
               for (const valueMural of listMurais) {
-                if (valueMural.userId == userInformation.id) {
-                  const groupsList = await authenticationG();
-                  for (const groupValue of groupsList) {
-                    if (groupValue.id == valueMural.groupId) {
-                      console.log(groupValue)
-                      setListGroup(prevList => [...prevList, groupValue])
+                if( typeof valueMural !== "string"){
+                  if (valueMural.userId == userInformation.id) {
+                    const groupsList = await authenticationG()
+                    for (const groupValue of groupsList) {
+                      if(typeof groupValue !== "string"){
+                        if (groupValue.id == valueMural.groupId) {
+                          setListGroup(prevList => [...prevList, groupValue])
+                        }
+                      }else{
+                        if(groupValue == "user erro"){
+                          return
+                        }else if(groupValue == "servidor erro"){
+                          setErroComponent(true)
+                        }
+                      }
                     }
+                  }
+                }else{
+                  if(valueMural == "user erro"){
+                    return
+                  }else if(valueMural == "servidor erro"){
+                    setErroComponent(true)
                   }
                 }
               }
@@ -82,6 +107,11 @@ export default function ChooseGroup({ navigation }: Props) {
 
   return (
     <View style={styles.allChooseGroup}>
+       {erroComponent?(
+        <ErroInternet authentication={()=>{
+          setErroComponent(false)
+        }}/>
+       ):null}
       {loading ? <LoadingMax /> : null}
       {user && listGroup.length !== 0 ? (
         <>
