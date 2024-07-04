@@ -25,6 +25,7 @@ import EditPost from '../../Components/EditPost/EditPost';
 import ShowMural from '../../Components/ShowMural/ShowMural';
 import { useDeleteMember } from '../../hooks/useDeleteMember';
 import DeleteMember from '../../Components/DeleteMember/DeleteMember';
+import ErroInternet from '../../Components/erroInternet/ErroInternet';
 
 type PostsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChooseMember'>;
 
@@ -51,7 +52,7 @@ export default function Posts({navigation, route}:Props) {
     const [isModalVisible, setModalVisible] = useState(false)
     const [userChoose, setUserChoose] = useState<user>()
     const [trueDeleteMember, setTrueDeleteMember] = useState(false)
-   
+    const [erroComponent, setErroComponent] = useState(false)
 
     const {authenticationGetM} = useGetMembers()
     const {authenticationG} = useGetGroup()
@@ -68,20 +69,28 @@ export default function Posts({navigation, route}:Props) {
     useEffect(() => {
         AsyncStorage.getItem('@userInfor')
             .then(async (value) => {
-                setLoading(true);
-                const userInfor = JSON.parse(value!);
-                const userInformation: user = userInfor.data;
-                setUser(userInformation);
+                setLoading(true)
+                const userInfor = JSON.parse(value!)
+                const userInformation: user = userInfor.data
+                setUser(userInformation)
                 if (muralChoose) {
-                    setMural(muralChoose);
+                    setMural(muralChoose)
     
                     const groupMural = authenticationG();
                     groupMural.then(cod => {
-                        const foundGroup = cod.find(codValue => codValue.id === muralChoose.groupId);
-                        if (foundGroup) {
-                            setMuralGroup(foundGroup);
+                        if(typeof cod !== "string"){
+                            const foundGroup = cod.find(codValue => codValue.id === muralChoose.groupId);
+                            if (foundGroup) {
+                                setMuralGroup(foundGroup)
+                            }
+                        }else{
+                            if(cod == "user erro"){
+                                return
+                            }else if(cod == "servidor erro"){
+                                setErroComponent(true)
+                            }
                         }
-                    });
+                    })
     
                     
                 }
@@ -114,49 +123,81 @@ export default function Posts({navigation, route}:Props) {
                 const memberList = authenticationGetM()
                 const listUser = authenticationGetU()
                 memberList.then((valueMemberList)=>{
-                    valueMemberList.map(value=>{
-                        if(value.groupId === muralGroup?.id && value.category == mural.category){
-                            
-                            listUser.then((valueListUser)=>{
-                                valueListUser.map(valueUser=>{
-                                    if(valueUser.id == value.userId){
-                                        
-                                        let letterUp: string = FirstLetter(searchText)
-                                        let letterDown: string = capitalizeFirstLetter(searchText)
-                                        if((valueUser.name.includes(searchText) || valueUser.name.includes(letterUp) || valueUser.name.includes(letterDown)) ||(valueUser.username.includes(searchText) || valueUser.username.includes(letterUp) || valueUser.username.includes(letterDown)) ){
+                    if(typeof valueMemberList !== "string"){
+                        valueMemberList.map(value=>{
+                            if(value.groupId === muralGroup?.id && value.category == mural.category){
+                                
+                                listUser.then((valueListUser)=>{
+                                   if(typeof valueListUser !== "string"){
+                                    valueListUser.map(valueUser=>{
+                                        if(valueUser.id == value.userId){
                                             
-                                            setListUsers(prevList => [...prevList, valueUser])
-                                        }else{
-                                            
+                                            let letterUp: string = FirstLetter(searchText)
+                                            let letterDown: string = capitalizeFirstLetter(searchText)
+                                            if((valueUser.name.includes(searchText) || valueUser.name.includes(letterUp) || valueUser.name.includes(letterDown)) ||(valueUser.username.includes(searchText) || valueUser.username.includes(letterUp) || valueUser.username.includes(letterDown)) ){
+                                                
+                                                setListUsers(prevList => [...prevList, valueUser])
+                                            }else{
+                                                
+                                            }
                                         }
+                                    })
+                                   }else{
+                                    if(valueListUser == "user erro"){
+                                        return
+                                    }else if(valueListUser == "servidor erro"){
+                                        setErroComponent(true)
                                     }
+                                   }
                                 })
-                            })
+                            }
+                        }) 
+                        setRefreshing(false)
+                        setLoading(false)
+                    }else{
+                        if(valueMemberList == "user erro"){
+                            return
+                        }else if(valueMemberList == "servidor erro"){
+                            setErroComponent(true)
                         }
-                    }) 
-                    setRefreshing(false)
-                    setLoading(false)
+                    }
                 })
             }else{
                 setListUsers([])
                 const memberList = authenticationGetM()
                 const listUser = authenticationGetU()
                 memberList.then((valueMemberList)=>{
-                    valueMemberList.map(value=>{
-                        if(value.groupId === muralGroup?.id && value.category == mural.category){
-                            
-                            listUser.then((valueListUser)=>{
-                                valueListUser.map(valueUser=>{
-                                    if(valueUser.id == value.userId){
-                                        setListUsers(prevList => [...prevList, valueUser])
-                                        
+                    if(typeof valueMemberList !== "string"){
+                        valueMemberList.map(value=>{
+                            if(value.groupId === muralGroup?.id && value.category == mural.category){
+                                
+                                listUser.then((valueListUser)=>{
+                                    if(typeof valueListUser !== "string"){
+                                        valueListUser.map(valueUser=>{
+                                            if(valueUser.id == value.userId){
+                                                setListUsers(prevList => [...prevList, valueUser])
+                                                
+                                            }
+                                        })
+                                    }else{
+                                        if(valueListUser == "user erro"){
+                                            return
+                                        }else if(valueListUser == "servidor erro"){
+                                            setErroComponent(true)
+                                        }
                                     }
                                 })
-                            })
+                            }
+                        }) 
+                        setRefreshing(false)
+                        setLoading(false)
+                    }else{
+                        if(valueMemberList == "user erro"){
+                            return
+                        }else if(valueMemberList == "servidor erro"){
+                            setErroComponent(true)
                         }
-                    }) 
-                    setRefreshing(false)
-                    setLoading(false)
+                    }
                 })
                 
                 
@@ -208,6 +249,11 @@ export default function Posts({navigation, route}:Props) {
         {loading?(
          <LoadingMax/>
        ): null}
+       {erroComponent?(
+        <ErroInternet authentication={()=>{
+          setErroComponent(false)
+        }}/>
+       ):null}
 
        {trueDeleteMember?(
             <DeleteMember authentication={()=>{

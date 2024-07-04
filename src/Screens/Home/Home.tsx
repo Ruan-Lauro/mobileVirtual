@@ -91,7 +91,7 @@ export default function Home({navigation}:Props) {
                 setUser(userInformation)
                 const listUserAll = authenticationGetU()
                 listUserAll.then(value=>{
-                  console.log(value)
+                 
                   if(typeof value == "string"){
                     if(value == "user erro"){
                       setLoading(false)

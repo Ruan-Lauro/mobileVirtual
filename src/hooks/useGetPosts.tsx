@@ -1,7 +1,8 @@
+import axios from "axios";
 import api from "../Services/Api";
 
 interface useGetPostsResult {
-  authenticationGetP: () => Promise<posts[]>;
+  authenticationGetP: () => Promise<posts[] | string>;
 }
 
 export type posts = {
@@ -24,8 +25,17 @@ export const useGetPosts = (): useGetPostsResult => {
 
       return response.data;
     } catch (error) {
-      console.log(error)
-      return 'Não passou';
+      if (axios.isAxiosError(error)) {
+        
+        if (error.response && error.response.status === 400) {
+          return "user erro"
+        } else {
+          return "servidor erro"
+        }
+      } else {
+       
+        console.error('Erro desconhecido:', error)
+      }
     }
 
   };

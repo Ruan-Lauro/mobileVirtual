@@ -25,6 +25,7 @@ import EditPost from '../../Components/EditPost/EditPost';
 import ChooseGroup from '../../Components/ChooseGroup/ChooseGroup';
 import { useGetMurals } from '../../hooks/useGetMurals';
 import { useGetPosts } from '../../hooks/useGetPosts';
+import ErroInternet from '../../Components/erroInternet/ErroInternet';
 
 type PostsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'UserPost'>;
 
@@ -59,15 +60,13 @@ export default function UserPost({navigation}:Props) {
     const [trueSeePost, setTruePost] = useState(false)
     const [editPostTrue, setEditPostTrue] = useState(false)
     const [muralChoose, setMuralChoose] = useState("")
-
+    const [erroComponent, setErroComponent] = useState(false)
     const {authenticationGetM} = useGetMembers()
     const {authenticationGetMU} = useGetMurals()
     const {authenticationAddG} = useGetGroupUserId()
     const {authenticationG} = useGetGroup()
     const {authenticationGetP} = useGetPosts()
-    const {authenticationGetPM} = useGetPostsMural()
     const {authenticationGetU} = useGetUsers()
-    const {authenticationWG} = useGetWallsGroup()
     const [refreshing, setRefreshing] = useState(false);
     const [deleteP, setDeleteP] = useState(false)
     const [idPostDeleted, setIdPostDeleted] = useState("")
@@ -92,24 +91,50 @@ export default function UserPost({navigation}:Props) {
                 if(userInformation.isAdmin){
                   const groupUser = authenticationAddG(userInformation.id!)
                   groupUser.then(valueGroupUser=>{
-                    setUserGroup(valueGroupUser)
-                    setMuralGroup(valueGroupUser)
+                    if(typeof valueGroupUser !== "string"){
+                      setUserGroup(valueGroupUser)
+                      setMuralGroup(valueGroupUser)
+                    }else{
+                      if(valueGroupUser == "user erro"){
+                        setLoading(false)
+                        return
+                      }else if(valueGroupUser == "servidor erro"){
+                        setErroComponent(true)
+                        setLoading(false)
+                      }
+                    }
                   })
                 }else{
                     const MemberAll = authenticationGetM()
                     const groupAll = authenticationG()
                     MemberAll.then(valueUserMember=>{
-                      const memberValue = valueUserMember.find(userMemberNow => userMemberNow.userId == userInformation.id)
+                      if(typeof valueUserMember !== "string"){
+                        const memberValue = valueUserMember.find(userMemberNow => userMemberNow.userId == userInformation.id)
                       setUserMember(memberValue)
                       
                       if(memberValue){
                         groupAll.then(valueGroupAll=>{
-                          const groupUserNow = valueGroupAll.find((valueGroup)=> valueGroup.id == memberValue.groupId)
+                          if(typeof valueGroupAll !== "string"){
+                            const groupUserNow = valueGroupAll.find((valueGroup)=> valueGroup.id == memberValue.groupId)
                           if(groupUserNow){
                             setUserGroup(groupUserNow)
                             setMuralGroup(groupUserNow)
                           }
+                          }else{
+                            if(valueGroupAll == "user erro"){
+                              return
+                            }else if(valueGroupAll == "servidor erro"){
+                              setErroComponent(true)
+                            }
+                          }
                         }) 
+                      }
+                      }else{
+                        if(valueUserMember == "user erro"){
+                          return
+                        }else if(valueUserMember == "servidor erro"){
+                          setErroComponent(true)
+                        }
                       }
                     })
                 }
@@ -138,29 +163,69 @@ export default function UserPost({navigation}:Props) {
       useEffect(()=>{
         const listUserAll = authenticationGetU()
           listUserAll.then(value=>{
-            setListUsers(value)
+            if(typeof value !== "string"){
+              setListUsers(value)
+            }else{
+              if(value == "user erro"){
+                return
+              }else if(value == "servidor erro"){
+                setErroComponent(true)
+              }
+            }
           })
         const listGroupN = authenticationG()
         listGroupN.then(valueGroup=>{
-          setListGroup(valueGroup)
+          if(typeof valueGroup !== "string"){
+            setListGroup(valueGroup)
+          }else{
+            if(valueGroup == "user erro"){
+              return
+            }else if(valueGroup == "servidor erro"){
+              setErroComponent(true)
+            }
+          }
         })
         const listMemberAll = authenticationGetM()
         const listMural = authenticationGetMU()
         listMural.then(valueListMural=>{
+         if(typeof valueListMural !== "string"){
           setListMuralsForGroup(valueListMural)
+         }else{
+          if(valueListMural == "user erro"){
+            return
+          }else if(valueListMural == "servidor erro"){
+            setErroComponent(true)
+          }
+         }
         })
         listMemberAll.then(valueMember=>{
-          setListMUrals([])
+          if(typeof valueMember !== "string"){
+            setListMUrals([])
           setListMember(valueMember)
           valueMember.map((member)=>{
             listMural.then((valueMural)=>{
-              valueMural.map(murals=>{
-                if(member.userId == user?.id && member.groupId == murals.groupId){
-                  setListMUrals(prevList => [...prevList, murals])
+              if(typeof valueMural !== "string"){
+                valueMural.map(murals=>{
+                  if(member.userId == user?.id && member.groupId == murals.groupId){
+                    setListMUrals(prevList => [...prevList, murals])
+                  }
+                })
+              }else{
+                if(valueMural == "user erro"){
+                  return
+                }else if(valueMural == "servidor erro"){
+                  setErroComponent(true)
                 }
-              })
+              }
             })
           })
+          }else{
+            if(valueMember == "user erro"){
+              return
+            }else if(valueMember == "servidor erro"){
+              setErroComponent(true)
+            }
+          }
 
         })
 
@@ -170,16 +235,24 @@ export default function UserPost({navigation}:Props) {
             const postAll = authenticationGetP()
   
             postAll.then((PostMuralNew)=>{
-              if(PostMuralNew.map !== undefined){
-                PostMuralNew.map(value=>{
-                  if(value.memberId === user?.id){
-                    let letterUp: string = FirstLetter(searchText)
-                    let letterDown: string = capitalizeFirstLetter(searchText)
-                    if(value.content.includes(searchText) || value.content.includes(letterUp) || value.content.includes(letterDown) ){
-                      setPostsTeste(prevList => [...prevList, value])
+              if(typeof PostMuralNew !== "string"){
+                if(PostMuralNew.map !== undefined){
+                  PostMuralNew.map(value=>{
+                    if(value.memberId === user?.id){
+                      let letterUp: string = FirstLetter(searchText)
+                      let letterDown: string = capitalizeFirstLetter(searchText)
+                      if(value.content.includes(searchText) || value.content.includes(letterUp) || value.content.includes(letterDown) ){
+                        setPostsTeste(prevList => [...prevList, value])
+                      }
                     }
-                  }
-                })
+                  })
+                }
+              }else{
+                if(PostMuralNew == "user erro"){
+                  return
+                }else if(PostMuralNew == "servidor erro"){
+                  setErroComponent(true)
+                }
               }
             })
             
@@ -191,12 +264,20 @@ export default function UserPost({navigation}:Props) {
             const postAll = authenticationGetP()
   
             postAll.then((PostMuralNew)=>{
-              if(PostMuralNew.map !== undefined){
-                PostMuralNew.map(value=>{
-                  if(value.memberId === user?.id){
-                    setPostsTeste(prevList => [...prevList, value])
-                  }
-                })
+              if(typeof PostMuralNew !== "string"){
+                if(PostMuralNew.map !== undefined){
+                  PostMuralNew.map(value=>{
+                    if(value.memberId === user?.id){
+                      setPostsTeste(prevList => [...prevList, value])
+                    }
+                  })
+                }
+              }else{
+                if(PostMuralNew == "user erro"){
+                  return
+                }else if(PostMuralNew == "servidor erro"){
+                  setErroComponent(true)
+                }
               }
             })
             
@@ -237,6 +318,11 @@ export default function UserPost({navigation}:Props) {
 
   return (
     <View style={styles.allPosts}>
+        {erroComponent?(
+        <ErroInternet authentication={()=>{
+          setErroComponent(false)
+        }}/>
+       ):null}
         {editPostTrue?(
             <>
                 {userSeePost?.isAdmin == true?(

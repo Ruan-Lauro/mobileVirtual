@@ -17,6 +17,7 @@ import { useGetUsers } from '../../hooks/useGetUsers';
 import LoadingMax from '../../Components/LoadingMax/Loading';
 import { setLocalesAsync } from '@expo/config-plugins/build/ios/Locales';
 import { putGroup, usePutGroup } from '../../hooks/usePutGroup';
+import ErroInternet from '../../Components/erroInternet/ErroInternet';
 
 
 type ChooseGroupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Profile'>;
@@ -39,7 +40,7 @@ export default function Profile({navigation}:Props) {
     const [editPassword, setEditPassword] = useState(false)
     const [editNameGroup, setEditNameGroup] = useState(false)
     const [menu, setMenu] = useState(true)
-
+    const [erroComponent, setErroComponent] = useState(false)
     const [name, setName] = useState(user?.name)
     const [userName, setUserName] = useState(user?.username)
     const [email, setEmail] = useState(user?.email)
@@ -68,7 +69,15 @@ export default function Profile({navigation}:Props) {
                 if(userInformation.isAdmin === true){
                   const groupUser = authenticationAddG(userInformation.id!)
                   groupUser.then((valueGroup)=>{
-                   setUserGroup(valueGroup)
+                   if(typeof valueGroup !== "string"){
+                    setUserGroup(valueGroup)
+                   }else{
+                    if(valueGroup =="user erro"){
+                      return
+                    }else if(valueGroup == "servidor erro"){
+                      setErroComponent(true)
+                    }
+                   }
                   })
                }
               }
@@ -80,7 +89,15 @@ export default function Profile({navigation}:Props) {
       const groupUser = authenticationAddG(user.id!)
       
         groupUser.then((valueGroup)=>{
-         setUserGroup(valueGroup)
+          if(typeof valueGroup !== "string"){
+            setUserGroup(valueGroup)
+           }else{
+            if(valueGroup =="user erro"){
+              return
+            }else if(valueGroup == "servidor erro"){
+              setErroComponent(true)
+            }
+           }
         })
     }
   },[loading])
@@ -182,7 +199,8 @@ export default function Profile({navigation}:Props) {
           console.log(valueProfile)
           
           const listUsers = authenticationGetU()
-          listUsers.then((valueUser:user[])=>{
+          listUsers.then((valueUser)=>{
+           if(typeof valueUser !== "string"){
             valueUser.map(async value=>{
               let userVal = user.id
               if(value.id == userVal){
@@ -206,6 +224,15 @@ export default function Profile({navigation}:Props) {
                 }
               }
             })
+           }else{
+            if(valueUser =="user erro"){
+              setLoading(false)
+              return
+            }else if(valueUser == "servidor erro"){
+              setLoading(false)
+              setErroComponent(true)
+            }
+           }
           })
         } 
       })
@@ -237,31 +264,41 @@ export default function Profile({navigation}:Props) {
     profileNew.then(valueProfile=>{
       if(valueProfile == "User updated successfully."){
         const listUsers = authenticationGetU()
-        listUsers.then((valueUser:user[])=>{
-          valueUser.map(async value=>{
-            let userVal = user.id
-            if(value.id == userVal){
-              if(value){
-                const data = {
-                  data: value,
+        listUsers.then((valueUser)=>{
+          if(typeof valueUser !== "string"){
+            valueUser.map(async value=>{
+              let userVal = user.id
+              if(value.id == userVal){
+                if(value){
+                  const data = {
+                    data: value,
+                  }
+                await AsyncStorage.setItem('@userInfor', JSON.stringify(data))
+                .then(() => {
+                  console.log(value);
+                  setUser(value)
+                  setLoading(false)
+                  setEditEmail(false)
+                  setEditName(false)
+                  setEditPassword(false)
+                  setEditNameGroup(false)
+                  setImageUri("")
+                })
+                .catch((error) => {
+                  console.error('Erro ao armazenar informações do usuário:', error);
+                });
                 }
-              await AsyncStorage.setItem('@userInfor', JSON.stringify(data))
-              .then(() => {
-                console.log(value);
-                setUser(value)
-                setLoading(false)
-                setEditEmail(false)
-                setEditName(false)
-                setEditPassword(false)
-                setEditNameGroup(false)
-                setImageUri("")
-              })
-              .catch((error) => {
-                console.error('Erro ao armazenar informações do usuário:', error);
-              });
               }
+            })
+          }else{
+            if(valueUser == "user erro"){
+              setLoading(false)
+              return
+            }else if(valueUser == "servidor erro"){
+              setLoading(false)
+              setErroComponent(true)
             }
-          })
+          }
         })
       }else{
         setAlert(true)
@@ -296,6 +333,11 @@ const keyboardDidHideListener = Keyboard.addListener(
       {loading?(
         <LoadingMax/>
       ):null}
+       {erroComponent?(
+        <ErroInternet authentication={()=>{
+          setErroComponent(false)
+        }}/>
+       ):null}
       <View style={{width:"70%"}}>
       <TouchableOpacity onPress={()=>{
                    navigation.goBack()

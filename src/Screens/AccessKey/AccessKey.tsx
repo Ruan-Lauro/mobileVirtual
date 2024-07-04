@@ -165,35 +165,45 @@ export default function AccessKey({navigation}:Props) {
                                 profileNew.then((valueP)=>{
                                     if(valueP == "User updated successfully."){
                                         const listUsers = authenticationGetU()
-                                        listUsers.then((valueUser:user[])=>{
-                                        valueUser.map(async value=>{
-                                            let userVal = user!.id
-                                            if(value.id == userVal){
-                                            if(value){
-                                                const data = {
-                                                data: value,
+                                        listUsers.then((valueUser)=>{
+                                            if(typeof valueUser !== "string"){
+                                                valueUser.map(async value=>{
+                                                    let userVal = user!.id
+                                                    if(value.id == userVal){
+                                                    if(value){
+                                                        const data = {
+                                                        data: value,
+                                                        }
+                                                    await AsyncStorage.setItem('@userInfor', JSON.stringify(data))
+                                                    .then(() => {
+                                                        setUser(value)
+                                                        setLoading(false)
+                                                        setTrueEmail(false)
+                                                        setEmail("")
+                                                        setNewEmail("")
+                                                        setText("Senha e email modificados")
+                                                        setLoading(false)
+                                                        setTruePassword(false)
+                                                        setPassword("")
+                                                        setConfirmNewPassword("")
+                                                        setNewPassword("")
+                                                        
+                                                    })
+                                                    .catch((error) => {
+                                                        console.error('Erro ao armazenar informações do usuário:', error);
+                                                    });
+                                                    }
+                                                    }
+                                                })
+                                            }else{
+                                                if(valueUser == "user erro"){
+                                                    setLoading(false)
+                                                    return
+                                                }else if(valueUser == "servidor erro"){
+                                                    setLoading(false)
+                                                    setErroComponent(true)
                                                 }
-                                            await AsyncStorage.setItem('@userInfor', JSON.stringify(data))
-                                            .then(() => {
-                                                setUser(value)
-                                                setLoading(false)
-                                                setTrueEmail(false)
-                                                setEmail("")
-                                                setNewEmail("")
-                                                setText("Senha e email modificados")
-                                                setLoading(false)
-                                                setTruePassword(false)
-                                                setPassword("")
-                                                setConfirmNewPassword("")
-                                                setNewPassword("")
-                                                
-                                            })
-                                            .catch((error) => {
-                                                console.error('Erro ao armazenar informações do usuário:', error);
-                                            });
                                             }
-                                            }
-                                        })
                                         })
                                         
                                     }
@@ -231,29 +241,39 @@ export default function AccessKey({navigation}:Props) {
         profileNew.then((valueP)=>{
             if(valueP == "User updated successfully."){
                 const listUsers = authenticationGetU()
-                listUsers.then((valueUser:user[])=>{
-                valueUser.map(async value=>{
-                    let userVal = user!.id
-                    if(value.id == userVal){
-                    if(value){
-                        const data = {
-                        data: value,
+                listUsers.then((valueUser)=>{
+                    if(typeof valueUser !== "string"){
+                        valueUser.map(async value=>{
+                            let userVal = user!.id
+                            if(value.id == userVal){
+                            if(value){
+                                const data = {
+                                data: value,
+                                }
+                            await AsyncStorage.setItem('@userInfor', JSON.stringify(data))
+                            .then(() => {
+                                setUser(value)
+                                setLoading(false)
+                                setTrueEmail(false)
+                                setEmail("")
+                                setNewEmail("")
+                                setText("Email modificado")
+                            })
+                            .catch((error) => {
+                                console.error('Erro ao armazenar informações do usuário:', error);
+                            });
+                            }
+                            }
+                        })
+                    }else{
+                        if(valueUser == "user erro"){
+                            setLoading(false)
+                            return
+                        }else if(valueUser == "servidor erro"){
+                            setLoading(false)
+                            setErroComponent(true)
                         }
-                    await AsyncStorage.setItem('@userInfor', JSON.stringify(data))
-                    .then(() => {
-                        setUser(value)
-                        setLoading(false)
-                        setTrueEmail(false)
-                        setEmail("")
-                        setNewEmail("")
-                        setText("Email modificado")
-                    })
-                    .catch((error) => {
-                        console.error('Erro ao armazenar informações do usuário:', error);
-                    });
                     }
-                    }
-                })
                 })
             }
         })
