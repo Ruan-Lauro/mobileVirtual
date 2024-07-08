@@ -78,7 +78,7 @@ export default function Group({navigation}:Props) {
             }
             
           } else {
-            console.log('Nenhuma informação do usuário encontrada.');
+     
           }
         })
         .catch((error) => {

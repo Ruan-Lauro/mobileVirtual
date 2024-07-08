@@ -10,6 +10,7 @@ import cloudinary from '../../Services/cloudinary';
 import TextPost from '../TextPost/TextPost';
 import LoadingMax from '../LoadingMax/Loading';
 import ErroInternet from '../erroInternet/ErroInternet';
+import Posting from '../Posting/Posting';
 
 type AuthButtonProps = {
     memberId: string,
@@ -41,6 +42,7 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
     const [errorN, setErrorN] = useState(false)
     const [loading,setLoading] = useState(false)
     const [erroComponent, setErroComponent] = useState(false)
+    const [postDone, setPostDone] = useState(false)
 
     const pickPdf =  async () =>{
         let result = await DocumentPicker.getDocumentAsync({
@@ -64,7 +66,7 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
         })
 
         setImage(prevList => [...prevList, result.assets![0].uri])
-        console.log(result.assets![0].uri)
+       
     }
 
     const pickVideo = async () => {
@@ -218,6 +220,7 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
                     setErroComponent(true)
                     setLoading(false)
                 }else{
+                    setPostDone(true)
                     setText("")
                     setLoading(false)
                 }
@@ -232,7 +235,7 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
     useEffect(()=>{
         if(mediaPostN.length !== 0){
             
-            console.log(mediaPostN)
+          
             if((mediaPostN.length/2) == (pass + 1)){
                 const newPost = {
                     category,
@@ -241,7 +244,7 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
                     content: text,
                     media: mediaPostN,
                    }
-                   console.log(newPost)
+                  
                    const resp = authenticationAddP(newPost)
                    resp.then((valueResp)=>{
                         if(valueResp == "user erro"){
@@ -251,6 +254,7 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
                             setErroComponent(true)
                             setLoading(false)
                         }else{
+                            setPostDone(true)
                             setText("")
                             setImage([])
                             setPdfN([])
@@ -271,6 +275,13 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
             {loading?(
                 <LoadingMax></LoadingMax>
             ):null}
+
+            {postDone?(
+                <Posting authentication={()=>{
+                    setPostDone(false)
+                }}/>
+            ):null}
+
             {erroComponent?(
                 <ErroInternet authentication={()=>{
                 setErroComponent(false)

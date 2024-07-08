@@ -87,7 +87,7 @@ export default function ChooseCategory({navigation, route}:Props) {
                 setUser(userInformation.data)
                 setGroup(groupChoose)
               } else {
-                console.log('Nenhuma informação do usuário encontrada.');
+               
               }
             })
             .catch((error) => {

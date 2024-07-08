@@ -45,7 +45,6 @@ export default async function cloudinary(uri:string){
             },
         });
 
-        console.log('Upload bem-sucedido:', response.data);
         return response.data;
     } catch (error) {
         console.error('Erro no upload:', error);

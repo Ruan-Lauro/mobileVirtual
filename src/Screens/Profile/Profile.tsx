@@ -187,7 +187,7 @@ export default function Profile({navigation}:Props) {
           
           const responseGroup = authenticationPutG(listGroup)
           responseGroup.then(responseGroupNew=>{
-            console.log(responseGroupNew)
+       
           })
         }
       }
@@ -195,8 +195,7 @@ export default function Profile({navigation}:Props) {
       const profileNew = authenticationPutU(listUser)
       profileNew.then(valueProfile=>{
         if(valueProfile == "User updated successfully."){
-          console.log("resultado aqui:")
-          console.log(valueProfile)
+        
           
           const listUsers = authenticationGetU()
           listUsers.then((valueUser)=>{
@@ -210,7 +209,7 @@ export default function Profile({navigation}:Props) {
                   }
                 await AsyncStorage.setItem('@userInfor', JSON.stringify(data))
                 .then(() => {
-                  console.log(value);
+                
                   setUser(value)
                   setLoading(false)
                   setEditEmail(false)
@@ -275,7 +274,7 @@ export default function Profile({navigation}:Props) {
                   }
                 await AsyncStorage.setItem('@userInfor', JSON.stringify(data))
                 .then(() => {
-                  console.log(value);
+                 
                   setUser(value)
                   setLoading(false)
                   setEditEmail(false)

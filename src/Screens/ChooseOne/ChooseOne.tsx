@@ -91,7 +91,7 @@ const ChooseOne = ({route, navigation}:Props) =>{
               AsyncStorage.setItem('@userInfor', JSON.stringify(data))
               .then(() => {
                 setLoading(false)
-                console.log('Informações do usuário armazenadas com sucesso.');
+              
                 navigation.navigate('Group')
               })
               .catch((error) => {
@@ -125,7 +125,7 @@ const ChooseOne = ({route, navigation}:Props) =>{
       const res = authenticationR(user)
       
       res.then((data) =>{
-        console.log(data)
+     
         if(data == "User created successfully."){
           setRejectRegister(false)
           const res = authenticationE(NewUser!.email!, NewUser!.password!)
@@ -138,7 +138,7 @@ const ChooseOne = ({route, navigation}:Props) =>{
             }else{
               AsyncStorage.setItem('@userInfor', JSON.stringify(data))
               .then(() => {
-                console.log('Informações do usuário armazenadas com sucesso.');
+              
                 setLoading(false)
                 navigation.navigate('CodGroup')
               })

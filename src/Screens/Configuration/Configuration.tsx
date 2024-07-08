@@ -22,7 +22,7 @@ export default function Configuration({navigation}:Props) {
    const exit = async () =>{
     await AsyncStorage.setItem('@userInfor', JSON.stringify(data))
         .then(() => {
-          console.log('Informações do usuário armazenadas com sucesso.');
+          
           navigation.navigate('First')
         })
         .catch((error) => {

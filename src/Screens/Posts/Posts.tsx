@@ -217,7 +217,7 @@ export default function Posts({navigation, route}:Props) {
                         }
                        }
                     })
-                    setPosts(list)
+                    setPosts(list.reverse())
                     setRefreshing(false)
                     setLoading(false)
                 }else{

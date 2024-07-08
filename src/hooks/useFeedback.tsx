@@ -24,16 +24,18 @@ export const useFeedback = (): UseFeedbackResult => {
         text: feedback.text,
         email: feedback.email
         
-      });
-
-      return response.data;
+      })
+     
+      return response.data
+      
     } catch (error) {
       if (axios.isAxiosError(error)) {
         
         if (error.response && error.response.status === 400) {
-          
+        
           return "user erro"
         } else {
+         
           return "servidor erro"
         }
       } else {

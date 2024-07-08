@@ -16,6 +16,7 @@ import React from 'react';
 import cloudinary from '../../Services/cloudinary';
 import { putMural, usePutMural } from '../../hooks/usePutMural';
 import { createMural } from '../../hooks/useAddMural';
+import ErroInternet from '../erroInternet/ErroInternet';
 
 
 type editMural ={
@@ -35,7 +36,7 @@ export default function EditMural({idMural, authentication, imageMural, name, ca
   const [loadingGroup, setLoadingGroup] = useState(false)
   const [rejectImage, setRejectImage] = useState(false)
   const {authenticationPutM} = usePutMural()
-
+  const [erroComponent, setErroComponent] = useState(false)
   const autheGroup = () =>{
     setLoadingGroup(true)
     if(nameMural && nameMural !== ""){
@@ -59,8 +60,16 @@ export default function EditMural({idMural, authentication, imageMural, name, ca
                     }
                 const responseGroup = authenticationPutM(muralUpdate)
                 responseGroup.then((element)=>{
-                    setLoadingGroup(false)
-                    authentication()
+                    if(element == "user erro"){
+                      setLoadingGroup(false)
+                      return
+                    }else if(element == "servidor erro"){
+                      setLoadingGroup(false)
+                      setErroComponent(true)
+                    }else{
+                      setLoadingGroup(false)
+                      authentication()
+                    }
                 })
                 }
               }else{
@@ -73,10 +82,17 @@ export default function EditMural({idMural, authentication, imageMural, name, ca
                    
                     const responseGroup = authenticationPutM(muralUpdate)
                     responseGroup.then((element)=>{
-                        
-                        setLoadingGroup(false)
-                        authentication()
-                        setRejectImage(true)
+                        if(element == "user erro"){
+                          setLoadingGroup(false)
+                          return
+                        }else if(element=="servidor erro"){
+                          setLoadingGroup(false)
+                          setErroComponent(true)
+                        }else{
+                          setLoadingGroup(false)
+                          authentication()
+                          setRejectImage(true)
+                        }
                     })
                     
               }
@@ -85,7 +101,7 @@ export default function EditMural({idMural, authentication, imageMural, name, ca
             }
             
           } else {
-            console.log('Nenhuma informação do usuário encontrada.');
+            
           }
         })
         .catch((error) => {
@@ -123,6 +139,11 @@ export default function EditMural({idMural, authentication, imageMural, name, ca
         {loadingGroup?(
           <Loading/>
         ): null}
+        {erroComponent?(
+                <ErroInternet authentication={()=>{
+                setErroComponent(false)
+                }}/>
+            ):null}
         <View style={styles.inforLogoMember}>
             <Image style={styles.imgMural} source={require('../../../assets/LogoMural.png')} />
         </View>

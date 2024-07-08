@@ -48,7 +48,7 @@ export default function Mural({navigation}:Props) {
         .then(async (value) => {
             const userInfor = JSON.parse(value!);
             const userInformation:user = userInfor.data
-            console.log(userInformation.id)
+           
             const group = authenticationAddG(userInformation.id!)
             group.then((element) =>{
               if(typeof element !== "string"){

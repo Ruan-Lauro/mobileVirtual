@@ -109,7 +109,13 @@ export default function Help({navigation}:Props){
                     setLoading(false)
                     setWarning(true)
                 }else{
-                    console.log(value)
+                    if(value == "user erro"){
+                        setLoading(false)
+                        return
+                    }else if(value == "servidor erro"){
+                        setLoading(false)
+                        setErroComponent(true)
+                    }
                 }
             })
        }

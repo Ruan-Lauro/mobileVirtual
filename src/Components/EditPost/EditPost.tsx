@@ -65,7 +65,7 @@ export default function EditPost({idPost, exit, img, media, context}:AuthButtonP
         })
 
         setImage(prevList => [...prevList, result.assets![0].uri])
-        console.log(result.assets![0].uri)
+       
     }
 
     const pickVideo = async () => {
@@ -247,14 +247,14 @@ export default function EditPost({idPost, exit, img, media, context}:AuthButtonP
     useEffect(()=>{
         if(mediaPostN.length !== 0){
             
-            console.log(mediaPostN)
+           
             if((mediaPostN.length/2) == (pass + 1)){
                 const newPost = {
                     idPost,
                     content: text,
                     media: mediaPostN,
                    }
-                   console.log(newPost)
+                 
                    const resp = authenticationPutP(newPost)
                    resp.then((valueResp)=>{
                         if(valueResp == "user erro"){

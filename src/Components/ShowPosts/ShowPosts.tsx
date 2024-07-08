@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Video, ResizeMode } from 'expo-av';
 import DeletePost from '../DeletePost/DeletePost';
 import EditPost from '../EditPost/EditPost';
+import{ shareContent } from '../../Services/Share';
 
 type docum = {
   file: string,
@@ -118,7 +119,9 @@ export default function ShowMural({img, authentication, name, category, idPost, 
               
               >
               <View style={styles.modalContentShowPost}>
-              <TouchableOpacity style={{flexDirection:"row",alignItems:"center", }}>
+              <TouchableOpacity style={{flexDirection:"row",alignItems:"center", }} onPress={()=>{
+                 shareContent({message:text, media: media})
+              }}>
                   <Image style={{ width: 25,height: 25, marginLeft: 25,}} source={require('../../../assets/mandar.png')}/>
                   <Text style={styles.modalItemShowPost}>Compartilhar Post</Text>
                 </TouchableOpacity>

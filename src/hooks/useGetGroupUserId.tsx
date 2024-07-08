@@ -20,7 +20,7 @@ export const useGetGroupUserId = (): useGetGroupUserIdResult => {
 
       return response.data;
     } catch (error) {
-      console.log(error)
+   
       if (axios.isAxiosError(error)) {
         
         if (error.response && error.response.status === 400) {

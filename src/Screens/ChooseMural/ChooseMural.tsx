@@ -73,7 +73,7 @@ export default function ChooseMural({navigation, route}:Props) {
                     setListMurais(value)
                     const ListMember = authenticationGetM()
                     if(userInformation){
-                      console.log("Aqui")
+                     
                     if(userInformation.isAdmin){
                         setLoading(false)
                     }else{
@@ -84,7 +84,7 @@ export default function ChooseMural({navigation, route}:Props) {
                               if(valueMember.map !== undefined){
                                 valueMember.map(valueMemberList =>{
                                   if(groupChoose.id == valueMemberList.groupId && valueMural.category == valueMemberList.category && valueMemberList.userId == userInformation.id){
-                                      console.log(valueMemberList)
+                                     
                                       setUserMember(valueMemberList)
                                       setLoading(false)
                                   }   

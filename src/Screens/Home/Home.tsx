@@ -110,6 +110,7 @@ export default function Home({navigation}:Props) {
                     if(typeof valueGroupUser !== "string"){
                       setUserGroup(valueGroupUser)
                       setMuralGroup(valueGroupUser)
+                      setLoading(false)
                     }else{
                       if(valueGroupUser == "user erro"){
                         setLoading(false)
@@ -128,7 +129,7 @@ export default function Home({navigation}:Props) {
                         if(valueUserMember == "user erro"){
                           return 
                         }else if(valueUserMember == "servidor erro"){
-                          console.log("Aqui meu amigo")
+                         
                           setErroComponent(true)
                           setLoading(false)
                         }
@@ -149,7 +150,7 @@ export default function Home({navigation}:Props) {
                             if(valueGroupAll == "user erro"){
                               return 
                             }else if(valueGroupAll == "servidor erro"){
-                              console.log("Aqui meu amigo")
+                            
                               setErroComponent(true)
                               setLoading(false)
                             }
@@ -301,6 +302,7 @@ export default function Home({navigation}:Props) {
             muralAll.then((valueMural)=>{
               if(typeof valueMural !== "string"){
                 if(valueMural.map !== undefined){
+                  const list:posts[] = []
                   valueMural.map(muralsNew=>{
                     const postMural = authenticationGetPM(muralsNew.id)
                     postMural.then((PostMuralNew)=>{
@@ -345,7 +347,7 @@ export default function Home({navigation}:Props) {
           
       }
         
-      },[ userGroup, atualiz, deleteP, postDo, trueSeePost, pesqTrue, editPostTrue])
+      },[ userGroup, atualiz, pesqTrue])
 
       useEffect(()=>{
         
@@ -410,9 +412,6 @@ export default function Home({navigation}:Props) {
         }
       },[userGroup])
 
-      useEffect(()=>{
-        console.log(lengthPost)
-      },[lengthPost])
       
 
       const keyboardDidShowListener = Keyboard.addListener(
@@ -441,10 +440,12 @@ export default function Home({navigation}:Props) {
                 {userSeePost?.isAdmin == true?(
                     <EditPost  context={seePost?.content!} exit={()=>{
                         setEditPostTrue(false)
+                        setAtualiz(!atualiz)
                     }} idPost={seePost?.id!} media={seePost?.media!} img={muralGroup?.imgGroup || "https://res.cloudinary.com/dfmdiobwa/image/upload/v1715644955/wtnyvouucw0rlu1o9f1f.png"} />
                 ):(
                     <EditPost  context={seePost?.content!} exit={()=>{
                         setEditPostTrue(false)
+                        setAtualiz(!atualiz)
                     }} idPost={seePost?.id!} media={seePost?.media!} img={userSeePost!.profile_image! || "https://res.cloudinary.com/dfmdiobwa/image/upload/v1715644955/wtnyvouucw0rlu1o9f1f.png"}/>
                 )}
             </>
@@ -454,6 +455,7 @@ export default function Home({navigation}:Props) {
                 {userSeePost.isAdmin === true?(
                     <SeePost  authentication={()=>{
                         setTruePost(false)
+                        setAtualiz(!atualiz)
                     }} name={ userGroup!?.name} category={"@grupo"} data={seePost.created_at} idPost={seePost.id} isAdmin={user?.isAdmin!} text={seePost.content} media={seePost.media} img={userGroup!!.imgGroup} deleteN={()=>{
         
                     }} userNow={user?.id} userPost={userSeePost.id} editPost={()=>{
@@ -473,6 +475,7 @@ export default function Home({navigation}:Props) {
          {deleteP?(
             <DeletePost authentication={()=>{
                 setDeleteP(false)
+                setAtualiz(!atualiz)
             }} idPost={idPostDeleted}/>
           ):null}
         

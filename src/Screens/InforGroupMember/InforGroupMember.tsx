@@ -43,8 +43,7 @@ export default function InforGroupMember({navigation, route}:Props) {
     useEffect(()=>{
         if(groupChoose){
            setGroupMember(groupChoose)
-           console.log("Aqui")
-           console.log(groupChoose)
+          
         }
     },[groupChoose])
 

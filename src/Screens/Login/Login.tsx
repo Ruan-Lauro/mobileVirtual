@@ -45,7 +45,7 @@ export default function Login({navigation}:Props) {
         Vibration.vibrate()
         setReject(true)
       }else if(data == "servidor erro"){
-        console.log("Aqui")
+       
         setLoad(false)
         setErroComponent(true)
       }else{
@@ -54,7 +54,7 @@ export default function Login({navigation}:Props) {
         setInforUser(data)
         await AsyncStorage.setItem('@userInfor', JSON.stringify(data))
         .then(() => {
-          console.log('Informações do usuário armazenadas com sucesso.');
+         
           navigation.navigate('Home')
         })
         .catch((error) => {

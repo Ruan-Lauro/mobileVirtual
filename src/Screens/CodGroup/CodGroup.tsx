@@ -36,7 +36,7 @@ export default function CodGroup({navigation}:Props) {
               navigation.navigate('ChooseCategory', {groupChoose: {id: date.id, name: date.name, created_at: date.created_at, imgGroup: date.imgGroup, groupCode: date.groupCode, userId: date.userId}})
             })
           }else{
-            console.log(setReject(true))
+            
           }
         }else{
           if(data == "user erro"){
