@@ -27,16 +27,18 @@ export default function CodGroup({navigation}:Props) {
 
   const authenCod = () => {
     if (codGroup !== "") {
+      setReject(false)
       const groups = authenticationG()
       const chooseGroup = groups.then((data)=>{
         if(typeof data !== "string"){
           const group = data.filter((value)=> value.groupCode === parseInt(codGroup))
+          
           if(group.length !== 0){
             group.map((date)=>{
               navigation.navigate('ChooseCategory', {groupChoose: {id: date.id, name: date.name, created_at: date.created_at, imgGroup: date.imgGroup, groupCode: date.groupCode, userId: date.userId}})
             })
           }else{
-            
+            setReject(true)
           }
         }else{
           if(data == "user erro"){

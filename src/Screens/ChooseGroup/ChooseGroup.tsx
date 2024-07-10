@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, Vibration, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, Vibration, TouchableOpacity, ScrollView, Modal } from 'react-native';
 import Input from '../../Components/Inputs/Inputs';
 import styles from './Style';
 import { useEffect, useState } from 'react';
@@ -23,6 +23,7 @@ import { useGetMembers, member } from '../../hooks/useGetMembers';
 import Routes from '../../Navigation/routes';
 import MenuTab from '../../Components/MenuTab';
 import ErroInternet from '../../Components/erroInternet/ErroInternet';
+import ExitGroup from '../../Components/exitGroup/ExitGroup';
 
 type ChooseGroupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChooseGroup'>;
 
@@ -35,17 +36,20 @@ export default function ChooseGroup({ navigation }: Props) {
   const { authenticationAddG } = useGetGroupUserId();
   const { authenticationGetM } = useGetMembers();
   const { authenticationG } = useGetGroup();
-
+  const [isModalVisible, setModalVisible] = useState(false)
   const [loading, setLoading] = useState(true);
   const [listGroup, setListGroup] = useState<group[]>([]);
   const [user, setUser] = useState<user>();
   const [erroComponent, setErroComponent] = useState(false)
+  const [trueExitGroup, setTrueExitGroup] = useState(false)
+  const [groupSelect, setGroupSelect] = useState("")
+  const [atuali, setAtuali] = useState(false)
 
   useFocusEffect(
     React.useCallback(() => {
       const loadData = async () => {
         try {
-          
+          setLoading(true)
           const value = await AsyncStorage.getItem('@userInfor');
           if (value !== null) {
             const userInfor = JSON.parse(value)
@@ -99,10 +103,10 @@ export default function ChooseGroup({ navigation }: Props) {
         } finally {
           setLoading(false)
         }
-      };
+      }
 
-      loadData();
-    }, [])
+      loadData()
+    }, [atuali])
   )
 
   return (
@@ -110,9 +114,52 @@ export default function ChooseGroup({ navigation }: Props) {
        {erroComponent?(
         <ErroInternet authentication={()=>{
           setErroComponent(false)
+          
         }}/>
        ):null}
       {loading ? <LoadingMax /> : null}
+      {trueExitGroup?(
+        <ExitGroup authentication={()=>{
+          setTrueExitGroup(false)
+          setLoading(false)
+          setAtuali(!atuali)
+        }} idGroup={groupSelect} idUser={user?.id!} functioLoading={()=>{
+          setLoading(true)
+        }}/>
+      ):null}
+      {isModalVisible?(
+              <Modal
+              visible={isModalVisible}
+              animationType="slide"
+              transparent={true}
+              
+              >
+              <View style={styles.modalContentShowPost}>
+              <TouchableOpacity style={{flexDirection:"row",alignItems:"center", }} onPress={()=>{
+               setTrueExitGroup(true)
+               setModalVisible(false)
+              }}>
+                  <Image style={{ width: 25,height: 25, marginLeft: 25,}} source={require('../../../assets/botao-apagar.png')}/>
+                  <Text style={styles.modalItemShowPost}>Sair do Grupo</Text>
+                </TouchableOpacity>
+                
+                {/* <TouchableOpacity style={styles.viewModalItem} onPress={()=>{
+                    
+                    setModalVisible(false)
+                }}>
+                <Image style={styles.imgViewModalItem} source={require('../../../assets/editar.png')}/>
+                <Text style={styles.modalItemShowPost}>Editar Mural</Text>
+            </TouchableOpacity>       */}
+                
+                <TouchableOpacity style={styles.viewModalItem} onPress={()=>{
+                    setModalVisible(false)
+                    }}>
+                  <Image style={{ width: 22.5,height: 22.5, marginLeft: 25,}} source={require('../../../assets/sair.png')}/>
+                    <Text style={styles.modalItemShowPost}>Sair</Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+            ):null}
       {user && listGroup.length !== 0 ? (
         <>
           {user.isAdmin ? (
@@ -130,7 +177,10 @@ export default function ChooseGroup({ navigation }: Props) {
               <TouchableOpacity key={valueListGroup.id} onPress={() => {
                 navigation.navigate('ChooseMural', { groupChoose: { id: valueListGroup!.id, name: valueListGroup!.name, created_at: valueListGroup!.created_at, imgGroup: valueListGroup!.imgGroup, groupCode: valueListGroup!.groupCode, userId: valueListGroup!.userId } });
               }}>
-                <ShowMural authentication={() => { }} name={valueListGroup.name} img={valueListGroup.imgGroup} idMural={valueListGroup.id} canceled={false} />
+                <ShowMural authentication={() => { 
+                  setModalVisible(true)
+                  setGroupSelect(valueListGroup.id)
+                }} name={valueListGroup.name} img={valueListGroup.imgGroup} idMural={valueListGroup.id} canceled={user?.isAdmin?(false):(true)} />
               </TouchableOpacity>
             ))
           ) : null}
@@ -138,7 +188,9 @@ export default function ChooseGroup({ navigation }: Props) {
             <TouchableOpacity onPress={() => {
               navigation.navigate('CodGroup');
             }}>
-              <ShowMural authentication={() => { }} name={"Adicionar Grupo"} img={"https://res.cloudinary.com/dfmdiobwa/image/upload/v1716926877/fyypxugvsc6g3m3pkget.png"} idMural={1} canceled={false} />
+              <ShowMural authentication={() => { 
+                
+              }} name={"Adicionar Grupo"} img={"https://res.cloudinary.com/dfmdiobwa/image/upload/v1716926877/fyypxugvsc6g3m3pkget.png"} idMural={1} canceled={false} />
             </TouchableOpacity>
           ) : null}
         </ScrollView>

@@ -5,7 +5,6 @@ import { StatusBar } from 'react-native';
 import Main from './src/Screens/Main/Main';
 
 
-
 export default function App() {
   return <Main />;
 }

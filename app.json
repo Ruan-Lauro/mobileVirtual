@@ -13,15 +13,23 @@
     },
     "ios": {
       "supportsTablet": true
+      
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ruanlauro07.mobileVirtual"
+      
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "97f8b674-32ef-423d-8734-25ad69466d92"
+      }
     }
   }
 }

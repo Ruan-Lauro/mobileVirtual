@@ -91,7 +91,7 @@ export default function Home({navigation}:Props) {
                 setUser(userInformation)
                 const listUserAll = authenticationGetU()
                 listUserAll.then(value=>{
-                 
+                  
                   if(typeof value == "string"){
                     if(value == "user erro"){
                       setLoading(false)
@@ -108,9 +108,10 @@ export default function Home({navigation}:Props) {
                   const groupUser = authenticationAddG(userInformation.id!)
                   groupUser.then(valueGroupUser=>{
                     if(typeof valueGroupUser !== "string"){
+                      
                       setUserGroup(valueGroupUser)
                       setMuralGroup(valueGroupUser)
-                      setLoading(false)
+                    
                     }else{
                       if(valueGroupUser == "user erro"){
                         setLoading(false)
@@ -135,7 +136,6 @@ export default function Home({navigation}:Props) {
                         }
                       }else{
                         const memberValue = valueUserMember.find(userMemberNow => userMemberNow.userId == userInformation.id)
-                     
                       
                       if(memberValue){
                         setUserMember(memberValue)
@@ -143,6 +143,7 @@ export default function Home({navigation}:Props) {
                           if(typeof valueGroupAll !== "string"){
                             const groupUserNow = valueGroupAll.find((valueGroup)=> valueGroup.id == memberValue.groupId)
                             if(groupUserNow){
+                             
                               setUserGroup(groupUserNow)
                               setMuralGroup(groupUserNow)
                             }
@@ -295,6 +296,7 @@ export default function Home({navigation}:Props) {
             }
       //     
       }else{
+       
           setPostsTeste([])
           if(userGroup){
             const muralAll = authenticationWG(userGroup.id)
@@ -320,7 +322,9 @@ export default function Home({navigation}:Props) {
                         }
                       }else{
                         if(PostMuralNew == "user erro"){
-                          return
+                          setPosts([])
+                          setRefreshing(false)
+                          setLoading(false)
                         }else if(PostMuralNew == "servidor erro"){
                           setLoading(false)
                           setErroComponent(true)
