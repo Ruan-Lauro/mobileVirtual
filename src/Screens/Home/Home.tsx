@@ -198,6 +198,8 @@ export default function Home({navigation}:Props) {
     
 
       useEffect(()=>{
+        setPostsTeste([])
+        setPosts([])
         const listUserAll = authenticationGetU()
           listUserAll.then(value=>{
             if(typeof value == "string"){
@@ -238,7 +240,6 @@ export default function Home({navigation}:Props) {
           }
         })
         if(searchText !== ""){
-          setPostsTeste([])
           if(userGroup){
             const muralAll = authenticationWG(userGroup.id)
             muralAll.then((valueMural)=>{
@@ -296,8 +297,6 @@ export default function Home({navigation}:Props) {
             }
       //     
       }else{
-       
-          setPostsTeste([])
           if(userGroup){
             const muralAll = authenticationWG(userGroup.id)
             
@@ -357,7 +356,16 @@ export default function Home({navigation}:Props) {
         
         if(postsTeste.length!==0){
           const sortedPosts: posts[] = postsTeste.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
-          setPosts(sortedPosts.reverse().filter(value=>value.id))
+          const seenIds = new Set()
+          const uniquePosts = sortedPosts.filter(post => {
+            if (seenIds.has(post.id)) {
+                return false
+            } else {
+                seenIds.add(post.id)
+                return true
+            }
+        })
+          setPosts(uniquePosts.reverse())
           setRefreshing(false)
           setLoading(false)
         }
@@ -506,7 +514,9 @@ export default function Home({navigation}:Props) {
                     />
             </View>
             <TouchableOpacity onPress={()=>{
+                setLoading(true)
                 setPesqTrue(!pesqTrue)
+                
             }}>
                 <Image style={styles.imgfilterShowPost} source={require('../../../assets/entrar.png')}/>
             </TouchableOpacity>

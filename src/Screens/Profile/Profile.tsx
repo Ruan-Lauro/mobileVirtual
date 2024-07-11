@@ -18,7 +18,7 @@ import LoadingMax from '../../Components/LoadingMax/Loading';
 import { setLocalesAsync } from '@expo/config-plugins/build/ios/Locales';
 import { putGroup, usePutGroup } from '../../hooks/usePutGroup';
 import ErroInternet from '../../Components/erroInternet/ErroInternet';
-
+import { Alert } from 'react-native';
 
 type ChooseGroupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Profile'>;
 
@@ -102,26 +102,81 @@ export default function Profile({navigation}:Props) {
     }
   },[loading])
 
- 
+  const requestPermissions = async () => {
+    const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
+    const { status: mediaLibraryStatus } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-
-
-  const selectImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 1,
-      base64: true,
-    });
-    
-
-    if (!result.canceled) {
-      
-      setImageUri(result.assets[0].uri)
-      
+    if (cameraStatus !== 'granted' || mediaLibraryStatus !== 'granted') {
+        Alert.alert('Permissão necessária', 'Precisamos de permissão para acessar sua câmera e biblioteca de mídia.')
+        return false
     }
+    return true
+}
+
+const selectImage = async () => {
+    const hasPermission = await requestPermissions();
+    if (!hasPermission) return;
+
+    Alert.alert(
+        'Selecionar Imagem',
+        'Escolha uma opção',
+        [
+            {
+                text: 'Tirar Foto',
+                onPress: async () => {
+                    let result = await ImagePicker.launchCameraAsync({
+                        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                        allowsEditing: true,
+                        quality: 1,
+                    });
+
+                    if (!result.canceled) {
+                      setImageUri(result.assets[0].uri)
+                    }
+                },
+                style:"cancel",
+            },
+            {
+                text: 'Escolher da Galeria',
+                onPress: async () => {
+                    let result = await ImagePicker.launchImageLibraryAsync({
+                        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                        allowsEditing: true,
+                        quality: 1,
+                    });
+
+                    if (!result.canceled) {
+                      setImageUri(result.assets[0].uri)
+                    }
+                },
+            },
+            {
+                text: 'Cancelar',
+                style: 'cancel',
+            },
+        ],
+        { cancelable: true }
+    )
+}
+
+
+
+  // const selectImage = async () => {
+  //   const result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //     allowsEditing: true,
+  //     quality: 1,
+  //     base64: true,
+  //   });
     
-  }
+
+  //   if (!result.canceled) {
+      
+  //     setImageUri(result.assets[0].uri)
+      
+  //   }
+    
+  // }
 
   const authenProfile = async () =>{
     if((name || email || userName || password || imageUri || nameGroup) && user){

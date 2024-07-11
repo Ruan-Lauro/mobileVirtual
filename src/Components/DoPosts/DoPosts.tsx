@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import styles from './Style';
-import {Text, View, TouchableOpacity, Image, TextInput, Keyboard, Linking, ScrollView, RefreshControl  } from 'react-native';
+import {Text, View, TouchableOpacity, Image, TextInput, Keyboard, Linking, ScrollView, RefreshControl, Button  } from 'react-native';
 import React from 'react';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
@@ -11,6 +11,8 @@ import TextPost from '../TextPost/TextPost';
 import LoadingMax from '../LoadingMax/Loading';
 import ErroInternet from '../erroInternet/ErroInternet';
 import Posting from '../Posting/Posting';
+import { CameraView, useCameraPermissions } from 'expo-camera';
+import { Alert } from 'react-native';
 
 type AuthButtonProps = {
     memberId: string,
@@ -44,6 +46,10 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
     const [erroComponent, setErroComponent] = useState(false)
     const [postDone, setPostDone] = useState(false)
 
+    const [facing, setFacing] = useState('back');
+    
+    const [permission, requestPermission] = useCameraPermissions();
+
     const pickPdf =  async () =>{
         let result = await DocumentPicker.getDocumentAsync({
             type:"application/pdf",
@@ -59,15 +65,15 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
         
     }
     
-    const pickImage = async () =>{
-        let result = await DocumentPicker.getDocumentAsync({
-            type:"image/*",
-            copyToCacheDirectory: true,
-        })
+    // const pickImage = async () =>{
+    //     let result = await DocumentPicker.getDocumentAsync({
+    //         type:"image/*",
+    //         copyToCacheDirectory: true,
+    //     })
 
-        setImage(prevList => [...prevList, result.assets![0].uri])
+    //     setImage(prevList => [...prevList, result.assets![0].uri])
        
-    }
+    // }
 
     const pickVideo = async () => {
         
@@ -267,6 +273,63 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
             }
         }
     },[mediaPostN])
+
+    const requestPermissions = async () => {
+        const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
+        const { status: mediaLibraryStatus } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    
+        if (cameraStatus !== 'granted' || mediaLibraryStatus !== 'granted') {
+            Alert.alert('Permissão necessária', 'Precisamos de permissão para acessar sua câmera e biblioteca de mídia.')
+            return false
+        }
+        return true
+    }
+
+    const pickImage = async () => {
+        const hasPermission = await requestPermissions();
+        if (!hasPermission) return;
+    
+        Alert.alert(
+            'Selecionar Imagem',
+            'Escolha uma opção',
+            [
+                {
+                    text: 'Tirar Foto',
+                    onPress: async () => {
+                        let result = await ImagePicker.launchCameraAsync({
+                            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                            allowsEditing: true,
+                            quality: 1,
+                        });
+    
+                        if (!result.canceled) {
+                            setImage(prevList => [...prevList, result.assets![0].uri])
+                        }
+                    },
+                    style:"cancel",
+                },
+                {
+                    text: 'Escolher da Galeria',
+                    onPress: async () => {
+                        let result = await ImagePicker.launchImageLibraryAsync({
+                            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                            allowsEditing: true,
+                            quality: 1,
+                        });
+    
+                        if (!result.canceled) {
+                            setImage(prevList => [...prevList, result.assets![0].uri])
+                        }
+                    },
+                },
+                {
+                    text: 'Cancelar',
+                    style: 'cancel',
+                },
+            ],
+            { cancelable: true }
+        )
+    }
       
 
 

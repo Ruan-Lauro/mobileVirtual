@@ -41,7 +41,7 @@ export default function ChooseGroupMember({ navigation }: Props) {
     React.useCallback(() => {
       const loadData = async () => {
         try {
-          
+          setLoading(true)
           const value = await AsyncStorage.getItem('@userInfor');
           if (value !== null) {
             const userInfor = JSON.parse(value)

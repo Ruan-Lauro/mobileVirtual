@@ -161,6 +161,7 @@ export default function UserPost({navigation}:Props) {
     
 
       useEffect(()=>{
+        setPosts([])
         const listUserAll = authenticationGetU()
           listUserAll.then(value=>{
             if(typeof value !== "string"){
@@ -288,11 +289,22 @@ export default function UserPost({navigation}:Props) {
       },[ userGroup, atualiz, deleteP, postDo, trueSeePost, pesqTrue, editPostTrue])
 
       useEffect(()=>{
+        
         if(postsTeste.length!==0){
           const sortedPosts: posts[] = postsTeste.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
-          setPosts(sortedPosts.reverse())
-          setRefreshing(false);
-          setLoading(false);
+          const seenIds = new Set()
+          const uniquePosts = sortedPosts.filter(post => {
+            if (seenIds.has(post.id)) {
+                return false
+            } else {
+                seenIds.add(post.id)
+                return true
+            }
+        })
+          setPosts(uniquePosts.reverse())
+          setRefreshing(false)
+          setLoading(false)
+          
         }else{
           setRefreshing(false);
           setLoading(false);
