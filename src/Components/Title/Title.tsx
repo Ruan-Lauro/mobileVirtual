@@ -21,7 +21,14 @@ export default function Title({ name, img ,category, navigation}: AuthShowMuralP
                     navigation.navigate('Profile')
                 }}>
                     {img?(
-                        <Image source={{ uri: img }} style={{ width: 45, height: 45, borderRadius: 100}}/>
+                        <Image  src={img} source={{
+                            uri: img,
+                            method: 'POST',
+                            headers: {
+                              Pragma: 'no-cache',
+                            },
+                            body: 'Your Body goes here',
+                          }} style={{ width: 45, height: 45, borderRadius: 100}}/>
                             ):(
                         <Image source={require('../../../assets/pensar.png')} style={{ width: 45, height: 45, borderRadius: 100,borderWidth: 1, borderColor: "black"}} />
                         )}
@@ -35,7 +42,14 @@ export default function Title({ name, img ,category, navigation}: AuthShowMuralP
             ):(
                 <View style={styles.viewImageTitle}>
                     {img?(
-                        <Image source={{ uri: img }} style={{ width: 45, height: 45, borderRadius: 100}}/>
+                        <Image   src={img} source={{
+                            uri: img,
+                            method: 'POST',
+                            headers: {
+                              Pragma: 'no-cache',
+                            },
+                            body: 'Your Body goes here',
+                          }} style={{ width: 45, height: 45, borderRadius: 100}}/>
                             ):(
                         <Image source={require('../../../assets/trabalho.png')} style={{ width: 45, height: 45, borderRadius: 100,borderWidth: 1, borderColor: "black"}} />
                         )}

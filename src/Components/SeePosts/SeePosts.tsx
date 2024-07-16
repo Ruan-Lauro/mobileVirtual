@@ -233,7 +233,14 @@ export default function SeePost({img, authentication, name, category, idPost, ca
                         <Image style={styles.imgArrow} source={require('../../../assets/seta-direita.png')}/>
                 </TouchableOpacity>
                 <View style={styles.viewPostSeePost}>
-                    <Image source={{ uri: img }} style={styles.SeePostImg}/>
+                    <Image  source={{
+                      uri: img,
+                      method: 'POST',
+                      headers: {
+                        Pragma: 'no-cache',
+                      },
+                      body: 'Your Body goes here',
+                    }} src={img} style={styles.SeePostImg}/>
                     <View >
                         <View style={styles.viewNameSeePost}>
                             <Text style={styles.userNameSeePost}>{name}</Text>
@@ -250,7 +257,14 @@ export default function SeePost({img, authentication, name, category, idPost, ca
 
                                 {image.length!== 0?(
                                     image.map((listImage)=>(
-                                        <Image source={{ uri: listImage}} style={{width:319, height:300,  }} resizeMode="cover"/>
+                                        <Image  source={{
+                                          uri: listImage,
+                                          method: 'POST',
+                                          headers: {
+                                            Pragma: 'no-cache',
+                                          },
+                                          body: 'Your Body goes here',
+                                        }} src={listImage} style={{width:319, height:300,  }} resizeMode="cover"/>
                                     ))
                                 ):null}
                                 
