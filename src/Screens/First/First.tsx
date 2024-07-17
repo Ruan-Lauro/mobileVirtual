@@ -68,8 +68,7 @@ const styles = StyleSheet.create({
   imgLogo:{
   width: 50,
   height: 45,
-  top: 50,
-  position: "absolute",
+  marginBottom: "20%",
   },
   firstInfor:{
     width: "55%",
@@ -83,8 +82,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   textFirstBottom:{
-    position:"absolute",
-    bottom:60,
+   marginTop: "10%",
     width: "70%",
     textAlign:"center",
     fontSize:18,

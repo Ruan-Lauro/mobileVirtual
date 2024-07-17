@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     },
     imgLogin:{
         width: "75%",
-        height: 45,
+        height: "5.4%",
         
     },
     inputView:{
