@@ -239,12 +239,8 @@ export default function SeePost({img, authentication, name, category, idPost, ca
                 <View style={styles.viewPostSeePost}>
                     <Image  source={{
                       uri: img,
-                      method: 'POST',
-                      headers: {
-                        Pragma: 'no-cache',
-                      },
-                      body: 'Your Body goes here',
-                    }} src={img} style={styles.SeePostImg}/>
+                     
+                    }}  style={styles.SeePostImg}/>
                     <View >
                         <View style={styles.viewNameSeePost}>
                             <Text style={styles.userNameSeePost}>{name}</Text>
@@ -263,12 +259,8 @@ export default function SeePost({img, authentication, name, category, idPost, ca
                                     image.map((listImage)=>(
                                         <Image  source={{
                                           uri: listImage,
-                                          method: 'POST',
-                                          headers: {
-                                            Pragma: 'no-cache',
-                                          },
-                                          body: 'Your Body goes here',
-                                        }} src={listImage} style={{width:319, height:300,  }} 
+                                         
+                                        }}  style={{width:319, height:300,  }} />
                                     ))
                                 ):null}
                                 

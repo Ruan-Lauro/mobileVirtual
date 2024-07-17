@@ -154,7 +154,7 @@ export default function ShowMural({img, authentication, name, category, idPost, 
               </View>
             </Modal>
             ):null}
-            <Image source={{ uri: img }} src={img} style={styles.ShowPostImg}/>
+            <Image source={{ uri: img }}style={styles.ShowPostImg}/>
             <View style={styles.viewInforShowPost}>
                 <View style={styles.viewTextDate}>
                     <Text style={styles.textNameShowPost}>
@@ -178,12 +178,8 @@ export default function ShowMural({img, authentication, name, category, idPost, 
                 {image?(
                      <Image  source={{
                       uri: image,
-                      method: 'POST',
-                      headers: {
-                        Pragma: 'no-cache',
-                      },
-                      body: 'Your Body goes here',
-                    }} src={image} style={{width:260, height:260, marginTop: 10,}}/>
+                    
+                    }}style={{width:260, height:260, marginTop: 10,}}/>
                 ):(
                     <View>
                         {vide?(
