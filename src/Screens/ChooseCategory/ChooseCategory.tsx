@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View, Image, Vibration, TouchableOpacity } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
+import { StyleSheet, Text, View, Vibration, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
+// import RNPickerSelect from 'react-native-picker-select';
 
 import Input from '../../Components/Inputs/Inputs';
 import styles from './Style';
@@ -20,6 +21,7 @@ import { useGetMembers } from '../../hooks/useGetMembers';
 import { useGetMurals } from '../../hooks/useGetMurals';
 import MuralVerification from '../../Components/MuralVerification/MuralVerification';
 import ErroInternet from '../../Components/erroInternet/ErroInternet';
+import Select from '../../Components/Select/Select';
 
 type ChooseCategoryScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChooseCategory'>;
 type ChooseCategoryScreenRouteProp = RouteProp<RootStackParamList, 'ChooseCategory'>;
@@ -227,41 +229,7 @@ export default function ChooseCategory({navigation, route}:Props) {
         <Image style={styles.imgChooseCategory} source={require('../../../assets/ler.png')}/>
         <Text style={styles.textSelectChooseCategory}>Qual categoria você vai escolher destes murais? </Text>
         {Array.isArray(walls) && walls.length > 0? (
-        <View style={styles.viewSelectChooseCategory}>
-            <RNPickerSelect
-          onValueChange={(value) => setSelectCategory(value)}
-          value={selectCategory}
-          items={walls.map(item => ({ label: item.name, value: item.id }))}
-          style={{
-            inputIOS: {
-                fontSize: 16,
-                paddingVertical: 12,
-                paddingHorizontal: 10,
-                borderWidth: 1,
-                borderColor: 'gray',
-                borderRadius: 4,
-                color: 'black',
-            },
-            inputAndroid: {
-                fontSize: 16,
-                paddingVertical: 12,
-                paddingHorizontal: 10,
-                borderWidth: 1,
-                borderColor: 'gray',
-                borderRadius: 4,
-                color: 'black',
-            },
-            
-          }}
-          placeholder={{
-            label: 'Selecione uma categoria...',
-            value: null,
-            color: '#9EA0A4',
-            font: 16,
-          }}
-          
-        />
-        </View>
+        <Select listElement={walls} selected={setSelectCategory}/>
       ): null}
       {(erroMember)?(
         <Text style={walls.length == 0?(styles.TextErroMemberN):(styles.TextErroMember)}>{erroText}</Text>

@@ -1,5 +1,6 @@
 import styles from './Style';
-import { View, StyleSheet, Image, Text, TouchableOpacity, Linking, ScrollView, TextInput, Modal } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Linking, ScrollView, TextInput, Modal } from 'react-native';
+import { Image } from 'expo-image';
 import {useDeleteMural} from "../../hooks/useDeleteMural";
 import React, { useEffect, useRef, useState } from 'react';
 import { Video, ResizeMode } from 'expo-av';
@@ -79,25 +80,27 @@ export default function SeePost({img, authentication, name, category, idPost, ca
 
       useEffect(()=>{
 
-        if(media){
-            media.map(mediaValue=>{
-                if(mediaValue == "img"){
-               
-                    setImage(prevList => [...prevList, media[media.indexOf(mediaValue)+1]])
-                }else if(mediaValue == "video"){
-                    setVideo(prevList => [...prevList, media[media.indexOf(mediaValue)+1]])
-                }else if(mediaValue == "doc"){
-                    let pdf = media[media.indexOf(mediaValue)+1].split(",")
-                    const pdfList:docum = {
-                        name: pdf[1],
-                        file: pdf[0],
-                    }
-                    setPdfN(prevList => [...prevList, pdfList])
-                    
-                    
-                }
-            })
-        }
+        if (media) {
+          for (let i = 0; i < media.length; i++) {
+              const mediaValue = media[i]
+              const mediaLink = media[i + 1]
+      
+              if (mediaValue === "img") {
+                  setImage(prevList => [...prevList, mediaLink])
+              } else if (mediaValue === "video") {
+                  setVideo(prevList => [...prevList, mediaLink])
+              } else if (mediaValue === "doc") {
+                  let pdf = mediaLink.split(",")
+                  const pdfList = {
+                      name: pdf[1],
+                      file: pdf[0],
+                  }
+                  setPdfN(prevList => [...prevList, pdfList])
+              }
+              i++
+          }
+      }
+      
 
         if(userNow == userPost || isAdmin == true){
             setPossibilyPost(true)
@@ -165,6 +168,7 @@ export default function SeePost({img, authentication, name, category, idPost, ca
     }
 
     useEffect(()=>{
+      console.log(image)
         let tV = video.length
         let tI = image.length
         let tP = pdfN.length

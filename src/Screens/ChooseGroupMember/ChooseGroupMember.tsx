@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, Image, Vibration, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Vibration, TouchableOpacity, ScrollView } from 'react-native';
+import { Image } from 'expo-image';
 import styles from './Style';
 import { useEffect, useState } from 'react';
 import Buttons from '../../Components/Buttons/Buttons';

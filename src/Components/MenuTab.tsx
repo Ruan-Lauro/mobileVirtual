@@ -1,6 +1,6 @@
-import { View, StyleSheet, Image, Text, TouchableOpacity, Linking } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Linking } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-
+import { Image } from 'expo-image';
 
 
 

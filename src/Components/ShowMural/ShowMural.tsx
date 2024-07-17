@@ -1,5 +1,6 @@
 import styles from './Style';
-import { View, StyleSheet, Image, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
+import { Image } from 'expo-image';
 import {useDeleteMural} from "../../hooks/useDeleteMural";
 import React from 'react';
 import { TouchableOpacity } from 'react-native';

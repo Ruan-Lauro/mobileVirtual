@@ -1,6 +1,7 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, Button, ScrollView, TouchableOpacity, TextInput, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, Button, ScrollView, TouchableOpacity, TextInput, Keyboard } from 'react-native';
+import { Image } from 'expo-image';
 import { RootStackParamList } from '../type';
 import MenuTab from '../../Components/MenuTab';
 import styles from './Style';

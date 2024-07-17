@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View, Image, Button, TextInput, ScrollView, TouchableOpacity, Platform, Keyboard, RefreshControl } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, ScrollView, TouchableOpacity, Platform, Keyboard, RefreshControl } from 'react-native';
+import { Image } from 'expo-image';
 import { KeyboardAvoidingView } from 'react-native';
 import styles from './Style';
 import { RouteProp, useFocusEffect } from '@react-navigation/native';
@@ -314,20 +315,11 @@ export default function Home({navigation}:Props) {
                             setPostsTeste(prevList => [...prevList, value])
     
                           })
-                        }else{
-                          setPosts([])
-                          setRefreshing(false)
-                          setLoading(false)
                         }
                       }else{
-                        if(PostMuralNew == "user erro"){
-                          setPosts([])
-                          setRefreshing(false)
-                          setLoading(false)
-                        }else if(PostMuralNew == "servidor erro"){
-                          setLoading(false)
-                          setErroComponent(true)
-                        }
+                        setRefreshing(false)
+                        setLoading(false)
+                       return
                       }
                     })
                     

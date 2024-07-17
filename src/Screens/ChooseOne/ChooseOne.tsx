@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, Image, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import styles from './Style';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';

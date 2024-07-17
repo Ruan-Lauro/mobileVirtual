@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import styles from './Style';
-import {Text, View, TouchableOpacity, Image, TextInput, Keyboard, Linking, ScrollView, RefreshControl  } from 'react-native';
+import {Text, View, TouchableOpacity, TextInput, Keyboard, Linking, ScrollView, RefreshControl  } from 'react-native';
+import { Image } from 'expo-image';
 import React from 'react';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';

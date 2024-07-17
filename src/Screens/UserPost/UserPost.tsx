@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View, Image, Button, TextInput, ScrollView, TouchableOpacity, Platform, Keyboard, RefreshControl } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, ScrollView, TouchableOpacity, Platform, Keyboard, RefreshControl } from 'react-native';
+import { Image } from 'expo-image';
 import { KeyboardAvoidingView } from 'react-native';
 import styles from './Style';
 import { RouteProp } from '@react-navigation/native';

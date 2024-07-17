@@ -12,8 +12,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
-      
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ruanlauro07.mobileVirtual"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,14 +21,20 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.ruanlauro07.mobileVirtual",
-      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "97f8b674-32ef-423d-8734-25ad69466d92"
+        "projectId": "07daae72-7545-4fc1-86c6-3c4542f0a8a2"
       }
     },
     "plugins": [

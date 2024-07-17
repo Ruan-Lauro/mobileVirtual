@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, Image, Button } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { Image } from 'expo-image';
 import Buttons from '../../Components/ButtonLarge/Buttons';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';

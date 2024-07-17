@@ -1,5 +1,6 @@
 
-import { StyleSheet, Text, View, Image, Vibration } from 'react-native';
+import { StyleSheet, Text, View, Vibration } from 'react-native';
+import { Image } from 'expo-image';
 import styles from './Style';
 import Input from '../../Components/Inputs/Inputs';
 import { useState } from 'react';

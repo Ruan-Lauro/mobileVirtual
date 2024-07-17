@@ -1,5 +1,6 @@
 import { FormEvent } from 'react';
-import {Text, View, TouchableOpacity, Image } from 'react-native';
+import {Text, View, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import React from 'react';
 import styles from './Style';
 

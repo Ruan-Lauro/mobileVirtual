@@ -1,5 +1,6 @@
 import styles from './Style';
-import { View, StyleSheet, Image, Text, TouchableOpacity, Linking, Modal } from 'react-native';
+import { View, StyleSheet,  Text, TouchableOpacity, Linking, Modal } from 'react-native';
+import { Image } from 'expo-image';
 import {useDeleteMural} from "../../hooks/useDeleteMural";
 import React, { useEffect, useRef, useState } from 'react';
 import { Video, ResizeMode } from 'expo-av';

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import MenuTab from '../../Components/MenuTab';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../type';

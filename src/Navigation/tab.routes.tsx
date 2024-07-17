@@ -1,5 +1,6 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
-import { StyleSheet, Text, View, Image, Button } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { Image } from 'expo-image';
 import Home from '../Screens/Home/Home';
 import UserPost from '../Screens/UserPost/UserPost';
 import ChooseGroup from '../Screens/ChooseGroup/ChooseGroup';
