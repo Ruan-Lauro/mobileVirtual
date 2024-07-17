@@ -194,7 +194,7 @@ export default function ShowMural({img, authentication, name, category, idPost, 
                                uri: vide,
                              }}
                              useNativeControls
-                             resizeMode={ResizeMode.CONTAIN}
+                         
                              isLooping
                              onPlaybackStatusUpdate={status => setStatus(() => status)}
                            />

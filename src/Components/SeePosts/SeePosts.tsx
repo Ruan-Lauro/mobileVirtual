@@ -268,7 +268,7 @@ export default function SeePost({img, authentication, name, category, idPost, ca
                                             Pragma: 'no-cache',
                                           },
                                           body: 'Your Body goes here',
-                                        }} src={listImage} style={{width:319, height:300,  }} resizeMode="cover"/>
+                                        }} src={listImage} style={{width:319, height:300,  }} 
                                     ))
                                 ):null}
                                 
@@ -281,7 +281,7 @@ export default function SeePost({img, authentication, name, category, idPost, ca
                                         uri: listVideo,
                                       }}
                                       useNativeControls
-                                      resizeMode={ResizeMode.CONTAIN}
+                                  
                                       isLooping
                                       onPlaybackStatusUpdate={status => setStatus(() => status)}
                                     />

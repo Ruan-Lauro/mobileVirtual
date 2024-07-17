@@ -417,7 +417,7 @@ export default function EditPost({idPost, exit, img, media, context}:AuthButtonP
                             {image.length!== 0?(
                                 image.map((listImage)=>(
                                     <View style={{position:"relative"}}>
-                                        <Image source={{ uri: listImage}} style={{width:260, height:260,}} resizeMode="contain"/>
+                                        <Image source={{ uri: listImage}} style={{width:260, height:260,}} />
                                         <Text style={{fontSize:20, position:"absolute", right: 20}} onPress={()=>{
                                             const newImage = image.filter((value)=> value !== listImage)
                                             setImage(newImage)
@@ -438,7 +438,7 @@ export default function EditPost({idPost, exit, img, media, context}:AuthButtonP
                                         uri: listVideo,
                                         }}
                                         useNativeControls
-                                        resizeMode={ResizeMode.CONTAIN}
+                                       
                                         />
                                         <Text style={{fontSize:20, position:"absolute", right: 20}} onPress={()=>{
                                             const newVideo = video.filter((value)=> value !== listVideo)
