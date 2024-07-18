@@ -13,6 +13,8 @@ import LoadingMax from '../LoadingMax/Loading';
 import { usePutPost } from '../../hooks/usePutPost';
 import ErroInternet from '../erroInternet/ErroInternet';
 import { Alert } from 'react-native';
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
 
 type AuthButtonProps = {
     img?: string,
@@ -417,7 +419,7 @@ export default function EditPost({idPost, exit, img, media, context}:AuthButtonP
                             {image.length!== 0?(
                                 image.map((listImage)=>(
                                     <View style={{position:"relative"}}>
-                                        <Image source={{ uri: listImage}} style={{width:260, height:260,}} />
+                                        <Image source={{ uri: listImage}} style={{width:width*0.65, height:height*0.3}} />
                                         <Text style={{fontSize:20, position:"absolute", right: 20}} onPress={()=>{
                                             const newImage = image.filter((value)=> value !== listImage)
                                             setImage(newImage)
@@ -433,12 +435,12 @@ export default function EditPost({idPost, exit, img, media, context}:AuthButtonP
                                     <View style={{position:"relative"}}>
                                         <Video
                                         ref={videoN}
-                                        style={{width: 260, height: 260, alignSelf:"center"}}
+                                        style={{width:width*0.65, height:height*0.3, backgroundColor:"#f4f4f4",}}
                                         source={{
                                         uri: listVideo,
                                         }}
                                         useNativeControls
-                                       
+                                        resizeMode={ResizeMode.CONTAIN}
                                         />
                                         <Text style={{fontSize:20, position:"absolute", right: 20}} onPress={()=>{
                                             const newVideo = video.filter((value)=> value !== listVideo)
@@ -457,7 +459,7 @@ export default function EditPost({idPost, exit, img, media, context}:AuthButtonP
                                     Linking.openURL(listpdf.file)
                                     }}>
                                     <Image style={{width:50, height: 50, }} source={require('../../../assets/pdf.png')}/>
-                                    <Text style={{textAlign:"center"}}>{listpdf.name}</Text>
+                                    <Text style={{textAlign:"center", fontSize:height*0.018}}>{listpdf.name}</Text>
                                 </TouchableOpacity>
                                 <Text style={{fontSize:20, position:"absolute", right: 20}} onPress={()=>{
                                     const newPdf = pdfN.filter((value)=> value !== listpdf)

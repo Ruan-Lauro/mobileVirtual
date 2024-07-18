@@ -1,38 +1,39 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-    allLogin:{
+    allLogin: {
         flex: 1,
-        display:"flex",
-        alignItems:"center",
+        alignItems: "center",
         justifyContent: "center",
         backgroundColor: "white",
-    },
-    imgLogin:{
-        width: "75%",
-        height: "5.4%",
         
     },
-    inputView:{
-        display:"flex",
-        width:"75%",
-        marginTop: "7%",
-        marginBottom: '10%',
+    imgLogin: {
+        width: width * 0.8, 
+        height: height * 0.065,
+        resizeMode: 'contain',
     },
-    inputViewText:{
-        opacity:0.5,
+    inputView: {
+        width: width * 0.80, 
+        marginTop: height * 0.07, 
+        marginBottom: height * 0.10,
+    },
+    inputViewText: {
+        opacity: 0.5,
         marginTop: 10,
         textAlign: "right",
     },
-    TextButtonBottom:{
+    TextButtonBottom: {
         opacity: 0.5,
-        marginTop: "2.5%",
+        marginTop: height * 0.025, 
     },
-    textReject:{
+    textReject: {
         color: "#C91E2D",
         marginTop: 25,
         textAlign: "center",
-    }
-})
+    },
+});
 
-export default styles
+export default styles;

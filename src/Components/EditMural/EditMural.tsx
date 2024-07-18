@@ -55,7 +55,7 @@ export default function EditMural({idMural, authentication, imageMural, name, ca
                 if(response.secure_url){
                 const muralUpdate: putMural = {
                     name: nameMural,
-                    imgMural: response!.url,
+                    imgMural: response!.secure_url,
                     category: category,
                     id: idMural!,
                     }

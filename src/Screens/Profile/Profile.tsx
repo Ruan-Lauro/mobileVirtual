@@ -237,7 +237,7 @@ const selectImage = async () => {
           const listGroup: putGroup = {
             name: userGroup?.name,
             userId: user.id!,
-            imgGroup: response.url,
+            imgGroup: response.response.secure_url,
             id: userGroup?.id!,
           }
           

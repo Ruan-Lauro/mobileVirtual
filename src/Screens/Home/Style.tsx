@@ -1,4 +1,6 @@
 import { StyleSheet } from "react-native";
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     allPosts:{
@@ -27,7 +29,7 @@ const styles = StyleSheet.create({
     viewPesqShowPost:{
         backgroundColor:"#F4F5F5",
         flexDirection:"row",
-        width: 280,
+        width: width*0.7,
         borderRadius: 100,
         padding: 10,
         alignSelf:"baseline",

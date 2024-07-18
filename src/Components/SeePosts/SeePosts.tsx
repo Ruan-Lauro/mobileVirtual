@@ -5,6 +5,9 @@ import {useDeleteMural} from "../../hooks/useDeleteMural";
 import React, { useEffect, useRef, useState } from 'react';
 import { Video, ResizeMode } from 'expo-av';
 import DeletePost from '../DeletePost/DeletePost';
+import SeeImage from '../SeeImage/SeeImage';
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
 
 type docum = {
     file: string,
@@ -46,6 +49,8 @@ export default function SeePost({img, authentication, name, category, idPost, ca
     const [idPostDeleted, setIdPostDeleted] = useState("")
     const [editPostTrue, setEditPostTrue] = useState(false)
     const [status, setStatus] = React.useState({});
+    const [seeImg, setSeeImg] = useState(false)
+    const [urlSeeImg, setUrlSeeImg] = useState("")
 
     const calculateTimeDifference = (postDate: string | Date): string => {
         const currentDate = new Date();
@@ -181,6 +186,11 @@ export default function SeePost({img, authentication, name, category, idPost, ca
    
     return(
         <View style={styles.allSeePosts}>
+          {seeImg?(
+            <SeeImage authentication={()=>{
+              setSeeImg(false)
+            }} image={urlSeeImg}/>
+          ):null}
             
              {deleteP?(
             <DeletePost authentication={()=>{
@@ -230,7 +240,7 @@ export default function SeePost({img, authentication, name, category, idPost, ca
               </View>
             </Modal>
             ):null}
-            <View style={{width:"80%"}}>
+            <View style={{width:width*0.8}}>
                 <TouchableOpacity onPress={()=>{
                         authentication()
                     }}>
@@ -241,7 +251,7 @@ export default function SeePost({img, authentication, name, category, idPost, ca
                       uri: img,
                      
                     }}  style={styles.SeePostImg}/>
-                    <View >
+                    <View style={{width:"80%"}}>
                         <View style={styles.viewNameSeePost}>
                             <Text style={styles.userNameSeePost}>{name}</Text>
                             <Text style={styles.dateSeePost}>{datePost}</Text>
@@ -249,7 +259,7 @@ export default function SeePost({img, authentication, name, category, idPost, ca
                         <Text style={styles.categorySeePost}>{category}</Text>
                     </View>
                 </View>
-                <ScrollView style={{marginTop:20}} contentContainerStyle={{paddingBottom:150}} showsVerticalScrollIndicator={false}>
+                <ScrollView style={{marginTop:20}} contentContainerStyle={{paddingBottom:250}} showsVerticalScrollIndicator={false}>
                     <Text style={styles.textDoPosts}>{text}</Text>
                     {(video.length!== 0 || image.length!== 0 || pdfN.length !== 0)?(
                         <ScrollView style={styles.viewMedia} horizontal  
@@ -257,10 +267,15 @@ export default function SeePost({img, authentication, name, category, idPost, ca
 
                                 {image.length!== 0?(
                                     image.map((listImage)=>(
-                                        <Image  source={{
+                                      <TouchableOpacity onPress={()=>{
+                                        setUrlSeeImg(listImage)
+                                        setSeeImg(true)
+                                      }}>
+                                            <Image  source={{
                                           uri: listImage,
                                          
-                                        }}  style={{width:319, height:300,  }} />
+                                        }}  style={{ width:width*0.8, height:height*0.4,  }} />
+                                      </TouchableOpacity>
                                     ))
                                 ):null}
                                 
@@ -294,13 +309,13 @@ export default function SeePost({img, authentication, name, category, idPost, ca
                         </ScrollView>
                         ):null}
                         {(video.length!== 0 || pdfN.length!== 0 || image.length!== 0) && contPass! < pass!?(
-                    <TouchableOpacity style={{position:"absolute", right:1, bottom: 300
+                    <TouchableOpacity style={{position:"absolute", right:1, bottom: 380
                     }} onPress={ scrollToRight}>
                         <Image source={require('../../../assets/passar.png')} style={{ width: 45, height: 45,  transform: [{ rotate: '90deg' }], }} />
                     </TouchableOpacity>
                 ):null}
                 {(video.length!== 0 || pdfN.length!== 0 || image.length!== 0) && contPass !== 0?(
-                    <TouchableOpacity style={{position:"absolute", left:-20, bottom: 300,
+                    <TouchableOpacity style={{position:"absolute", left:-20, bottom: 380,
                     }} onPress={ scrollToLeft}>
                         <Image source={require('../../../assets/passar.png')} style={{ width: 45, height: 45,  transform: [{ rotate: '270deg' }], marginLeft:20,}} />
                     </TouchableOpacity>

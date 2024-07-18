@@ -8,6 +8,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../type';
 import TabRoutes from '../../Navigation/tab.routes';
 
+import { Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
 
 
 
@@ -28,7 +31,7 @@ export default function First({navigation}:Props) {
     
       <View style={styles.firstInfor}>
         <Text style={styles.textFirstInfor}>A informação é a chave do sucesso para que tudo cresça.</Text>
-        <Image  source={require("../../../assets/PapeisPersonagem.png")} style={{width: 190, height: 130}}/>    
+        <Image  source={require("../../../assets/PapeisPersonagem.png")} style={{width: width*0.5, height: height*0.17, resizeMode: 'contain',}}/>    
        
       </View>
       
@@ -60,32 +63,33 @@ const styles = StyleSheet.create({
   },
   viewbutton:{
     display:"flex",
-    marginTop:70,
+    marginTop:height*0.05,
     justifyContent:"space-between", 
     alignItems:"center",
-    width:300,
+    width: width*0.6,
   },
   imgLogo:{
-  width: 50,
-  height: 45,
-  marginBottom: "20%",
+    width: width*0.13,
+    height: height*0.07,
+    marginBottom: height*0.02,
+    resizeMode:"contain",
   },
   firstInfor:{
-    width: "55%",
+    width: width*0.55,
     alignItems:"center",
   },
   textFirstInfor:{
     width:"100%",
     display:"flex",
-    fontSize: 29,
+    fontSize: width*0.08,
     fontWeight: "bold",
     marginBottom: 40,
   },
   textFirstBottom:{
    marginTop: "10%",
-    width: "70%",
+    width: width*0.7,
     textAlign:"center",
-    fontSize:18,
+    fontSize:width*0.043,
     opacity: 0.55,
   },
   textStrong:{
@@ -93,7 +97,7 @@ const styles = StyleSheet.create({
   },
   textOr:{ 
     letterSpacing: -1,
-    fontSize:16,
+    fontSize:width*0.033,
   },
   viewTextOr:{
     display:"flex",
@@ -102,8 +106,8 @@ const styles = StyleSheet.create({
     marginTop: 3,
     marginBottom: 3,
   },
-  textOrN:{
-    fontSize:18,
+  textOrN:{ 
+    fontSize:width*0.043,
   },
   
 });

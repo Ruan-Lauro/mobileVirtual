@@ -1,8 +1,10 @@
 import { StyleSheet } from "react-native";
-
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
    allConfiguration:{
     flex: 1,
+    maxWidth:"100%",
     backgroundColor: "white",
    },
    imgArrow:{
@@ -27,6 +29,7 @@ const styles = StyleSheet.create({
   },
   viewConfiguration:{
       marginLeft:25,
+      marginRight:25,
   },
   viewImgConfiguration:{
       marginBottom: 30,
@@ -44,6 +47,7 @@ const styles = StyleSheet.create({
    marginRight: 10,
 },
   textPrinConfiguration:{
+    marginRight:0,
    fontSize:18,
    fontWeight:"500",
    marginBottom: -2,
@@ -51,7 +55,8 @@ const styles = StyleSheet.create({
   textSecoConfiguration:{
    fontSize:16,
    opacity: 0.6,
-   width:"85%",
+   width:width*0.8,
+   marginRight:0,
   },
    
 })

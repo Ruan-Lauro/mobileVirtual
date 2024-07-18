@@ -7,7 +7,8 @@ import { Video, ResizeMode } from 'expo-av';
 import DeletePost from '../DeletePost/DeletePost';
 import EditPost from '../EditPost/EditPost';
 import{ shareContent } from '../../Services/Share';
-
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
 type docum = {
   file: string,
   name: string,
@@ -179,14 +180,14 @@ export default function ShowMural({img, authentication, name, category, idPost, 
                      <Image  source={{
                       uri: image,
                       
-                    }}style={{width:260, height:260, marginTop: 10,}}/>
+                    }}style={{width:width*0.65, height:height*0.3, marginTop: 10,}}/>
                     
                 ):(
                     <View>
                         {vide?(
                              <Video
                              ref={video}
-                             style={{width: 260, height: 260,  marginTop:20, backgroundColor:"#353535"}}
+                             style={{marginTop:20, backgroundColor:"#353535", width:width*0.65, height:height*0.3}}
                              source={{
                                uri: vide,
                              }}

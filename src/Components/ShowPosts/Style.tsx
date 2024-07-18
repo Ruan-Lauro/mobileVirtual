@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
-
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
     allShowPost:{
         flexDirection:"row",
@@ -10,14 +11,14 @@ const styles = StyleSheet.create({
         position:"relative",
     },
     ShowPostImg:{
-        width: 50,
-        height: 50,
+        width: width*0.13,
+        height: height*0.06,
         borderRadius: 100,
         marginRight: 10,
         marginLeft: 25,
     },
     viewInforShowPost:{
-        width:"65%",
+        width:width*0.65,
         
     },
     viewTextDate:{
@@ -27,11 +28,11 @@ const styles = StyleSheet.create({
     },
     textNameShowPost:{
         fontWeight:"500",
-        fontSize:16,
+        fontSize:width*0.04,
         marginBottom: -4,
     },
     textCategoryShowPost:{
-        fontSize:14,
+        fontSize:width*0.036,
         opacity: 0.6,
     },
     textDateShowPost:{
@@ -45,8 +46,8 @@ const styles = StyleSheet.create({
         flexDirection:"row",
     },
     imageOptionShowPost:{
-        width: 15,
-        height: 15,
+        width: width*0.015,
+        height: height*0.015,
         marginLeft: 20,
     },
    

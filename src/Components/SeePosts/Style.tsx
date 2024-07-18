@@ -1,4 +1,5 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     allSeePosts:{
@@ -7,17 +8,18 @@ const styles = StyleSheet.create({
         height:"100%",
         backgroundColor:"white",
         zIndex:999,
-        paddingTop: 40,
         alignItems:"center",
     },
     imgArrow:{
         width: 40,
         height: 30,
         transform: [{ scaleX: -1 }],
+        marginTop:40
     },
     viewPostSeePost:{
         flexDirection:"row",
         marginTop:30,
+        width:"100%",
     },
     SeePostImg:{
         width: 45,
@@ -26,7 +28,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     textDoPosts:{
-        fontSize: 16,
+        fontSize:width*0.043,
         width:"100%",
         textAlign:"justify",
     },
@@ -49,15 +51,15 @@ const styles = StyleSheet.create({
     },
     userNameSeePost:{
         fontWeight:"500",
-        fontSize:16,
+        fontSize:width*0.043,
         marginBottom: -4,
     },
     dateSeePost:{
-        fontSize:14,
+        fontSize:width*0.035,
         opacity: 0.6,
     },
     categorySeePost:{
-        fontSize:14,
+        fontSize:width*0.035,
         opacity: 0.6,
     },
     modalShowPost: {

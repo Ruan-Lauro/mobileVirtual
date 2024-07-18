@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
-
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
     allDoPosts:{
         position: "absolute",
@@ -55,7 +56,8 @@ const styles = StyleSheet.create({
     },
     textDoPosts:{
         fontSize: 16,
-        width:260,
+        width:width*0.7,
+        height:"auto"
     },
     viewMedia:{
         marginTop: 20,
