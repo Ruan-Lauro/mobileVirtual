@@ -273,7 +273,7 @@ export default function SeePost({img, authentication, name, category, idPost, ca
                                         uri: listVideo,
                                       }}
                                       useNativeControls
-                                  
+                                      resizeMode={ResizeMode.CONTAIN}
                                       isLooping
                                       onPlaybackStatusUpdate={status => setStatus(() => status)}
                                     />

@@ -76,7 +76,7 @@ export default function Mural({navigation}:Props) {
         const muralAdd ={
           name: nameMural,
           groupId: groupMural?.id!,
-          imgMural: response.url,
+          imgMural: response.secure_url,
           category: nameMural,
           isPrivate: isPrivate,
         }

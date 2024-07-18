@@ -52,7 +52,7 @@ export default function EditMural({idMural, authentication, imageMural, name, ca
                
               if(imageUri.includes("file")){
                 const response = await cloudinary(imageUri)
-                if(response.url){
+                if(response.secure_url){
                 const muralUpdate: putMural = {
                     name: nameMural,
                     imgMural: response!.url,

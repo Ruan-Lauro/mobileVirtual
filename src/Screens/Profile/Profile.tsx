@@ -213,7 +213,7 @@ const selectImage = async () => {
           email,
           password,
           username: userName,
-          profile_image: response.url,
+          profile_image: response.secure_url,
       }
 
       if(user.isAdmin){

@@ -56,7 +56,7 @@ export default function Group({navigation}:Props) {
                 const response = await cloudinary(imageUri)
                 const groupCreate: createGroup = {
                 name: nameGroup,
-                imgGroup: response!.url,
+                imgGroup: response!.secure_url,
                 userId: userInformation.id,
                 }
                 const responseGroup = authenticationAddG(groupCreate)

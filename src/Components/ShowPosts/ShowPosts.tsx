@@ -1,6 +1,6 @@
 import styles from './Style';
 import { View, StyleSheet,  Text, TouchableOpacity, Linking, Modal } from 'react-native';
-import { Image } from 'expo-image';
+import { Image, ImageSource } from 'expo-image';
 import {useDeleteMural} from "../../hooks/useDeleteMural";
 import React, { useEffect, useRef, useState } from 'react';
 import { Video, ResizeMode } from 'expo-av';
@@ -154,7 +154,7 @@ export default function ShowMural({img, authentication, name, category, idPost, 
               </View>
             </Modal>
             ):null}
-            <Image source={{ uri: img }}style={styles.ShowPostImg}/>
+            <Image source={{ uri: img }}  style={styles.ShowPostImg}/>
             <View style={styles.viewInforShowPost}>
                 <View style={styles.viewTextDate}>
                     <Text style={styles.textNameShowPost}>
@@ -178,8 +178,9 @@ export default function ShowMural({img, authentication, name, category, idPost, 
                 {image?(
                      <Image  source={{
                       uri: image,
-                    
+                      
                     }}style={{width:260, height:260, marginTop: 10,}}/>
+                    
                 ):(
                     <View>
                         {vide?(
@@ -190,7 +191,7 @@ export default function ShowMural({img, authentication, name, category, idPost, 
                                uri: vide,
                              }}
                              useNativeControls
-                         
+                             resizeMode={ResizeMode.CONTAIN}
                              isLooping
                              onPlaybackStatusUpdate={status => setStatus(() => status)}
                            />

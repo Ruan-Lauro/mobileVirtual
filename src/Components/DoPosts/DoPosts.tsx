@@ -187,7 +187,7 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
                 video.map(async vid =>{
                     const response = await cloudinary(vid)
                     setMediaPostN(prevList => [...prevList, "video"])
-                    setMediaPostN(prevList => [...prevList, response!.url])
+                    setMediaPostN(prevList => [...prevList, response!.secure_url])
                     
                 })
             }
@@ -196,7 +196,8 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
                 image.map(async img=>{
                     const response = await cloudinary(img)
                     setMediaPostN(prevList => [...prevList, "img"])
-                    setMediaPostN(prevList => [...prevList, response!.url])
+                    setMediaPostN(prevList => [...prevList, response!.secure_url])
+                   
                    
                 })
             }
@@ -205,7 +206,7 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
                 pdfN.map(async pdf=>{
                     const response = await cloudinary(pdf.file)
                     setMediaPostN(prevList => [...prevList, "doc"])
-                    setMediaPostN(prevList => [...prevList, response!.url+","+pdf.name])
+                    setMediaPostN(prevList => [...prevList, response!.secure_url+","+pdf.name])
                     
                 })
             }
