@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { Image } from 'expo-image';
 import styles from './Style';
 import { RouteProp } from '@react-navigation/native';
@@ -14,7 +14,9 @@ import React from 'react';
 import { usePostEmailCode } from '../../hooks/usePostEmailCode';
 import EmailVerification from '../../Components/EmailVerification/EmailVerification';
 import ErroInternet from '../../Components/erroInternet/ErroInternet';
+import { Dimensions } from 'react-native';
 
+const { width, height } = Dimensions.get('window');
 type ChooseOneScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChooseOne'>;
 
 type ChooseOneScreenRouteProp = RouteProp<RootStackParamList, 'ChooseOne'>;
@@ -198,20 +200,20 @@ const ChooseOne = ({route, navigation}:Props) =>{
         <View style={styles.chooseOneCharacter}>
          
           <Image style={styles.Character} source={require('../../../assets/EscolhaUm.png')}/>
-          <TouchableOpacity onPress={() => {
+          <TouchableWithoutFeedback onPress={() => {
             setChosseUser(true) 
             setChosseGroup(false)
           }}>
-            <View style={styles.ChooseUserView}>
-              <Text>Usuário</Text>
+             <View style={styles.ChooseUserView}>
+              <Text >Usuário</Text>
               {chooseUser ? (
                 <Image style={styles.ChooseUser} source={require('../../../assets/perfilPintado.png')}/>
               ) : (
                 <Image style={styles.ChooseUser} source={require('../../../assets/perfil.png')}/>
               )}
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{
+       </TouchableWithoutFeedback>
+       <TouchableWithoutFeedback onPress={() => {
             setChosseUser(false) 
             setChosseGroup(true)
           }}>
@@ -223,7 +225,8 @@ const ChooseOne = ({route, navigation}:Props) =>{
                 <Image style={styles.ChooseGroup} source={require('../../../assets/grupon.png')}/>
               )}
             </View>
-          </TouchableOpacity>
+       </TouchableWithoutFeedback>
+          
           
         </View>
         {chooseGroup || chooseUser?(

@@ -1,5 +1,7 @@
 import { StyleSheet } from "react-native";
+import { Dimensions } from 'react-native';
 
+const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
     allRegister:{
         display:"flex",
@@ -9,8 +11,9 @@ const styles = StyleSheet.create({
         backgroundColor:"white",
     },
     imgRegister:{
-        width: "75%",
-        height: 45,
+        width: width * 0.8, 
+        height: height * 0.065,
+        resizeMode: "contain",
     },
     inputViewRegister:{
         display:"flex",

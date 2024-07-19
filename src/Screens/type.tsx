@@ -1,4 +1,4 @@
-export type RootStackParamList = {
+  export type RootStackParamList = {
   Home: undefined;
   Register: undefined;
   ChooseOne: { NewUser?: { 

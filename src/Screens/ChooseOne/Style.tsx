@@ -1,5 +1,7 @@
 import { StyleSheet } from "react-native";
+import { Dimensions } from 'react-native';
 
+const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
     allChooseOne:{
         flex: 1,
@@ -38,33 +40,38 @@ const styles = StyleSheet.create({
     ChooseUserView:{
         alignItems:"center",
         position:"absolute",
-        right: 0,
-        bottom: 90,
+        right: 0.0*width,
+        bottom: 0.106*height,
+        
     },
     ChooseGroupView:{
         alignItems:"center",
         position:"absolute",
-        left: 0,
-        bottom: 84,
+        left: -0.02*width,
+        bottom: 0.1*height,
+       
     },
     ChooseUser:{
-        width: 40,
-        height: 45,
-        
+        width: width*0.15,
+        height: height*0.054,
+        resizeMode:"contain",
+        zIndex:999,
     },
     Character:{
-        width: 320,
-        height: 240,
+        width: width*0.77,
+        height: height*0.27,
+        resizeMode:"contain",
     },
     ChooseGroup:{
-        width: 70,
-        height: 45,
-        
+        width: width*0.19,
+        height: height*0.055,
+        resizeMode:"contain",
+        zIndex:1000,
     },
     textChoose:{
-        fontSize: 28,
+        fontSize: width*0.085,
         textAlign:"center",
-        width:"70%",
+        width:width*0.7,
         fontWeight:"bold",
         marginBottom:30,
 

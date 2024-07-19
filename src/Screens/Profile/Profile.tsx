@@ -217,11 +217,13 @@ const selectImage = async () => {
       }
 
       if(user.isAdmin){
+        console.log("Ali")
         if(nameGroup){
+          console.log("Tome")
           const listGroup: putGroup = {
             name: nameGroup,
             userId: user.id!,
-            imgGroup: response.url,
+            imgGroup: response.response.secure_url,
             id: userGroup?.id!,
           }
   
@@ -230,20 +232,29 @@ const selectImage = async () => {
             if(responseGroupNew == "Group updated successfully."){
               setEditNameGroup(false)
               setImageUri("")
+              setLoading(false)
             }
             setImageUri("")
           })
         }else{
+          
           const listGroup: putGroup = {
             name: userGroup?.name,
             userId: user.id!,
-            imgGroup: response.response.secure_url,
+            imgGroup: response.secure_url,
             id: userGroup?.id!,
           }
-          
+         
           const responseGroup = authenticationPutG(listGroup)
+          
           responseGroup.then(responseGroupNew=>{
-       
+            console.log(responseGroupNew)
+            if(responseGroupNew == "Group updated successfully."){
+              setEditNameGroup(false)
+              setImageUri("")
+              setLoading(false)
+            }
+            setImageUri("")
           })
         }
       }
