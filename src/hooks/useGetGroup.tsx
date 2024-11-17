@@ -17,9 +17,14 @@ export type group = {
 
 
 export const useGetGroup = (): useGetGroupResult => {
+
  
 
   const authenticationG = async () => {
+
+
+    
+
     try {
       const response = await api.get('/groups');
 

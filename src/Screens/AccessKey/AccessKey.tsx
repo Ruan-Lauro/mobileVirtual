@@ -18,6 +18,7 @@ import { useGetUsers } from '../../hooks/useGetUsers';
 import LoadingMax from '../../Components/LoadingMax/Loading';
 import { useAuthLogin } from '../../hooks/useAuthLogin';
 import ErroInternet from '../../Components/erroInternet/ErroInternet';
+import SendEmail from '../../Components/SendEmail/SendEmail';
 
 type CodGroupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'AccessKey'>;
 
@@ -44,7 +45,7 @@ export default function AccessKey({navigation}:Props) {
  const [loading,setLoading] = useState(false)
  const [text, setText] = useState("º A senha deve conter oito caracteres")
  const [erroComponent, setErroComponent] = useState(false)
-
+ const [trueSendEmail, setTrueSendEmail] = useState(false)
  const {authenticationPEV} = usePostEmailCode()
  const {authenticationPutU} = usePutUser()
  const {authenticationGetU} = useGetUsers()
@@ -60,6 +61,7 @@ export default function AccessKey({navigation}:Props) {
 }, []);
 
   const authenCod = () => {
+    setLoading(true)
     setReject(false)
     if(email){
         if(email === user?.email){
@@ -143,6 +145,7 @@ export default function AccessKey({navigation}:Props) {
   }
 
   const emailConfirm = () =>{
+    setLoading(true)
     if(email && password){
         if(newPassword){
             if(confirmNewPassword){
@@ -150,10 +153,12 @@ export default function AccessKey({navigation}:Props) {
                     const res = authenticationE(user!.email, password)
                     res.then(async (data) =>{
                         if(data == "user erro"){
+                            setLoading(false)
                             setReject(true)
                             setTextReject("Senha não condiz")
                         }else if(data == "servidor erro"){
                             setErroComponent(true)
+                            setLoading(false)
                         }else{
                             if(newPassword !== password){
                                 const userNew = {
@@ -192,6 +197,7 @@ export default function AccessKey({navigation}:Props) {
                                                     })
                                                     .catch((error) => {
                                                         console.error('Erro ao armazenar informações do usuário:', error);
+                                                        setLoading(false)
                                                     });
                                                     }
                                                     }
@@ -259,9 +265,11 @@ export default function AccessKey({navigation}:Props) {
                                 setEmail("")
                                 setNewEmail("")
                                 setText("Email modificado")
+                                setLoading(false)
                             })
                             .catch((error) => {
                                 console.error('Erro ao armazenar informações do usuário:', error);
+                                setLoading(false)
                             });
                             }
                             }
@@ -286,6 +294,14 @@ export default function AccessKey({navigation}:Props) {
 
   return (
     <View style={styles.allCodGroup}>
+        {trueSendEmail?(
+            <SendEmail functionEmail={()=>{
+                setTrueSendEmail(false)
+                authenCod()
+            }} navigation={()=>{
+               setTrueSendEmail(false)
+            }} confirm={true}/>
+        ):null}
         {trueCodEmail && codEmail?(
         <EmailVerification authentication={()=>{
           emailConfirm()
@@ -336,7 +352,9 @@ export default function AccessKey({navigation}:Props) {
             <Text style={{marginTop: 10,   opacity: 0.6,}}>{text}</Text>
         )}
       </View>
-      <Buttons textButton='Editar' Condition={true} authentication={authenCod}/>
+      <Buttons textButton='Editar' Condition={true} authentication={()=>{
+        setTrueSendEmail(true)
+      }}/>
       </View>
     </View>
   );

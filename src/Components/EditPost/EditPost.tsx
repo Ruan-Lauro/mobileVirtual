@@ -14,6 +14,7 @@ import { usePutPost } from '../../hooks/usePutPost';
 import ErroInternet from '../erroInternet/ErroInternet';
 import { Alert } from 'react-native';
 import { Dimensions } from 'react-native';
+import { useBackHandler } from '@react-native-community/hooks';
 const { width, height } = Dimensions.get('window');
 
 type AuthButtonProps = {
@@ -62,15 +63,10 @@ export default function EditPost({idPost, exit, img, media, context}:AuthButtonP
         
     }
     
-    // const pickImage = async () =>{
-    //     let result = await DocumentPicker.getDocumentAsync({
-    //         type:"image/*",
-    //         copyToCacheDirectory: true,
-    //     })
-
-    //     setImage(prevList => [...prevList, result.assets![0].uri])
-       
-    // }
+    useBackHandler(() => {
+        exit()
+        return true; 
+      });
 
     const pickVideo = async () => {
         

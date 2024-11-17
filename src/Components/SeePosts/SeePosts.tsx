@@ -7,6 +7,8 @@ import { Video, ResizeMode } from 'expo-av';
 import DeletePost from '../DeletePost/DeletePost';
 import SeeImage from '../SeeImage/SeeImage';
 import { Dimensions } from 'react-native';
+import { shareContent } from '../../Services/Share';
+import { useBackHandler } from '@react-native-community/hooks';
 const { width, height } = Dimensions.get('window');
 
 type docum = {
@@ -51,6 +53,11 @@ export default function SeePost({img, authentication, name, category, idPost, ca
     const [status, setStatus] = React.useState({});
     const [seeImg, setSeeImg] = useState(false)
     const [urlSeeImg, setUrlSeeImg] = useState("")
+
+    useBackHandler(() => {
+      authentication()
+      return true; 
+    });
 
     const calculateTimeDifference = (postDate: string | Date): string => {
         const currentDate = new Date();
@@ -203,10 +210,14 @@ export default function SeePost({img, authentication, name, category, idPost, ca
               visible={isModalVisible}
               animationType="slide"
               transparent={true}
-              
+              onRequestClose={()=>{
+                setModalVisible(false)
+              }}
               >
               <View style={styles.modalContentShowPost}>
-              <TouchableOpacity style={{flexDirection:"row",alignItems:"center", }}>
+              <TouchableOpacity style={{flexDirection:"row",alignItems:"center", }} onPress={()=>{
+                 shareContent({message:text, media: media})
+              }}>
                   <Image style={{ width: 25,height: 25, marginLeft: 25,}} source={require('../../../assets/mandar.png')}/>
                   <Text style={styles.modalItemShowPost}>Compartilhar Post</Text>
                 </TouchableOpacity>
@@ -235,7 +246,7 @@ export default function SeePost({img, authentication, name, category, idPost, ca
                     setModalVisible(false)
                     }}>
                   <Image style={{ width: 22.5,height: 22.5, marginLeft: 25,}} source={require('../../../assets/sair.png')}/>
-                    <Text style={styles.modalItemShowPost}>Sair</Text>
+                    <Text style={styles.modalItemShowPost}>Sair do menu</Text>
                 </TouchableOpacity>
               </View>
             </Modal>

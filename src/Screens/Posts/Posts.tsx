@@ -333,9 +333,9 @@ export default function Posts({navigation, route}:Props) {
         {postDo?(
             <>
                 {user?.isAdmin == true?(
-                    <DoPosts memberId={user?.id!} muralId={muralChoose?.id!} exit={exitDoPost} img={muralGroup!.imgGroup} category={muralChoose?.category!}/>
+                    <DoPosts memberId={user?.id!} muralId={muralChoose?.id!} exit={exitDoPost} img={muralGroup!.imgGroup} category={muralChoose?.category!} groupId={muralGroup?.id!} userId={user.id!}/>
                 ):(
-                    <DoPosts memberId={user?.id!} muralId={muralChoose?.id!} exit={exitDoPost} img={user?.profile_image} category={muralChoose?.category!}/>
+                    <DoPosts memberId={user?.id!} muralId={muralChoose?.id!} exit={exitDoPost} img={user?.profile_image} category={muralChoose?.category!} groupId={muralGroup?.id!} userId={user?.id!}/>
                 )}
             </>
         ):null}

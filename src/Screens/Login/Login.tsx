@@ -16,7 +16,7 @@ import EmailVerification from '../../Components/EmailVerification/EmailVerificat
 import { usePostEmailCode } from '../../hooks/usePostEmailCode';
 import SendEmail from '../../Components/SendEmail/SendEmail';
 import ErroInternet from '../../Components/erroInternet/ErroInternet';
-
+import {registerForPushNotificationsAsync} from "../../Services/Notification";
 type RegisterScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
 type Props = {
@@ -50,6 +50,9 @@ export default function Login({navigation}:Props) {
         setLoad(false)
         setErroComponent(true)
       }else{
+        console.log("Aqui Tome:")
+        console.log(data.data.id)
+        await registerForPushNotificationsAsync(data.data.id)
         setLoad(false)
         setReject(false)
         setInforUser(data)
@@ -72,6 +75,7 @@ export default function Login({navigation}:Props) {
               const userInfor = JSON.parse(value!);
               const userInformation:user = userInfor.data
               if(userInformation !== undefined && userInformation!== null){
+                registerForPushNotificationsAsync(userInformation.id!)
                 navigation.navigate('Home')
               }
                 

@@ -1,5 +1,6 @@
-import { View, StyleSheet, Text, TouchableOpacity, Linking, ScrollView, TextInput, Modal } from 'react-native';
+import { View, TouchableOpacity} from 'react-native';
 import { Image } from 'expo-image';
+import { useBackHandler } from '@react-native-community/hooks';
 
 type seePost = {
     image: string,
@@ -7,7 +8,12 @@ type seePost = {
 }
 
 export default function SeeImage ({image, authentication}:seePost){
-    console.log(image)
+
+    useBackHandler(() => {
+        authentication
+        return true; 
+      });
+   
     return(
         <View style={{position:"absolute", width: "100%", marginTop:0, height:"100%", backgroundColor:"#1a1a1a", zIndex:1000}}>
              <View style={{width:"100%", height:"100%"}}>

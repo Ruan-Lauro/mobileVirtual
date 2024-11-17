@@ -14,11 +14,12 @@ import PutPassword from '../PutPassword/PutPassword';
 type sendEmailVerification = {
     navigation: ()=>void,
     functionEmail : ()=>void,
+    confirm?: boolean;
 }
 
 
 
-export default function SendEmail({ navigation, functionEmail, }:sendEmailVerification) {
+export default function SendEmail({ navigation, functionEmail, confirm}:sendEmailVerification) {
 
  const [codEmail, setCodEmail] = useState("")
  const [email, setEmail] = useState("")
@@ -39,6 +40,12 @@ export default function SendEmail({ navigation, functionEmail, }:sendEmailVerifi
     })
   }
 
+  useEffect(()=>{
+    if(truePassword && confirm){
+      functionEmail()
+  }
+  },[truePassword])
+
 
   
 
@@ -54,7 +61,7 @@ export default function SendEmail({ navigation, functionEmail, }:sendEmailVerifi
         }}/>
       ):null}
 
-      {truePassword && email?(
+      {truePassword && email && confirm===false?(
         <PutPassword authentication={()=>{
           functionEmail()
         }} navigation={()=>{

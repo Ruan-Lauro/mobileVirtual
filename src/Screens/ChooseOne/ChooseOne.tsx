@@ -15,6 +15,7 @@ import { usePostEmailCode } from '../../hooks/usePostEmailCode';
 import EmailVerification from '../../Components/EmailVerification/EmailVerification';
 import ErroInternet from '../../Components/erroInternet/ErroInternet';
 import { Dimensions } from 'react-native';
+import {registerForPushNotificationsAsync} from "../../Services/Notification";
 
 const { width, height } = Dimensions.get('window');
 type ChooseOneScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChooseOne'>;
@@ -48,7 +49,9 @@ const ChooseOne = ({route, navigation}:Props) =>{
 
   const selectVerification = () =>{
     setLoading(true)
+    console.log("Passei aqui!")
     const code = authenticationPEV(NewUser?.email!)
+   
     code.then((valueCod)=>{
       if(valueCod == "servidor erro"){
         setLoading(false)
@@ -84,13 +87,14 @@ const ChooseOne = ({route, navigation}:Props) =>{
         if(data == "User created successfully."){
           setRejectRegister(false)
           const res = authenticationE(NewUser!.email!, NewUser!.password!)
-          res.then((data) =>{
+          res.then(async (data) =>{
             if(data === "user erro"){
               setLoading(false)
             }else if(data == "servidor erro"){
               setLoading(false)
               setErroComponent(true)
             }else{
+              await registerForPushNotificationsAsync(data.data.id)
               AsyncStorage.setItem('@userInfor', JSON.stringify(data))
               .then(() => {
                 setLoading(false)
@@ -132,13 +136,14 @@ const ChooseOne = ({route, navigation}:Props) =>{
         if(data == "User created successfully."){
           setRejectRegister(false)
           const res = authenticationE(NewUser!.email!, NewUser!.password!)
-          res.then((data) =>{
+          res.then(async (data) =>{
             if(data === "user erro"){
               setLoading(false)
             }else if(data == "servidor erro"){
               setLoading(false)
               setErroComponent(true)
             }else{
+              await registerForPushNotificationsAsync(data.data.id)
               AsyncStorage.setItem('@userInfor', JSON.stringify(data))
               .then(() => {
               

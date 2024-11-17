@@ -16,6 +16,8 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { Alert } from 'react-native';
 import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
+import { useBackHandler } from '@react-native-community/hooks';
+import {useAddNotification} from '../../hooks/useNotificationPost'
 
 type AuthButtonProps = {
     memberId: string,
@@ -23,6 +25,8 @@ type AuthButtonProps = {
     img?: string,
     exit: () => void,
     category: string,
+    groupId?: string;
+    userId?: string,
 }
 
 type docum = {
@@ -30,7 +34,7 @@ type docum = {
     name: string,
 }
 
-export default function DoPosts({muralId, memberId, exit, img, category}:AuthButtonProps){
+export default function DoPosts({muralId, memberId, exit, img, category, groupId, userId}:AuthButtonProps){
 
     const [imgLogo, setImgLogo] = useState(true)
     const [text, setText] = useState<string>("")
@@ -48,7 +52,7 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
     const [loading,setLoading] = useState(false)
     const [erroComponent, setErroComponent] = useState(false)
     const [postDone, setPostDone] = useState(false)
-
+    const {authenticationAddNPN} = useAddNotification()
     const [facing, setFacing] = useState('back');
     
     const [permission, requestPermission] = useCameraPermissions();
@@ -68,15 +72,10 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
         
     }
     
-    // const pickImage = async () =>{
-    //     let result = await DocumentPicker.getDocumentAsync({
-    //         type:"image/*",
-    //         copyToCacheDirectory: true,
-    //     })
-
-    //     setImage(prevList => [...prevList, result.assets![0].uri])
-       
-    // }
+    useBackHandler(() => {
+        exit()
+        return true; 
+      });
 
     const pickVideo = async () => {
         
@@ -222,7 +221,7 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
            }
 
            const resp = authenticationAddP(newPost)
-           resp.then((valueResp)=>{
+           resp.then(async (valueResp)=>{
                 if(valueResp == "user erro"){
                     setLoading(false)
                     return
@@ -230,6 +229,11 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
                     setErroComponent(true)
                     setLoading(false)
                 }else{
+                    await authenticationAddNPN({
+                        groupId: groupId!,
+                        message: text,
+                        userId: userId!,
+                    })
                     setPostDone(true)
                     setText("")
                     setLoading(false)
@@ -256,7 +260,7 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
                    }
                   
                    const resp = authenticationAddP(newPost)
-                   resp.then((valueResp)=>{
+                   resp.then(async (valueResp)=>{
                         if(valueResp == "user erro"){
                             setLoading(false)
                             return
@@ -264,6 +268,11 @@ export default function DoPosts({muralId, memberId, exit, img, category}:AuthBut
                             setErroComponent(true)
                             setLoading(false)
                         }else{
+                            await authenticationAddNPN({
+                                groupId: groupId!,
+                                message: text,
+                                userId: userId!,
+                            })
                             setPostDone(true)
                             setText("")
                             setImage([])

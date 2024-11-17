@@ -51,8 +51,6 @@ export default async function cloudinary(uri:string){
         throw error;
     }
     
-    
-    
 }
 
 

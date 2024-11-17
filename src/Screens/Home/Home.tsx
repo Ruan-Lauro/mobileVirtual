@@ -26,6 +26,7 @@ import EditPost from '../../Components/EditPost/EditPost';
 import ChooseGroup from '../../Components/ChooseGroup/ChooseGroup';
 import ErroInternet from '../../Components/erroInternet/ErroInternet';
 import { setLocalesAsync } from '@expo/config-plugins/build/ios/Locales';
+import { useGetPosts } from '../../hooks/useGetPosts';
 
 type PostsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -65,6 +66,7 @@ export default function Home({navigation}:Props) {
     const {authenticationGetPM} = useGetPostsMural()
     const {authenticationGetU} = useGetUsers()
     const {authenticationWG} = useGetWallsGroup()
+    const {authenticationGetP} = useGetPosts()
     const [refreshing, setRefreshing] = useState(false);
     const [deleteP, setDeleteP] = useState(false)
     const [idPostDeleted, setIdPostDeleted] = useState("")
@@ -162,8 +164,6 @@ export default function Home({navigation}:Props) {
                         navigation.navigate("CodGroup")
                       }
                       }
-
-                      
                     })
                 }
 
@@ -201,6 +201,18 @@ export default function Home({navigation}:Props) {
       useEffect(()=>{
         setPostsTeste([])
         setPosts([])
+
+        const listPostSave = authenticationGetP()
+        listPostSave.then(async value=>{
+          if(typeof value !== "string"){
+            await AsyncStorage.setItem('@listPostSave', JSON.stringify(value)).then(() => {
+              return
+            })
+            .catch((error) => {
+              console.error('Erro ao armazenar posts', error);
+            })
+          }
+        })
         const listUserAll = authenticationGetU()
           listUserAll.then(value=>{
             if(typeof value == "string"){

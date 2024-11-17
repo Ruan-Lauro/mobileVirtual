@@ -47,7 +47,7 @@ export default function First({navigation}:Props) {
            navigation.navigate('Login')
         }}/>
       </View>
-      <Text style={styles.textFirstBottom}>Ao fazer o <Text style={styles.textStrong}>cadastro</Text>, você estar concordando com <Text style={styles.textStrong}>nossos termos</Text></Text>
+      <Text style={styles.textFirstBottom}>Ao fazer o <Text style={styles.textStrong}>cadastro</Text>, você está concordando com <Text style={styles.textStrong}>nossos termos</Text></Text>
       
     </View>
   );

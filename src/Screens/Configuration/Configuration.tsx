@@ -6,6 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../type';
 import styles from './Style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDeleteTokenNotifcation } from '../../hooks/deleteTokenNotification'; 
 
 type ChooseGroupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Configuration'>;
 
@@ -16,11 +17,20 @@ type Props = {
 
 export default function Configuration({navigation}:Props) {
 
+    const {authenticationDNT} = useDeleteTokenNotifcation()
+
     const data = {
 
     }
 
    const exit = async () =>{
+
+    const storedToken = await AsyncStorage.getItem('pushToken');
+    if (storedToken) {
+      authenticationDNT(storedToken)
+    }
+    await AsyncStorage.removeItem('pushToken'); 
+
     await AsyncStorage.setItem('@userInfor', JSON.stringify(data))
         .then(() => {
           

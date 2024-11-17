@@ -118,7 +118,9 @@ export default function ShowMural({img, authentication, name, category, idPost, 
               visible={isModalVisible}
               animationType="slide"
               transparent={true}
-              
+              onRequestClose={()=>{
+                setModalVisible(false)
+              }}
               >
               <View style={styles.modalContentShowPost}>
               <TouchableOpacity style={{flexDirection:"row",alignItems:"center", }} onPress={()=>{
@@ -150,7 +152,7 @@ export default function ShowMural({img, authentication, name, category, idPost, 
                     setModalVisible(false)
                     }}>
                   <Image style={{ width: 22.5,height: 22.5, marginLeft: 25,}} source={require('../../../assets/sair.png')}/>
-                    <Text style={styles.modalItemShowPost}>Sair</Text>
+                    <Text style={styles.modalItemShowPost}>Sair do menu</Text>
                 </TouchableOpacity>
               </View>
             </Modal>
