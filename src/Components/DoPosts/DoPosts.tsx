@@ -27,6 +27,9 @@ type AuthButtonProps = {
     category: string,
     groupId?: string;
     userId?: string,
+    nameGroup: string,
+    nameMural: string,
+    nameUser: string,
 }
 
 type docum = {
@@ -34,7 +37,7 @@ type docum = {
     name: string,
 }
 
-export default function DoPosts({muralId, memberId, exit, img, category, groupId, userId}:AuthButtonProps){
+export default function DoPosts({muralId, memberId, exit, img, category, groupId, userId, nameGroup, nameMural, nameUser}:AuthButtonProps){
 
     const [imgLogo, setImgLogo] = useState(true)
     const [text, setText] = useState<string>("")
@@ -231,8 +234,9 @@ export default function DoPosts({muralId, memberId, exit, img, category, groupId
                 }else{
                     await authenticationAddNPN({
                         groupId: groupId!,
-                        message: text,
+                        message: `${nameUser}: ${text}`,
                         userId: userId!,
+                        data:[nameMural,nameGroup]
                     })
                     setPostDone(true)
                     setText("")
@@ -270,8 +274,9 @@ export default function DoPosts({muralId, memberId, exit, img, category, groupId
                         }else{
                             await authenticationAddNPN({
                                 groupId: groupId!,
-                                message: text,
+                                message: `${nameUser}: ${text}`,
                                 userId: userId!,
+                                data:[nameMural,nameGroup]
                             })
                             setPostDone(true)
                             setText("")
