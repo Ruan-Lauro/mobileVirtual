@@ -25,13 +25,14 @@
       },
       "package": "com.ruanlauro07.mobileVirtual",
       "permissions": [
+        "INTERNET",
+        "ACCESS_NETWORK_STATE",
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE",
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
-      ],
-      "useNextNotificationsApi": true
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"

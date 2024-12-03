@@ -23,8 +23,6 @@ type Props = {
   navigation: RegisterScreenNavigationProp;
 };
 
-
-
 export default function Login({navigation}:Props) {
 
   const {authenticationE} = useAuthLogin()
@@ -52,7 +50,8 @@ export default function Login({navigation}:Props) {
       }else{
         console.log("Aqui Tome:")
         console.log(data.data.id)
-        await registerForPushNotificationsAsync(data.data.id)
+        const ele = registerForPushNotificationsAsync(data.data.id)
+        
         setLoad(false)
         setReject(false)
         setInforUser(data)
