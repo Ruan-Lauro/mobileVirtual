@@ -15,9 +15,6 @@
         "buildType": "apk",
         "gradleCommand": ":app:assembleRelease",
         "withoutCredentials": true
-      },
-      "env": {
-        "API_URL": "https://api-muralvirtual.onrender.com"
       }
     },
     "production": {}

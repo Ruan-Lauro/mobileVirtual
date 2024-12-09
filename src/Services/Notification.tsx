@@ -6,42 +6,57 @@ import { useAddTokenNotification } from '../hooks/useAddTokenNotification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export async function registerForPushNotificationsAsync(userId: string) {
+
   let token;
   const { authenticationAddTN } = useAddTokenNotification();
-
+ 
   if (!Device.isDevice) {
     alert('Must use physical device for Push Notifications');
     return;
   }
 
+  alert('Passei do primeiro');
+
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
-  
+
+  alert('Passei do segundo');
+
   if (existingStatus !== 'granted') {
     const { status } = await Notifications.requestPermissionsAsync();
     finalStatus = status;
   }
 
+  alert('Passei do terceiro');
+ 
   if (finalStatus !== 'granted') {
     alert('Failed to get push token for push notification!');
     return;
   }
 
+  alert('Passei do quarto');
 
   const storedToken = await AsyncStorage.getItem('pushToken');
   if (storedToken) {
-    console.log('Token already stored:', storedToken);
+    alert('Fui armazenado');
     return storedToken; 
   }
 
-  token = (await Notifications.getExpoPushTokenAsync()).data;
-  console.log('New token:', token);
+  alert('Passei do quinto');
 
+  token = (await Notifications.getExpoPushTokenAsync()).data;
+
+  alert(token);
+
+  alert('Passei do sexto');
 
   await AsyncStorage.setItem('pushToken', token);
 
-
+  alert('Passei do setimo');
+ 
   await authenticationAddTN({ token, userId });
+
+  alert('Passei do oitavo');
 
   if (Platform.OS === 'android') {
     Notifications.setNotificationChannelAsync('default', {
@@ -53,21 +68,23 @@ export async function registerForPushNotificationsAsync(userId: string) {
     });
   }
 
+  alert(`Passei do nono ${token}`);
+
   return token;
 }
 
 
-Notifications.setNotificationHandler({
-  handleNotification: async (notification) => {
-    console.log('Received notification:', notification);
+// Notifications.setNotificationHandler({
+//   handleNotification: async (notification) => {
+//     console.log('Received notification:', notification);
    
-    return {
-      shouldShowAlert: true, 
-      shouldPlaySound: true, 
-      shouldSetBadge: true,
-    };
-  },
-});
+//     return {
+//       shouldShowAlert: true, 
+//       shouldPlaySound: true, 
+//       shouldSetBadge: true,
+//     };
+//   },
+// });
 
 
 Notifications.addNotificationReceivedListener((notification) => {

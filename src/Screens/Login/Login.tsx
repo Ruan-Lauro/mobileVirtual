@@ -48,21 +48,19 @@ export default function Login({navigation}:Props) {
         setLoad(false)
         setErroComponent(true)
       }else{
-        console.log("Aqui Tome:")
-        console.log(data.data.id)
-        const ele = registerForPushNotificationsAsync(data.data.id)
-        
+        await registerForPushNotificationsAsync(data.data.id)
         setLoad(false)
         setReject(false)
         setInforUser(data)
-        await AsyncStorage.setItem('@userInfor', JSON.stringify(data))
-        .then(() => {
-         
-          navigation.navigate('Home')
-        })
-        .catch((error) => {
-          console.error('Erro ao armazenar informações do usuário:', error);
-        })
+        AsyncStorage.setItem('@userInfor', JSON.stringify(data))
+          .then(() => {
+            console.log("Aqui")
+            navigation.navigate('Home')
+          })
+          .catch((error) => {
+            console.error('Erro ao armazenar informações do usuário:', error);
+          })
+        
       }
     })
     
@@ -71,11 +69,12 @@ export default function Login({navigation}:Props) {
   useEffect(()=>{
     AsyncStorage.getItem('@userInfor')
             .then(async (value) => {
-              const userInfor = JSON.parse(value!);
+              const userInfor = JSON.parse(value!)
               const userInformation:user = userInfor.data
               if(userInformation !== undefined && userInformation!== null){
-                registerForPushNotificationsAsync(userInformation.id!)
+                await registerForPushNotificationsAsync(userInformation.id!)
                 navigation.navigate('Home')
+                
               }
                 
             })
