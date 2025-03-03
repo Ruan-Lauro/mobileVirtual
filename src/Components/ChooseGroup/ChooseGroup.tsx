@@ -23,7 +23,7 @@ export default function ChooseGroup({
 
   return (
     <TouchableOpacity onPress={onchange} style={[styles.chooseOpacity, selected && styles.groupChoose]}>
-        <Text style={[styles.textChooseOpacity, selected && styles.textGroupChoose]}>{placeholder}</Text>
+        <Text style={[styles.textChooseOpacity, selected && styles.textGroupChoose]} numberOfLines={1}>{placeholder}</Text>
     </TouchableOpacity>
   );
 }

@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
    chooseOpacity:{
      borderColor: "#1A1A1A",
      borderWidth:1,
-     width:70,
+     width:90,
      height: 30,
      borderRadius: 5,
      marginRight: 10,
@@ -22,10 +22,11 @@ const styles = StyleSheet.create({
      marginRight: 10,
      alignItems:"center",
      justifyContent:"center",
-     width:70,
+     width:90,
      height: 30,
    },
    textGroupChoose:{
+     width:"75%",
      color:"white",
      fontSize:18,
      fontWeight: 500,

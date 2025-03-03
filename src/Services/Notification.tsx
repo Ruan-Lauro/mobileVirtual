@@ -15,48 +15,42 @@ export async function registerForPushNotificationsAsync(userId: string) {
     return;
   }
 
-  alert('Passei do primeiro');
-
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
 
-  alert('Passei do segundo');
 
   if (existingStatus !== 'granted') {
     const { status } = await Notifications.requestPermissionsAsync();
     finalStatus = status;
   }
 
-  alert('Passei do terceiro');
  
   if (finalStatus !== 'granted') {
     alert('Failed to get push token for push notification!');
     return;
   }
 
-  alert('Passei do quarto');
 
   const storedToken = await AsyncStorage.getItem('pushToken');
   if (storedToken) {
-    alert('Fui armazenado');
     return storedToken; 
   }
 
-  alert('Passei do quinto');
 
-  token = (await Notifications.getExpoPushTokenAsync()).data;
-
-  alert(token);
-
-  alert('Passei do sexto');
+  try {
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+  } catch (error) {
+    console.error("Erro ao gerar o token:", error);
+    alert("Erro ao gerar o token de notificação.");
+    return;
+  }
+  
 
   await AsyncStorage.setItem('pushToken', token);
 
-  alert('Passei do setimo');
  
   await authenticationAddTN({ token, userId });
 
-  alert('Passei do oitavo');
 
   if (Platform.OS === 'android') {
     Notifications.setNotificationChannelAsync('default', {
@@ -68,7 +62,6 @@ export async function registerForPushNotificationsAsync(userId: string) {
     });
   }
 
-  alert(`Passei do nono ${token}`);
 
   return token;
 }
@@ -89,6 +82,6 @@ export async function registerForPushNotificationsAsync(userId: string) {
 
 Notifications.addNotificationReceivedListener((notification) => {
   console.log('Received notification:', notification);
- 
+
 });
 

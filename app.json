@@ -16,7 +16,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.ruanlauro07.mobileVirtual",
       "infoPlist": {
-        "UIBackgroundModes": ["remote-notification"]
+        "UIBackgroundModes": [
+          "remote-notification"
+        ]
       }
     },
     "android": {
@@ -34,7 +36,8 @@
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO",
         "NOTIFICATIONS",
-        "VIBRATE"
+        "VIBRATE",
+        "android.permission.RECEIVE_BOOT_COMPLETED"
       ],
       "googleServicesFile": "./google-services.json"
     },
@@ -54,7 +57,8 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
           "recordAudioAndroid": true
         }
-      ]
+      ],
+      "expo-sqlite"
     ]
   }
 }

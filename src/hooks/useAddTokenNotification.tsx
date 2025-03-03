@@ -13,8 +13,6 @@ export type createTokenNotification = {
 export const useAddTokenNotification = (): useAddTokenNotificationResult => {
 
   const authenticationAddTN = async (postAdd: createTokenNotification) => {
-    
-    alert('Estou pronto para envio');
 
     try {
      
@@ -22,8 +20,6 @@ export const useAddTokenNotification = (): useAddTokenNotificationResult => {
             token: postAdd.token,
             userId: postAdd.userId
       });
-
-      alert('Vou retornar algo');
 
       return response.data;
      
