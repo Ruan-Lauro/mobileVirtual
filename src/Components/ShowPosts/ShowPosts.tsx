@@ -9,6 +9,7 @@ import EditPost from '../EditPost/EditPost';
 import{ shareContent } from '../../Services/Share';
 import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
+import Markdown from 'react-native-markdown-display';
 type docum = {
   file: string,
   name: string,
@@ -175,9 +176,21 @@ export default function ShowMural({img, authentication, name, category, idPost, 
                   @{category.toLowerCase()}
                 </Text>
                 ):null}
-                <Text style={styles.textInforShowPost} numberOfLines={8} ellipsizeMode="tail">
+                {/* <Text style={styles.textInforShowPost} numberOfLines={8} ellipsizeMode="tail">
                     {text}
-                </Text>
+                </Text> */}
+                <Markdown style={{
+                  body: {
+                    marginTop: 1,
+                    maxHeight: 240,      
+                    overflow: 'hidden',
+                    lineHeight: 27,
+                  },
+                }} 
+                
+                >
+                      {text}
+                </Markdown>
                 {image?(
                      <Image  source={{
                       uri: image,

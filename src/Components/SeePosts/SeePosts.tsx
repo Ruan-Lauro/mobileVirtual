@@ -10,6 +10,8 @@ import { Dimensions } from 'react-native';
 import { shareContent } from '../../Services/Share';
 import { useBackHandler } from '@react-native-community/hooks';
 const { width, height } = Dimensions.get('window');
+import Markdown from 'react-native-markdown-display';
+import markdownStyles from './StyleTwo';
 
 type docum = {
     file: string,
@@ -271,7 +273,11 @@ export default function SeePost({img, authentication, name, category, idPost, ca
                     </View>
                 </View>
                 <ScrollView style={{marginTop:20}} contentContainerStyle={{paddingBottom:250}} showsVerticalScrollIndicator={false}>
-                    <Text style={styles.textDoPosts}>{text}</Text>
+                    
+                    <Markdown style={markdownStyles}>
+                      {text}
+                    </Markdown>
+
                     {(video.length!== 0 || image.length!== 0 || pdfN.length !== 0)?(
                         <ScrollView style={styles.viewMedia} horizontal  
                         showsHorizontalScrollIndicator={false}  contentContainerStyle={{  maxHeight:300,}}  ref={scrollViewRef}  scrollEnabled={false}>
